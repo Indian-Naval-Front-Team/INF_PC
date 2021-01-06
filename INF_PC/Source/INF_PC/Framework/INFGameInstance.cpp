@@ -8,7 +8,7 @@ UINFGameInstance::UINFGameInstance(const FObjectInitializer& ObjectInitializer)
 {
 	UE_LOG(LogTemp, Warning, TEXT("GameInstance Constructor"));
 
-	const ConstructorHelpers::FClassFinder<UUserWidget> MainMenuBPClass(TEXT("Game/__Blueprints/Widgets/WBP_MainMenu"));
+	const ConstructorHelpers::FClassFinder<UUserWidget> MainMenuBPClass(TEXT("/Game/__Blueprints/Widgets/WBP_MainMenu"));
 	if (!ensure(MainMenuBPClass.Class != nullptr)) return;
 
 	MainMenuClass = MainMenuBPClass.Class;

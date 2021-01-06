@@ -4,6 +4,7 @@
 #include "MainMenu.h"
 #include "UMG/Public/Components/Button.h"
 #include "UMG/Public/Components/WidgetSwitcher.h"
+#include <INF_PC/UI/MultiplayerPanel.h>
 
 bool UMainMenu::Initialize()
 {
@@ -26,6 +27,7 @@ bool UMainMenu::Initialize()
 
 	return true;
 }
+
 
 void UMainMenu::SetMenuInterface(IMenuInterface* MenuInterfaceVal)
 {
@@ -82,7 +84,7 @@ void UMainMenu::OnBtnMuliplayerClicked()
 {
 	if (!ensure(MainMenuSwitcher != nullptr)) return;
 	if (!ensure(Multiplayer != nullptr)) return;
-
+	
 	MainMenuSwitcher->SetActiveWidget(Multiplayer);
 }
 
