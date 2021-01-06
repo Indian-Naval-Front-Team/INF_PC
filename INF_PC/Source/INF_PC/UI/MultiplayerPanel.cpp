@@ -53,7 +53,6 @@ void UMultiplayerPanel::Setup()
 void UMultiplayerPanel::OnLevelRemovedFromWorld(ULevel* InLevel, UWorld* InWorld)
 {
 	Super::OnLevelRemovedFromWorld(InLevel, InWorld);
-
 	this->RemoveFromViewport();
 }
 
