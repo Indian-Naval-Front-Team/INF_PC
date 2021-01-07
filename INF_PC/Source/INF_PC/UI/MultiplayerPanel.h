@@ -22,8 +22,8 @@ public:
 
 	
 private:
-	class UTexture2D* ActiveTabTexture;
-	class UTexture2D* NormalTabTexture;
+	class UTexture* ActiveTabTexture;
+	class UTexture* NormalTabTexture;
 
 	UPROPERTY(meta = (BindWidget))
 	class UButton* BtnServerBrowser;

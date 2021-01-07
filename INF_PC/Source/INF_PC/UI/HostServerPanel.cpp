@@ -8,8 +8,8 @@
 
 UHostServerPanel::UHostServerPanel(const FObjectInitializer& ObjectInitializer) : UUserWidget(ObjectInitializer)
 {
-	const ConstructorHelpers::FObjectFinder<UTexture2D>ActiveTabTextureTemp(TEXT("/Game/_Assets/UI/GenericButton_Hovered"));
-	const ConstructorHelpers::FObjectFinder<UTexture2D>NormalTabTextureTemp(TEXT("/Game/_Assets/UI/GenericButton_Normal"));
+	const ConstructorHelpers::FObjectFinder<UTexture>ActiveTabTextureTemp(TEXT("/Game/_Assets/UI/GenericButton_Hovered"));
+	const ConstructorHelpers::FObjectFinder<UTexture>NormalTabTextureTemp(TEXT("/Game/_Assets/UI/GenericButton_Normal"));
 
 	if (!ensure(ActiveTabTextureTemp.Object != nullptr)) return;
 	if (!ensure(NormalTabTextureTemp.Object != nullptr)) return;
