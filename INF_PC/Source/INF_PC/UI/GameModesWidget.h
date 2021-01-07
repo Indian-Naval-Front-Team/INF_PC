@@ -4,49 +4,53 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "MultiplayerPanel.generated.h"
+#include "GameModesWidget.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class INF_PC_API UMultiplayerPanel : public UUserWidget
+class INF_PC_API UGameModesWidget : public UUserWidget
 {
 	GENERATED_BODY()
 
 public:
-	UMultiplayerPanel(const FObjectInitializer& ObjectInitializer);
+	UGameModesWidget(const FObjectInitializer& ObjectInitializer);
 
 	void Setup();
 	virtual void OnLevelRemovedFromWorld(ULevel* InLevel, UWorld* InWorld) override;
 
-	
 private:
 	class UTexture2D* ActiveTabTexture;
 	class UTexture2D* NormalTabTexture;
 
 	UPROPERTY(meta = (BindWidget))
-	class UButton* BtnServerBrowser;
+		class UButton* BtnSortie;
 	UPROPERTY(meta = (BindWidget))
-	class UButton* BtnHostServer;
+		class UButton* BtnAmbush;
 	UPROPERTY(meta = (BindWidget))
-	class UButton* BtnGameModes;
+		class UButton* BtnPortCapture;
 	UPROPERTY(meta = (BindWidget))
-	class UWidgetSwitcher* PanelSwitcher;
+		class UButton* BtnTeamDeathmatch;
 	UPROPERTY(meta = (BindWidget))
-	class UWidget* Tab_ServerBrowser;
+		class UWidgetSwitcher* PanelSwitcher;
 	UPROPERTY(meta = (BindWidget))
-	class UWidget* Tab_HostServer;
+		class UWidget* Tab_Sortie;
 	UPROPERTY(meta = (BindWidget))
-	class UWidget* Tab_GameModes;
+		class UWidget* Tab_Ambush;
+	UPROPERTY(meta = (BindWidget))
+		class UWidget* Tab_PortCapture;
+	UPROPERTY(meta = (BindWidget))
+		class UWidget* Tab_TeamDeathmatch;
 
-
 	UFUNCTION()
-	void OnBtnServerBrowserClicked();
+		void OnBtnSortieClicked();
 	UFUNCTION()
-	void OnBtnHostServerClicked();
+		void OnBtnAmbushClicked();
 	UFUNCTION()
-	void OnBtnGameModesClicked();
+		void OnBtnPortCaptureClicked();
+	UFUNCTION()
+		void OnBtnTeamDeathmatchClicked();
 
 protected:
 	bool Initialize() override;
