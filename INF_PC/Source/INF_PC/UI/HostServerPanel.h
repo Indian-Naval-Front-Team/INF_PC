@@ -14,4 +14,16 @@ class INF_PC_API UHostServerPanel : public UUserWidget
 {
 	GENERATED_BODY()
 	
+public:
+	UHostServerPanel(const FObjectInitializer& ObjectInitializer);
+
+private:
+	class UTexture2D* ActiveTabTexture;
+	class UTexture2D* NormalTabTexture;
+	
+	UPROPERTY(meta = (BindWidget))
+	class UButton* BtnSelectGameMode;
+
+	UPROPERTY(meta = (BindWidget))
+	class UButton* BtnSetGameRules;
 };
