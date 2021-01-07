@@ -30,7 +30,7 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	class UButton* BtnHostServer;
 	UPROPERTY(meta = (BindWidget))
-	class UButton* BtnGameModes;
+	class UButton* BtnTrainingIsland;
 	UPROPERTY(meta = (BindWidget))
 	class UWidgetSwitcher* PanelSwitcher;
 	UPROPERTY(meta = (BindWidget))
@@ -38,7 +38,7 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	class UWidget* Tab_HostServer;
 	UPROPERTY(meta = (BindWidget))
-	class UWidget* Tab_GameModes;
+	class UWidget* Tab_TrainingIsland;
 
 
 	UFUNCTION()
@@ -46,7 +46,7 @@ private:
 	UFUNCTION()
 	void OnBtnHostServerClicked();
 	UFUNCTION()
-	void OnBtnGameModesClicked();
+	void OnBtnTrainingIslandClicked();
 
 protected:
 	bool Initialize() override;
