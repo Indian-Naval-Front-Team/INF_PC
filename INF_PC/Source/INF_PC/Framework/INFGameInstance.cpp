@@ -43,12 +43,14 @@ void UINFGameInstance::LoadMainMenu()
 	UMainMenu* MainMenu = CreateWidget<UMainMenu>(this, MainMenuClass);
 	if (!ensure(MainMenu != nullptr)) return;
 
+	MainMenu->bIsFocusable = true;
 	MainMenu->Setup();
 	MainMenu->SetMenuInterface(this);
 }
 
 void UINFGameInstance::Host()
 {
+	UE_LOG(LogTemp, Warning, TEXT("Host Server Now!!!"));
 	if (SessionInterface.IsValid())
 	{
 		FOnlineSessionSettings SessionSettings;
@@ -58,6 +60,12 @@ void UINFGameInstance::Host()
 
 void UINFGameInstance::OnCreateSessionsComplete(FName SessionName, bool Success)
 {
+	if (!Success)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Could not create Session!"));
+		return;
+	}
+
 	UEngine* Engine = GetEngine();
 	if (!ensure(Engine != nullptr)) return;
 

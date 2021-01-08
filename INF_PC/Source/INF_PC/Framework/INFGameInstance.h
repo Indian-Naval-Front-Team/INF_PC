@@ -26,10 +26,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void LoadMainMenu();
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(Exec)
 	void Host();
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(Exec)
 	void Join();
 
 private:

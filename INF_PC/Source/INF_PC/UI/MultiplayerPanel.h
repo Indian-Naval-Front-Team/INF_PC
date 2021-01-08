@@ -4,13 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include <INF_PC/UI/MenuWidget.h>
 #include "MultiplayerPanel.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class INF_PC_API UMultiplayerPanel : public UUserWidget
+class INF_PC_API UMultiplayerPanel : public UMenuWidget
 {
 	GENERATED_BODY()
 

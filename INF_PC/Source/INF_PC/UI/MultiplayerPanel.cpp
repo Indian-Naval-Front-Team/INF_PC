@@ -5,9 +5,10 @@
 #include "UMG/Public/Components/Button.h"
 #include "UMG/Public/Components/WidgetSwitcher.h"
 #include "Runtime/Engine/Classes/Engine/Texture2D.h"
+#include "HostServerPanel.h"
 
 
-UMultiplayerPanel::UMultiplayerPanel(const FObjectInitializer& ObjectInitializer) : UUserWidget(ObjectInitializer)
+UMultiplayerPanel::UMultiplayerPanel(const FObjectInitializer& ObjectInitializer) : UMenuWidget(ObjectInitializer)
 {
 	const ConstructorHelpers::FObjectFinder<UTexture>ActiveTabTextureTemp(TEXT("/Game/_Assets/UI/GenericButton_Hovered"));
 	const ConstructorHelpers::FObjectFinder<UTexture>NormalTabTextureTemp(TEXT("/Game/_Assets/UI/GenericButton_Normal"));
@@ -84,6 +85,9 @@ void UMultiplayerPanel::OnBtnHostServerClicked()
 	//BtnServerBrowser->WidgetStyle.Normal.SetImageSize(FVector2D(NormalTabTexture->MaxTextureSize));
 	BtnTrainingIsland->WidgetStyle.Normal.SetResourceObject(NormalTabTexture);
 	//BtnTrainingIsland->WidgetStyle.Normal.SetImageSize(FVector2D(NormalTabTexture->MaxTextureSize));
+
+	UHostServerPanel* HostServerPanel = static_cast<UHostServerPanel*>(Tab_HostServer);
+	HostServerPanel->SetMenuInterface(MenuInterfaceRef);
 }
 
 void UMultiplayerPanel::OnBtnTrainingIslandClicked()

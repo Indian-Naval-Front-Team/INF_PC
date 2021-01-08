@@ -5,8 +5,9 @@
 #include "UMG/Public/Components/Button.h"
 #include "UMG/Public/Components/WidgetSwitcher.h"
 #include "Runtime/Engine/Classes/Engine/Texture2D.h"
+#include "GameRulesWidget.h"
 
-UHostServerPanel::UHostServerPanel(const FObjectInitializer& ObjectInitializer) : UUserWidget(ObjectInitializer)
+UHostServerPanel::UHostServerPanel(const FObjectInitializer& ObjectInitializer) : UMenuWidget(ObjectInitializer)
 {
 	const ConstructorHelpers::FObjectFinder<UTexture>ActiveTabTextureTemp(TEXT("/Game/_Assets/UI/GenericButton_Hovered"));
 	const ConstructorHelpers::FObjectFinder<UTexture>NormalTabTextureTemp(TEXT("/Game/_Assets/UI/GenericButton_Normal"));
@@ -74,4 +75,10 @@ void UHostServerPanel::OnBtnSetGameRulesClicked()
 	//BtnSetGameRules->WidgetStyle.Normal.SetImageSize(FVector2D(ActiveTabTexture->MaxTextureSize));
 	BtnSelectGameMode->WidgetStyle.Normal.SetResourceObject(NormalTabTexture);
 	//BtnSelectGameMode->WidgetStyle.Normal.SetImageSize(FVector2D(NormalTabTexture->MaxTextureSize));
+
+	UGameRulesWidget* GameRulesWidget = static_cast<UGameRulesWidget*>(Tab_SetGameRules);
+	GameRulesWidget->SetMenuInterface(MenuInterfaceRef);
+
+	auto test = GetMenuInterface();
+	UE_LOG(LogTemp, Warning, TEXT(""));
 }

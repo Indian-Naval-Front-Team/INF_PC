@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include <INF_PC/UI/MenuWidget.h>
 #include "MenuInterface.h"
 #include "MainMenu.generated.h"
 
@@ -11,19 +12,14 @@
  * 
  */
 UCLASS()
-class INF_PC_API UMainMenu : public UUserWidget
+class INF_PC_API UMainMenu : public UMenuWidget
 {
 	GENERATED_BODY()
 
 public:
-	void SetMenuInterface(IMenuInterface* MenuInterfaceVal);
-	void Setup();
-
 	virtual void OnLevelRemovedFromWorld(ULevel* InLevel, UWorld* InWorld) override;
 
 private:
-	IMenuInterface* MenuInterfaceRef;
-
 #pragma region Widget Component bindings for Main Menu.
 	UPROPERTY(meta = (BindWidget))
 	class UButton* BtnCampaign;
@@ -57,6 +53,9 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	class UWidget* Multiplayer;
+	
+	UPROPERTY(meta = (BindWidget))
+	class UMultiplayerPanel* MultiplayerPanel;
 
 	UPROPERTY(meta = (BindWidget))
 	class UWidget* Settings;
@@ -80,5 +79,5 @@ private:
 #pragma endregion Widget Component callbacks.
 
 protected:
-	bool Initialize() override;
+	virtual bool Initialize();
 };

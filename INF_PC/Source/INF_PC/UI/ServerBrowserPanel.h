@@ -4,13 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include <INF_PC/UI/MenuWidget.h>
 #include "ServerBrowserPanel.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class INF_PC_API UServerBrowserPanel : public UUserWidget
+class INF_PC_API UServerBrowserPanel : public UMenuWidget
 {
 	GENERATED_BODY()
 	

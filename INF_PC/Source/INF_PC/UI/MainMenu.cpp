@@ -28,32 +28,6 @@ bool UMainMenu::Initialize()
 	return true;
 }
 
-
-void UMainMenu::SetMenuInterface(IMenuInterface* MenuInterfaceVal)
-{
-	MenuInterfaceRef = MenuInterfaceVal;
-}
-
-void UMainMenu::Setup()
-{
-	this->AddToViewport();
-	this->bIsFocusable = true;
-
-	UWorld* World = GetWorld();
-
-	if (!ensure(World != nullptr)) return;
-
-	APlayerController* PlayerController = World->GetFirstPlayerController();
-	if (!ensure(PlayerController != nullptr)) return;
-
-	FInputModeUIOnly InputModeData;
-	InputModeData.SetWidgetToFocus(this->TakeWidget());
-	InputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
-
-	PlayerController->SetInputMode(InputModeData);
-	PlayerController->bShowMouseCursor = true;
-}
-
 void UMainMenu::OnLevelRemovedFromWorld(ULevel* InLevel, UWorld* InWorld)
 {
 	Super::OnLevelRemovedFromWorld(InLevel, InWorld);
@@ -85,6 +59,8 @@ void UMainMenu::OnBtnMuliplayerClicked()
 	if (!ensure(MainMenuSwitcher != nullptr)) return;
 	if (!ensure(Multiplayer != nullptr)) return;
 	
+	MultiplayerPanel->SetMenuInterface(this->MenuInterfaceRef);
+
 	MainMenuSwitcher->SetActiveWidget(Multiplayer);
 }
 

@@ -6,7 +6,7 @@
 #include "UMG/Public/Components/WidgetSwitcher.h"
 #include "Runtime/Engine/Classes/Engine/Texture2D.h"
 
-UGameModesWidget::UGameModesWidget(const FObjectInitializer& ObjectInitializer) : UUserWidget(ObjectInitializer)
+UGameModesWidget::UGameModesWidget(const FObjectInitializer& ObjectInitializer) : UMenuWidget(ObjectInitializer)
 {
 	const ConstructorHelpers::FObjectFinder<UTexture>ActiveTabTextureTemp(TEXT("/Game/_Assets/UI/GenericButton_Hovered"));
 	const ConstructorHelpers::FObjectFinder<UTexture>NormalTabTextureTemp(TEXT("/Game/_Assets/UI/GenericButton_Normal"));
