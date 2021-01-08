@@ -41,7 +41,7 @@ void UHostServerPanel::Setup()
 
 	if (!ensure(BtnSelectGameMode != nullptr)) return;
 	BtnSelectGameMode->WidgetStyle.Normal.SetResourceObject(ActiveTabTexture);
-	BtnSelectGameMode->WidgetStyle.Normal.SetImageSize(FVector2D(ActiveTabTexture->MaxTextureSize));
+	//BtnSelectGameMode->WidgetStyle.Normal.SetImageSize(FVector2D(ActiveTabTexture->MaxTextureSize));
 }
 
 void UHostServerPanel::OnLevelRemovedFromWorld(ULevel* InLevel, UWorld* InWorld)
@@ -58,9 +58,9 @@ void UHostServerPanel::OnBtnSelectGameModeClicked()
 	PanelSwitcher->SetActiveWidget(Tab_SelectGameMode);
 
 	BtnSelectGameMode->WidgetStyle.Normal.SetResourceObject(ActiveTabTexture);
-	BtnSelectGameMode->WidgetStyle.Normal.SetImageSize(FVector2D(ActiveTabTexture->MaxTextureSize));
+	//BtnSelectGameMode->WidgetStyle.Normal.SetImageSize(FVector2D(ActiveTabTexture->MaxTextureSize));
 	BtnSetGameRules->WidgetStyle.Normal.SetResourceObject(NormalTabTexture);
-	BtnSetGameRules->WidgetStyle.Normal.SetImageSize(FVector2D(NormalTabTexture->MaxTextureSize));
+	//BtnSetGameRules->WidgetStyle.Normal.SetImageSize(FVector2D(NormalTabTexture->MaxTextureSize));
 }
 
 void UHostServerPanel::OnBtnSetGameRulesClicked()
@@ -71,7 +71,7 @@ void UHostServerPanel::OnBtnSetGameRulesClicked()
 	PanelSwitcher->SetActiveWidget(Tab_SetGameRules);
 
 	BtnSetGameRules->WidgetStyle.Normal.SetResourceObject(ActiveTabTexture);
-	BtnSetGameRules->WidgetStyle.Normal.SetImageSize(FVector2D(ActiveTabTexture->MaxTextureSize));
+	//BtnSetGameRules->WidgetStyle.Normal.SetImageSize(FVector2D(ActiveTabTexture->MaxTextureSize));
 	BtnSelectGameMode->WidgetStyle.Normal.SetResourceObject(NormalTabTexture);
-	BtnSelectGameMode->WidgetStyle.Normal.SetImageSize(FVector2D(NormalTabTexture->MaxTextureSize));
+	//BtnSelectGameMode->WidgetStyle.Normal.SetImageSize(FVector2D(NormalTabTexture->MaxTextureSize));
 }

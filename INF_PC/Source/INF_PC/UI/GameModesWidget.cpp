@@ -56,13 +56,13 @@ void UGameModesWidget::OnBtnSortieClicked()
 	PanelSwitcher->SetActiveWidget(Tab_Sortie);
 
 	BtnSortie->WidgetStyle.Normal.SetResourceObject(ActiveTabTexture);
-	BtnSortie->WidgetStyle.Normal.SetImageSize(FVector2D(ActiveTabTexture->MaxTextureSize));
+	//BtnSortie->WidgetStyle.Normal.SetImageSize(FVector2D(ActiveTabTexture->MaxTextureSize));
 	BtnAmbush->WidgetStyle.Normal.SetResourceObject(NormalTabTexture);
-	BtnAmbush->WidgetStyle.Normal.SetImageSize(FVector2D(NormalTabTexture->MaxTextureSize));
+	//BtnAmbush->WidgetStyle.Normal.SetImageSize(FVector2D(NormalTabTexture->MaxTextureSize));
 	BtnPortCapture->WidgetStyle.Normal.SetResourceObject(NormalTabTexture);
-	BtnPortCapture->WidgetStyle.Normal.SetImageSize(FVector2D(NormalTabTexture->MaxTextureSize));
+	//BtnPortCapture->WidgetStyle.Normal.SetImageSize(FVector2D(NormalTabTexture->MaxTextureSize));
 	BtnTeamDeathmatch->WidgetStyle.Normal.SetResourceObject(NormalTabTexture);
-	BtnTeamDeathmatch->WidgetStyle.Normal.SetImageSize(FVector2D(NormalTabTexture->MaxTextureSize));
+	//BtnTeamDeathmatch->WidgetStyle.Normal.SetImageSize(FVector2D(NormalTabTexture->MaxTextureSize));
 }
 
 void UGameModesWidget::OnBtnAmbushClicked()
@@ -73,13 +73,13 @@ void UGameModesWidget::OnBtnAmbushClicked()
 	PanelSwitcher->SetActiveWidget(Tab_Ambush);
 
 	BtnAmbush->WidgetStyle.Normal.SetResourceObject(ActiveTabTexture);
-	BtnAmbush->WidgetStyle.Normal.SetImageSize(FVector2D(ActiveTabTexture->MaxTextureSize));
+	//BtnAmbush->WidgetStyle.Normal.SetImageSize(FVector2D(ActiveTabTexture->MaxTextureSize));
 	BtnSortie->WidgetStyle.Normal.SetResourceObject(NormalTabTexture);
-	BtnSortie->WidgetStyle.Normal.SetImageSize(FVector2D(NormalTabTexture->MaxTextureSize));
+	//BtnSortie->WidgetStyle.Normal.SetImageSize(FVector2D(NormalTabTexture->MaxTextureSize));
 	BtnPortCapture->WidgetStyle.Normal.SetResourceObject(NormalTabTexture);
-	BtnPortCapture->WidgetStyle.Normal.SetImageSize(FVector2D(NormalTabTexture->MaxTextureSize));
+	//BtnPortCapture->WidgetStyle.Normal.SetImageSize(FVector2D(NormalTabTexture->MaxTextureSize));
 	BtnTeamDeathmatch->WidgetStyle.Normal.SetResourceObject(NormalTabTexture);
-	BtnTeamDeathmatch->WidgetStyle.Normal.SetImageSize(FVector2D(NormalTabTexture->MaxTextureSize));
+	//BtnTeamDeathmatch->WidgetStyle.Normal.SetImageSize(FVector2D(NormalTabTexture->MaxTextureSize));
 }
 
 void UGameModesWidget::OnBtnPortCaptureClicked()
@@ -90,13 +90,13 @@ void UGameModesWidget::OnBtnPortCaptureClicked()
 	PanelSwitcher->SetActiveWidget(Tab_PortCapture);
 
 	BtnPortCapture->WidgetStyle.Normal.SetResourceObject(ActiveTabTexture);
-	BtnPortCapture->WidgetStyle.Normal.SetImageSize(FVector2D(ActiveTabTexture->MaxTextureSize));
+	//BtnPortCapture->WidgetStyle.Normal.SetImageSize(FVector2D(ActiveTabTexture->MaxTextureSize));
 	BtnSortie->WidgetStyle.Normal.SetResourceObject(NormalTabTexture);
-	BtnSortie->WidgetStyle.Normal.SetImageSize(FVector2D(NormalTabTexture->MaxTextureSize));
+	//BtnSortie->WidgetStyle.Normal.SetImageSize(FVector2D(NormalTabTexture->MaxTextureSize));
 	BtnAmbush->WidgetStyle.Normal.SetResourceObject(NormalTabTexture);
-	BtnAmbush->WidgetStyle.Normal.SetImageSize(FVector2D(NormalTabTexture->MaxTextureSize));
+	//BtnAmbush->WidgetStyle.Normal.SetImageSize(FVector2D(NormalTabTexture->MaxTextureSize));
 	BtnTeamDeathmatch->WidgetStyle.Normal.SetResourceObject(NormalTabTexture);
-	BtnTeamDeathmatch->WidgetStyle.Normal.SetImageSize(FVector2D(NormalTabTexture->MaxTextureSize));
+	//BtnTeamDeathmatch->WidgetStyle.Normal.SetImageSize(FVector2D(NormalTabTexture->MaxTextureSize));
 }
 
 void UGameModesWidget::OnBtnTeamDeathmatchClicked()
@@ -107,11 +107,11 @@ void UGameModesWidget::OnBtnTeamDeathmatchClicked()
 	PanelSwitcher->SetActiveWidget(Tab_TeamDeathmatch);
 
 	BtnTeamDeathmatch->WidgetStyle.Normal.SetResourceObject(ActiveTabTexture);
-	BtnTeamDeathmatch->WidgetStyle.Normal.SetImageSize(FVector2D(ActiveTabTexture->MaxTextureSize));
+	//BtnTeamDeathmatch->WidgetStyle.Normal.SetImageSize(FVector2D(ActiveTabTexture->MaxTextureSize));
 	BtnSortie->WidgetStyle.Normal.SetResourceObject(NormalTabTexture);
-	BtnSortie->WidgetStyle.Normal.SetImageSize(FVector2D(NormalTabTexture->MaxTextureSize));
+	//BtnSortie->WidgetStyle.Normal.SetImageSize(FVector2D(NormalTabTexture->MaxTextureSize));
 	BtnAmbush->WidgetStyle.Normal.SetResourceObject(NormalTabTexture);
-	BtnAmbush->WidgetStyle.Normal.SetImageSize(FVector2D(NormalTabTexture->MaxTextureSize));
+	//BtnAmbush->WidgetStyle.Normal.SetImageSize(FVector2D(NormalTabTexture->MaxTextureSize));
 	BtnPortCapture->WidgetStyle.Normal.SetResourceObject(NormalTabTexture);
-	BtnPortCapture->WidgetStyle.Normal.SetImageSize(FVector2D(NormalTabTexture->MaxTextureSize));
+	//BtnPortCapture->WidgetStyle.Normal.SetImageSize(FVector2D(NormalTabTexture->MaxTextureSize));
 }

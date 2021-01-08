@@ -47,7 +47,7 @@ void UMultiplayerPanel::Setup()
 	
 	if (!ensure(BtnServerBrowser != nullptr)) return;
 	BtnServerBrowser->WidgetStyle.Normal.SetResourceObject(ActiveTabTexture);
-	BtnServerBrowser->WidgetStyle.Normal.SetImageSize(FVector2D(ActiveTabTexture->MaxTextureSize));
+	//BtnServerBrowser->WidgetStyle.Normal.SetImageSize(FVector2D(ActiveTabTexture->MaxTextureSize));
 }
 
 void UMultiplayerPanel::OnLevelRemovedFromWorld(ULevel* InLevel, UWorld* InWorld)
@@ -64,11 +64,11 @@ void UMultiplayerPanel::OnBtnServerBrowserClicked()
 	PanelSwitcher->SetActiveWidget(Tab_ServerBrowser);
 
 	BtnServerBrowser->WidgetStyle.Normal.SetResourceObject(ActiveTabTexture);
-	BtnServerBrowser->WidgetStyle.Normal.SetImageSize(FVector2D(ActiveTabTexture->MaxTextureSize));
+	//BtnServerBrowser->WidgetStyle.Normal.SetImageSize(FVector2D(ActiveTabTexture->MaxTextureSize));
 	BtnHostServer->WidgetStyle.Normal.SetResourceObject(NormalTabTexture);
-	BtnHostServer->WidgetStyle.Normal.SetImageSize(FVector2D(NormalTabTexture->MaxTextureSize));
+	//BtnHostServer->WidgetStyle.Normal.SetImageSize(FVector2D(NormalTabTexture->MaxTextureSize));
 	BtnTrainingIsland->WidgetStyle.Normal.SetResourceObject(NormalTabTexture);
-	BtnTrainingIsland->WidgetStyle.Normal.SetImageSize(FVector2D(NormalTabTexture->MaxTextureSize));
+	//BtnTrainingIsland->WidgetStyle.Normal.SetImageSize(FVector2D(NormalTabTexture->MaxTextureSize));
 }
 
 void UMultiplayerPanel::OnBtnHostServerClicked()
@@ -79,11 +79,11 @@ void UMultiplayerPanel::OnBtnHostServerClicked()
 	PanelSwitcher->SetActiveWidget(Tab_HostServer);
 
 	BtnHostServer->WidgetStyle.Normal.SetResourceObject(ActiveTabTexture);
-	BtnHostServer->WidgetStyle.Normal.SetImageSize(FVector2D(ActiveTabTexture->MaxTextureSize));
+	//BtnHostServer->WidgetStyle.Normal.SetImageSize(FVector2D(ActiveTabTexture->MaxTextureSize));
 	BtnServerBrowser->WidgetStyle.Normal.SetResourceObject(NormalTabTexture);
-	BtnServerBrowser->WidgetStyle.Normal.SetImageSize(FVector2D(NormalTabTexture->MaxTextureSize));
+	//BtnServerBrowser->WidgetStyle.Normal.SetImageSize(FVector2D(NormalTabTexture->MaxTextureSize));
 	BtnTrainingIsland->WidgetStyle.Normal.SetResourceObject(NormalTabTexture);
-	BtnTrainingIsland->WidgetStyle.Normal.SetImageSize(FVector2D(NormalTabTexture->MaxTextureSize));
+	//BtnTrainingIsland->WidgetStyle.Normal.SetImageSize(FVector2D(NormalTabTexture->MaxTextureSize));
 }
 
 void UMultiplayerPanel::OnBtnTrainingIslandClicked()
@@ -94,9 +94,9 @@ void UMultiplayerPanel::OnBtnTrainingIslandClicked()
 	PanelSwitcher->SetActiveWidget(Tab_TrainingIsland);
 
 	BtnTrainingIsland->WidgetStyle.Normal.SetResourceObject(ActiveTabTexture);
-	BtnTrainingIsland->WidgetStyle.Normal.SetImageSize(FVector2D(ActiveTabTexture->MaxTextureSize));
+	//BtnTrainingIsland->WidgetStyle.Normal.SetImageSize(FVector2D(ActiveTabTexture->MaxTextureSize));
 	BtnServerBrowser->WidgetStyle.Normal.SetResourceObject(NormalTabTexture);
-	BtnServerBrowser->WidgetStyle.Normal.SetImageSize(FVector2D(NormalTabTexture->MaxTextureSize));
+	//BtnServerBrowser->WidgetStyle.Normal.SetImageSize(FVector2D(NormalTabTexture->MaxTextureSize));
 	BtnHostServer->WidgetStyle.Normal.SetResourceObject(NormalTabTexture);
-	BtnHostServer->WidgetStyle.Normal.SetImageSize(FVector2D(NormalTabTexture->MaxTextureSize));
+	//BtnHostServer->WidgetStyle.Normal.SetImageSize(FVector2D(NormalTabTexture->MaxTextureSize));
 }

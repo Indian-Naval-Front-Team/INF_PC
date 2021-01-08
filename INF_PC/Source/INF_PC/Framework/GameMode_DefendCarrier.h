@@ -14,4 +14,6 @@ class INF_PC_API AGameMode_DefendCarrier : public AGameModeParent
 {
 	GENERATED_BODY()
 	
+public:
+	AGameMode_DefendCarrier();
 };

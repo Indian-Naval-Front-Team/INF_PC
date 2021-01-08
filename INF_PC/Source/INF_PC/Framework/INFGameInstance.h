@@ -5,6 +5,9 @@
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
 #include "INF_PC/UI/MenuInterface.h"
+#include <OnlineSubsystem.h>
+#include <Interfaces/OnlineSessionInterface.h>
+#include <OnlineSessionSettings.h>
 #include "INFGameInstance.generated.h"
 
 /**
@@ -18,7 +21,7 @@ class INF_PC_API UINFGameInstance : public UGameInstance, public IMenuInterface
 public:
 	UINFGameInstance(const FObjectInitializer& ObjectInitializer);
 
-	virtual void Initialize();
+	virtual void Init();
 
 	UFUNCTION(BlueprintCallable)
 	void LoadMainMenu();
@@ -31,4 +34,7 @@ public:
 
 private:
 	TSubclassOf<class UUserWidget> MainMenuClass;
+	IOnlineSessionPtr SessionInterface;
+
+	void OnCreateSessionsComplete(FName SessionName, bool Success);
 };
