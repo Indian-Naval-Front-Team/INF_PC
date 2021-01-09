@@ -70,6 +70,8 @@ void UMultiplayerPanel::OnBtnServerBrowserClicked()
 	//BtnHostServer->WidgetStyle.Normal.SetImageSize(FVector2D(NormalTabTexture->MaxTextureSize));
 	BtnTrainingIsland->WidgetStyle.Normal.SetResourceObject(NormalTabTexture);
 	//BtnTrainingIsland->WidgetStyle.Normal.SetImageSize(FVector2D(NormalTabTexture->MaxTextureSize));
+
+	MenuInterfaceRef->Find();
 }
 
 void UMultiplayerPanel::OnBtnHostServerClicked()

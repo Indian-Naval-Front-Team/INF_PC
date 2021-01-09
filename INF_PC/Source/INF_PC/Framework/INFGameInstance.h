@@ -8,6 +8,7 @@
 #include <OnlineSubsystem.h>
 #include <Interfaces/OnlineSessionInterface.h>
 #include <OnlineSessionSettings.h>
+#include <Templates/SharedPointer.h>
 #include "INFGameInstance.generated.h"
 
 /**
@@ -26,18 +27,23 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void LoadMainMenu();
 
-	UFUNCTION(Exec)
+	UFUNCTION(BlueprintCallable)
 	void Host();
 
-	UFUNCTION(Exec)
+	UFUNCTION(BlueprintCallable)
 	void Join();
+
+	UFUNCTION(BlueprintCallable)
+	void Find();
 
 private:
 	TSubclassOf<class UUserWidget> MainMenuClass;
 	IOnlineSessionPtr SessionInterface;
+	TSharedPtr<FOnlineSessionSearch> SessionSearch;
 
 	void OnCreateSessionsComplete(FName SessionName, bool Success);
 	void OnDestroySessionsComplete(FName SessionName, bool Success);
+	void OnFindSessionsComplete(bool Success);
 
 	void CreateSession();
 };

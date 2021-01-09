@@ -27,16 +27,24 @@ void UINFGameInstance::Init()
 
 		if (SessionInterface.IsValid())
 		{
+			SessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this, &UINFGameInstance::OnFindSessionsComplete);
 			SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UINFGameInstance::OnCreateSessionsComplete);
 			SessionInterface->OnDestroySessionCompleteDelegates.AddUObject(this, &UINFGameInstance::OnDestroySessionsComplete);
+
+			// FIND SESSIONS
+			/*SessionSearch = MakeShareable(new FOnlineSessionSearch);
+
+			if (SessionSearch.IsValid())
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Finding Sessions..."));
+				SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
+			}*/
 		}
 	}
 	else
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Found no Subsystem."));
 	}
-
-	UE_LOG(LogTemp, Warning, TEXT("Found Main Menu Class - %s"), *MainMenuClass->GetName());
 }
 
 void UINFGameInstance::LoadMainMenu()
@@ -95,6 +103,11 @@ void UINFGameInstance::OnDestroySessionsComplete(FName SessionName, bool Success
 	}
 }
 
+void UINFGameInstance::OnFindSessionsComplete(bool Success)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Finished Finding Sessions!!!"));
+}
+
 void UINFGameInstance::CreateSession()
 {
 	if (SessionInterface.IsValid())
@@ -107,4 +120,15 @@ void UINFGameInstance::CreateSession()
 void UINFGameInstance::Join()
 {
 
+}
+
+void UINFGameInstance::Find()
+{
+	SessionSearch = MakeShareable(new FOnlineSessionSearch);
+
+	if (SessionSearch.IsValid())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Finding Sessions..."));
+		SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
+	}
 }

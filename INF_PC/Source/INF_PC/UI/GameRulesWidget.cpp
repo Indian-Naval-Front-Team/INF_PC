@@ -29,6 +29,7 @@ void UGameRulesWidget::OnBtnListenServerClicked()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Menu Interface Reference is NULL AGAIN!!!"));
 	}
+
 	MenuInterfaceRef->Host();
 }
 

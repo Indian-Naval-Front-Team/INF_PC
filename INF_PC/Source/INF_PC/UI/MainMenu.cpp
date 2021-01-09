@@ -60,6 +60,7 @@ void UMainMenu::OnBtnMuliplayerClicked()
 	if (!ensure(Multiplayer != nullptr)) return;
 	
 	MultiplayerPanel->SetMenuInterface(this->MenuInterfaceRef);
+	MenuInterfaceRef->Find();
 
 	MainMenuSwitcher->SetActiveWidget(Multiplayer);
 }
