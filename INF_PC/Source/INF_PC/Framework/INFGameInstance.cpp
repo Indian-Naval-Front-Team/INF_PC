@@ -104,8 +104,16 @@ void UINFGameInstance::OnDestroySessionsComplete(FName SessionName, bool Success
 }
 
 void UINFGameInstance::OnFindSessionsComplete(bool Success)
-{
-	UE_LOG(LogTemp, Warning, TEXT("Finished Finding Sessions!!!"));
+{	
+	if (Success && SessionSearch.IsValid())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Finished Finding Sessions!!!"));
+
+		for (const FOnlineSessionSearchResult& SearchResult : SessionSearch->SearchResults)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Session found - %s with Ping %d"), *SearchResult.GetSessionIdStr(), SearchResult.PingInMs);
+		}
+	}
 }
 
 void UINFGameInstance::CreateSession()
@@ -113,6 +121,10 @@ void UINFGameInstance::CreateSession()
 	if (SessionInterface.IsValid())
 	{
 		FOnlineSessionSettings SessionSettings;
+		SessionSettings.bIsLANMatch = true;
+		SessionSettings.NumPublicConnections = 2;
+		SessionSettings.bShouldAdvertise = true;
+
 		SessionInterface->CreateSession(0, SESSION_NAME, SessionSettings);
 	}
 }
@@ -128,6 +140,12 @@ void UINFGameInstance::Find()
 
 	if (SessionSearch.IsValid())
 	{
+		// Add QueryParams here or in other words Filters to search for online sessions.
+		SessionSearch->bIsLanQuery = true;	// look for LAN matches
+		
+		// The line below lets us create QuerySettings as per the target platform for Multiplayer being used. Eg. Steam or XBox Live or EOS
+		//SessionSearch->QuerySettings.Set()
+
 		UE_LOG(LogTemp, Warning, TEXT("Finding Sessions..."));
 		SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
 	}
