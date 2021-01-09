@@ -4,6 +4,7 @@
 #include "ServerBrowserPanel.h"
 #include "UMG/Public/Components/Button.h"
 #include "ServerRow.h"
+#include <INF_PC/Framework/INFGameInstance.h>
 
 UServerBrowserPanel::UServerBrowserPanel(const FObjectInitializer& ObjectInitializer)
 {
@@ -19,18 +20,35 @@ bool UServerBrowserPanel::Initialize()
 
 	if (!Success) return false;
 
-	if (!ensure(BtnServerRowTest != nullptr)) return false;
+	if (!ensure(TestButton != nullptr)) return false;
 
-	BtnServerRowTest->OnClicked.AddDynamic(this, &UServerBrowserPanel::OnBtnServerRowTestClicked);
+	TestButton->OnClicked.AddDynamic(this, &UServerBrowserPanel::OnBtnServerRowTestClicked);
+
+	UINFGameInstance* INFGameInstance = Cast<UINFGameInstance>(GetWorld()->GetGameInstance());
+	if (!ensure(INFGameInstance != nullptr)) return false;
+
+	INFGameInstance->SetServerBrowserPanel(this);
 
 	return true;
 }
 
+void UServerBrowserPanel::SetServerList(TArray<FString> ServerNames)
+{
+	ServerList->ClearChildren();
+
+	for (const FString& ServerName : ServerNames)
+	{
+		ServerRowWidget = CreateWidget<UServerRow>(this, ServerRowClass);
+		if (!ensure(ServerRowWidget != nullptr)) return;
+
+		ServerRowWidget->SetServerName(FText::FromString(ServerName));
+
+		if (!ensure(ServerList != nullptr)) return;
+		ServerList->AddChild(ServerRowWidget);
+	}
+}
+
 void UServerBrowserPanel::OnBtnServerRowTestClicked()
 {
-	ServerRowWidget = CreateWidget<UServerRow>(this, ServerRowClass);
-	if (!ensure(ServerRowWidget != nullptr)) return;
-
-	if (!ensure(ServerList != nullptr)) return;
-	ServerList->AddChild(ServerRowWidget);
+	SetServerList({ "Test Server 1", "Test Server 2" });
 }

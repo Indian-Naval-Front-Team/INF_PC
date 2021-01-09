@@ -17,12 +17,13 @@ class INF_PC_API UServerBrowserPanel : public UMenuWidget
 	
 public:
 	UServerBrowserPanel(const FObjectInitializer& ObjectInitializer);
+	void SetServerList(TArray<FString> ServerNames);
 
 private:
 	UPROPERTY(meta = (BindWidget))
 	class UPanelWidget* ServerList;
 	UPROPERTY(meta = (BindWidget))
-	class UButton* BtnServerRowTest;
+	class UButton* TestButton;
 
 	TSubclassOf<UUserWidget> ServerRowClass;
 	class UServerRow* ServerRowWidget;

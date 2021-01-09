@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "MenuInterface.h"
-#include <INF_PC/Framework/INFGameInstance.h>
 #include "MenuWidget.generated.h"
 
 /**
@@ -27,6 +26,4 @@ public:
 protected:
 	IMenuInterface* MenuInterfaceRef;
 
-private:
-	UINFGameInstance* GameInstanceRef;
 };

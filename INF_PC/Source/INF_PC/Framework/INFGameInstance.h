@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
 #include "INF_PC/UI/MenuInterface.h"
+#include <INF_PC/UI/MainMenu.h>
+#include <INF_PC/UI/ServerBrowserPanel.h>
 #include <OnlineSubsystem.h>
 #include <Interfaces/OnlineSessionInterface.h>
 #include <OnlineSessionSettings.h>
@@ -21,6 +23,9 @@ class INF_PC_API UINFGameInstance : public UGameInstance, public IMenuInterface
 	
 public:
 	UINFGameInstance(const FObjectInitializer& ObjectInitializer);
+	UMainMenu* GetMainMenu() const { return MainMenu; };
+
+	void SetServerBrowserPanel(UServerBrowserPanel* Val) { ServerBrowserPanel = Val; };
 
 	virtual void Init();
 
@@ -36,11 +41,15 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void Find();
 
+	UFUNCTION(BlueprintCallable)
+	void RefreshServerList();
+
 private:
 	TSubclassOf<class UUserWidget> MainMenuClass;
-	class UMainMenu* MainMenu;
+	UMainMenu* MainMenu;
 	IOnlineSessionPtr SessionInterface;
 	TSharedPtr<FOnlineSessionSearch> SessionSearch;
+	UServerBrowserPanel* ServerBrowserPanel;
 
 	void OnCreateSessionsComplete(FName SessionName, bool Success);
 	void OnDestroySessionsComplete(FName SessionName, bool Success);

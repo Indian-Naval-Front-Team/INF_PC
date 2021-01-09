@@ -2,7 +2,6 @@
 
 
 #include "INFGameInstance.h"
-#include <INF_PC/UI/MainMenu.h>
 
 const static FName SESSION_NAME = TEXT("My Session Game");
 
@@ -30,15 +29,6 @@ void UINFGameInstance::Init()
 			SessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this, &UINFGameInstance::OnFindSessionsComplete);
 			SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UINFGameInstance::OnCreateSessionsComplete);
 			SessionInterface->OnDestroySessionCompleteDelegates.AddUObject(this, &UINFGameInstance::OnDestroySessionsComplete);
-
-			// FIND SESSIONS
-			/*SessionSearch = MakeShareable(new FOnlineSessionSearch);
-
-			if (SessionSearch.IsValid())
-			{
-				UE_LOG(LogTemp, Warning, TEXT("Finding Sessions..."));
-				SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
-			}*/
 		}
 	}
 	else
@@ -103,15 +93,28 @@ void UINFGameInstance::OnDestroySessionsComplete(FName SessionName, bool Success
 	}
 }
 
+void UINFGameInstance::RefreshServerList()
+{
+	Find();
+}
+
 void UINFGameInstance::OnFindSessionsComplete(bool Success)
 {	
 	if (Success && SessionSearch.IsValid())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Finished Finding Sessions!!!"));
 
+		TArray<FString> ServerNames;
+
 		for (const FOnlineSessionSearchResult& SearchResult : SessionSearch->SearchResults)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Session found - %s with Ping %d"), *SearchResult.GetSessionIdStr(), SearchResult.PingInMs);
+			ServerNames.Add(SearchResult.GetSessionIdStr());
+		}
+
+		if (ServerBrowserPanel != nullptr)
+		{
+			ServerBrowserPanel->SetServerList(ServerNames);
 		}
 	}
 }
@@ -129,11 +132,6 @@ void UINFGameInstance::CreateSession()
 	}
 }
 
-void UINFGameInstance::Join()
-{
-
-}
-
 void UINFGameInstance::Find()
 {
 	SessionSearch = MakeShareable(new FOnlineSessionSearch);
@@ -149,4 +147,9 @@ void UINFGameInstance::Find()
 		UE_LOG(LogTemp, Warning, TEXT("Finding Sessions..."));
 		SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
 	}
+}
+
+void UINFGameInstance::Join()
+{
+
 }
