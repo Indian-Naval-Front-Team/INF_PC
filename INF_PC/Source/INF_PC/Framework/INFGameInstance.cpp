@@ -4,6 +4,8 @@
 #include "INFGameInstance.h"
 #include <INF_PC/UI/MainMenu.h>
 
+const static FName SESSION_NAME = TEXT("My Session Game");
+
 UINFGameInstance::UINFGameInstance(const FObjectInitializer& ObjectInitializer)
 {
 	UE_LOG(LogTemp, Warning, TEXT("GameInstance Constructor"));
@@ -24,8 +26,9 @@ void UINFGameInstance::Init()
 		SessionInterface = Subsystem->GetSessionInterface();
 
 		if (SessionInterface.IsValid())
-		{	
+		{
 			SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UINFGameInstance::OnCreateSessionsComplete);
+			SessionInterface->OnDestroySessionCompleteDelegates.AddUObject(this, &UINFGameInstance::OnDestroySessionsComplete);
 		}
 	}
 	else
@@ -50,11 +53,18 @@ void UINFGameInstance::LoadMainMenu()
 
 void UINFGameInstance::Host()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Host Server Now!!!"));
 	if (SessionInterface.IsValid())
 	{
-		FOnlineSessionSettings SessionSettings;
-		SessionInterface->CreateSession(0, TEXT("My Session Game"), SessionSettings);
+		auto ExistingSession = SessionInterface->GetNamedSession(SESSION_NAME);
+
+		if (ExistingSession != nullptr)
+		{
+			SessionInterface->DestroySession(SESSION_NAME);
+		}
+		else
+		{
+			CreateSession();
+		}
 	}
 }
 
@@ -75,6 +85,23 @@ void UINFGameInstance::OnCreateSessionsComplete(FName SessionName, bool Success)
 	if (!ensure(World != nullptr)) return;
 
 	World->ServerTravel("/Game/Maps/Workspace/MultiplayerTestMap");
+}
+
+void UINFGameInstance::OnDestroySessionsComplete(FName SessionName, bool Success)
+{
+	if (Success)
+	{
+		CreateSession();
+	}
+}
+
+void UINFGameInstance::CreateSession()
+{
+	if (SessionInterface.IsValid())
+	{
+		FOnlineSessionSettings SessionSettings;
+		SessionInterface->CreateSession(0, SESSION_NAME, SessionSettings);
+	}
 }
 
 void UINFGameInstance::Join()
