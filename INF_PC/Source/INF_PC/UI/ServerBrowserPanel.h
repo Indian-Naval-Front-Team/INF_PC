@@ -15,4 +15,21 @@ class INF_PC_API UServerBrowserPanel : public UMenuWidget
 {
 	GENERATED_BODY()
 	
+public:
+	UServerBrowserPanel(const FObjectInitializer& ObjectInitializer);
+
+private:
+	UPROPERTY(meta = (BindWidget))
+	class UPanelWidget* ServerList;
+	UPROPERTY(meta = (BindWidget))
+	class UButton* BtnServerRowTest;
+
+	TSubclassOf<UUserWidget> ServerRowClass;
+	class UServerRow* ServerRowWidget;
+
+	UFUNCTION()
+	void OnBtnServerRowTestClicked();
+
+protected:
+	bool Initialize();
 };

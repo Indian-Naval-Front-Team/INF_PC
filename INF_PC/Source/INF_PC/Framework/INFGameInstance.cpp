@@ -51,7 +51,7 @@ void UINFGameInstance::LoadMainMenu()
 {
 	if (!ensure(MainMenuClass != nullptr)) return;
 
-	UMainMenu* MainMenu = CreateWidget<UMainMenu>(this, MainMenuClass);
+	MainMenu = CreateWidget<UMainMenu>(this, MainMenuClass);
 	if (!ensure(MainMenu != nullptr)) return;
 
 	MainMenu->bIsFocusable = true;
