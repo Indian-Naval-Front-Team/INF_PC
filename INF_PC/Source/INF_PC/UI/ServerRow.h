@@ -29,6 +29,10 @@ public:
 	void SetPingText(FText Val);
 	UFUNCTION()
 	void SetLocked(bool IsLocked);
+	UFUNCTION()
+	void SetSessionIndex(uint32 Val);
+
+	uint32 GetSessionIndex() { return SessionIndex; };
 
 private:
 	UPROPERTY(meta = (BindWidget))
@@ -43,6 +47,8 @@ private:
 	UTextBlock* TxtPing;
 	UPROPERTY(meta = (BindWidget))
 	UButton* BtnJoin;
+
+	uint32 SessionIndex;
 
 	UFUNCTION()
 	void OnBtnJoinClicked();

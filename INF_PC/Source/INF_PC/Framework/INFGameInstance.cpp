@@ -2,6 +2,7 @@
 
 
 #include "INFGameInstance.h"
+#include <INF_PC/UI/ServerRow.h>
 
 const static FName SESSION_NAME = TEXT("My Session Game");
 
@@ -149,7 +150,23 @@ void UINFGameInstance::Find()
 	}
 }
 
-void UINFGameInstance::Join()
+void UINFGameInstance::OnJoinSessionsComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result)
 {
 
+}
+
+void UINFGameInstance::Join(UServerRow* ServerRow)
+{
+	if (!SessionInterface.IsValid())
+	{
+		return;
+	}
+
+	if (!SessionSearch.IsValid())
+	{
+		return;
+	}
+
+	// Join the Session by the Session Index.
+	SessionInterface->JoinSession(0, SESSION_NAME, SessionSearch->SearchResults[ServerRow->GetSessionIndex()]);
 }

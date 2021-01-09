@@ -24,7 +24,7 @@ bool UServerBrowserPanel::Initialize()
 
 	TestButton->OnClicked.AddDynamic(this, &UServerBrowserPanel::OnBtnServerRowTestClicked);
 
-	UINFGameInstance* INFGameInstance = Cast<UINFGameInstance>(GetWorld()->GetGameInstance());
+	INFGameInstance = Cast<UINFGameInstance>(GetWorld()->GetGameInstance());
 	if (!ensure(INFGameInstance != nullptr)) return false;
 
 	INFGameInstance->SetServerBrowserPanel(this);
@@ -35,17 +35,22 @@ bool UServerBrowserPanel::Initialize()
 void UServerBrowserPanel::SetServerList(TArray<FString> ServerNames)
 {
 	ServerList->ClearChildren();
-
+	
+	uint32 Index = 0;
 	for (const FString& ServerName : ServerNames)
 	{
 		ServerRowWidget = CreateWidget<UServerRow>(this, ServerRowClass);
 		if (!ensure(ServerRowWidget != nullptr)) return;
 
 		ServerRowWidget->SetServerName(FText::FromString(ServerName));
-
+		ServerRowWidget->SetMenuInterface(INFGameInstance);
+		ServerRowWidget->SetSessionIndex(Index++);
+		
 		if (!ensure(ServerList != nullptr)) return;
 		ServerList->AddChild(ServerRowWidget);
 	}
+
+	Index = 0;
 }
 
 void UServerBrowserPanel::OnBtnServerRowTestClicked()

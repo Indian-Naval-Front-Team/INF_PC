@@ -60,6 +60,14 @@ void UServerRow::SetLocked(bool IsLocked)
 
 }
 
+void UServerRow::SetSessionIndex(uint32 Val)
+{
+	if (Val < 0)
+		Val = 0;
+
+	SessionIndex = Val;
+}
+
 void UServerRow::OnBtnJoinClicked()
 {
 	if (MenuInterfaceRef != nullptr)
@@ -67,6 +75,6 @@ void UServerRow::OnBtnJoinClicked()
 		UINFGameInstance* INFGameInstance = Cast<UINFGameInstance>(GetWorld()->GetGameInstance());
 		if (!ensure(INFGameInstance != nullptr)) return;
 
-		MenuInterfaceRef->Join();
+		MenuInterfaceRef->Join(this);
 	}
 }

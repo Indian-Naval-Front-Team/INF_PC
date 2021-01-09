@@ -27,6 +27,7 @@ private:
 
 	TSubclassOf<UUserWidget> ServerRowClass;
 	class UServerRow* ServerRowWidget;
+	class UINFGameInstance* INFGameInstance;
 
 	UFUNCTION()
 	void OnBtnServerRowTestClicked();

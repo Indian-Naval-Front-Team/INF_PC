@@ -24,7 +24,7 @@ class INF_PC_API IMenuInterface
 public:
 
 	virtual void Host() = 0;
-	virtual void Join() = 0;
+	virtual void Join(class UServerRow* ServerRow) = 0;
 	virtual void Find() = 0;
 	virtual void RefreshServerList() = 0;
 };

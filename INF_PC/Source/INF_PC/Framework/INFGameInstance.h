@@ -36,7 +36,7 @@ public:
 	void Host();
 
 	UFUNCTION(BlueprintCallable)
-	void Join();
+	void Join(class UServerRow* ServerRow);
 
 	UFUNCTION(BlueprintCallable)
 	void Find();
@@ -54,6 +54,7 @@ private:
 	void OnCreateSessionsComplete(FName SessionName, bool Success);
 	void OnDestroySessionsComplete(FName SessionName, bool Success);
 	void OnFindSessionsComplete(bool Success);
+	void OnJoinSessionsComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result);
 
 	void CreateSession();
 };
