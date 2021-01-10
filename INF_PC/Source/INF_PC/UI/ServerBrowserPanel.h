@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include <INF_PC/UI/MenuWidget.h>
+#include <INF_PC/Framework/INFGameInstance.h>
 #include "ServerBrowserPanel.generated.h"
 
 /**
@@ -17,7 +18,7 @@ class INF_PC_API UServerBrowserPanel : public UMenuWidget
 	
 public:
 	UServerBrowserPanel(const FObjectInitializer& ObjectInitializer);
-	void SetServerList(TArray<FString> ServerNames);
+	void SetServerList(TArray<FServerData> ServerDatum);
 
 	virtual void NativeConstruct() override;
 

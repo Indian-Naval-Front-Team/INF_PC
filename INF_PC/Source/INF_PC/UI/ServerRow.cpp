@@ -77,9 +77,6 @@ void UServerRow::OnBtnJoinClicked()
 {
 	if (MenuInterfaceRef != nullptr)
 	{
-		/*UINFGameInstance* INFGameInstance = Cast<UINFGameInstance>(GetWorld()->GetGameInstance());
-		if (!ensure(INFGameInstance != nullptr)) return;*/
-
 		MenuInterfaceRef->Join(this);
 	}
 }

@@ -4,7 +4,6 @@
 #include "ServerBrowserPanel.h"
 #include "UMG/Public/Components/Button.h"
 #include "ServerRow.h"
-#include <INF_PC/Framework/INFGameInstance.h>
 
 UServerBrowserPanel::UServerBrowserPanel(const FObjectInitializer& ObjectInitializer)
 {
@@ -38,19 +37,21 @@ bool UServerBrowserPanel::Initialize()
 	return true;
 }
 
-void UServerBrowserPanel::SetServerList(TArray<FString> ServerNames)
+void UServerBrowserPanel::SetServerList(TArray<FServerData> ServerDatum)
 {
 	ServerList->ClearChildren();
 	
 	uint32 Index = 0;
-	for (const FString& ServerName : ServerNames)
+	for (const FServerData& ServerData : ServerDatum)
 	{
 		ServerRowWidget = CreateWidget<UServerRow>(this, ServerRowClass);
 		if (!ensure(ServerRowWidget != nullptr)) return;
-
-		ServerRowWidget->SetServerName(FText::FromString(ServerName));
+		
 		ServerRowWidget->SetMenuInterface(INFGameInstance);
 		ServerRowWidget->SetSessionIndex(Index++);
+		ServerRowWidget->SetServerName(FText::FromString(ServerData.ServerName));
+		FString PlayerCountText = FString::Printf(TEXT("%d / %d"), ServerData.CurrentPlayers, ServerData.ServerSize);
+		ServerRowWidget->SetPlayerCountText(FText::FromString(PlayerCountText));
 		
 		if (!ensure(ServerList != nullptr)) return;
 		ServerList->AddChild(ServerRowWidget);
@@ -61,5 +62,5 @@ void UServerBrowserPanel::SetServerList(TArray<FString> ServerNames)
 
 void UServerBrowserPanel::OnBtnServerRowTestClicked()
 {
-	SetServerList({ "Test Server 1", "Test Server 2" });
+	//SetServerList({ "Test Server 1", "Test Server 2" });
 }

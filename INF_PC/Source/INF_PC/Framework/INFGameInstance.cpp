@@ -2,6 +2,7 @@
 
 
 #include "INFGameInstance.h"
+#include <INF_PC/UI/ServerBrowserPanel.h>
 #include <INF_PC/UI/ServerRow.h>
 
 const static FName SESSION_NAME = TEXT("My Session Game");
@@ -106,17 +107,22 @@ void UINFGameInstance::OnFindSessionsComplete(bool Success)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Finished Finding Sessions!!!"));
 
-		TArray<FString> ServerNames;
+		TArray<FServerData> ServerDatum;
 
 		for (const FOnlineSessionSearchResult& SearchResult : SessionSearch->SearchResults)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Session found - %s with Ping %d"), *SearchResult.GetSessionIdStr(), SearchResult.PingInMs);
-			ServerNames.Add(SearchResult.GetSessionIdStr());
+			FServerData Data;
+			Data.ServerName = SearchResult.GetSessionIdStr();
+			Data.CurrentPlayers = SearchResult.Session.NumOpenPublicConnections;
+			Data.ServerSize = SearchResult.Session.SessionSettings.NumPublicConnections;
+			//ServerNames.Add(SearchResult.GetSessionIdStr());
+			ServerDatum.Add(Data);
 		}
 
 		if (ServerBrowserPanel != nullptr)
 		{
-			ServerBrowserPanel->SetServerList(ServerNames);
+			ServerBrowserPanel->SetServerList(ServerDatum);
 		}
 	}
 }
@@ -125,10 +131,17 @@ void UINFGameInstance::CreateSession()
 {
 	if (SessionInterface.IsValid())
 	{
+		bool LanMatchTemp = false;
+		if (IOnlineSubsystem::Get()->GetSubsystemName() == "NULL")
+		{
+			LanMatchTemp = true;
+		}
+
 		FOnlineSessionSettings SessionSettings;
-		SessionSettings.bIsLANMatch = true;
+		SessionSettings.bIsLANMatch = LanMatchTemp;
 		SessionSettings.NumPublicConnections = 2;
 		SessionSettings.bShouldAdvertise = true;
+		SessionSettings.bUsesPresence = true;
 
 		SessionInterface->CreateSession(0, SESSION_NAME, SessionSettings);
 	}
@@ -140,11 +153,14 @@ void UINFGameInstance::Find()
 
 	if (SessionSearch.IsValid())
 	{
-		// Add QueryParams here or in other words Filters to search for online sessions.
-		SessionSearch->bIsLanQuery = true;	// look for LAN matches
+		// TODO : Take off the line below when we stop using the SpaceWars AppID(480) and use the INF AppID instead.
+		SessionSearch->MaxSearchResults = 100;
 		
+		// Add QueryParams here or in other words Filters to search for online sessions.
+		//SessionSearch->bIsLanQuery = true;	// look for LAN matches
 		// The line below lets us create QuerySettings as per the target platform for Multiplayer being used. Eg. Steam or XBox Live or EOS
-		//SessionSearch->QuerySettings.Set()
+			// For Steam Lobbies - The Set function invokes a Dictionary like operation to check whether Presence is turned on or not.
+		SessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals);
 
 		UE_LOG(LogTemp, Warning, TEXT("Finding Sessions..."));
 		SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
