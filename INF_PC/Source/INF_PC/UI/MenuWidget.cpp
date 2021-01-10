@@ -4,6 +4,12 @@
 #include "MenuWidget.h"
 
 
+void UMenuWidget::NativeConstruct()
+{
+	Super::NativeConstruct();
+	UE_LOG(LogTemp, Warning, TEXT("MenuWidget constructed!!"));
+}
+
 void UMenuWidget::Setup()
 {
 	this->AddToViewport();

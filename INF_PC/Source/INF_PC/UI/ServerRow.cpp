@@ -4,6 +4,16 @@
 #include "ServerRow.h"
 #include "../Framework/INFGameInstance.h"
 
+void UServerRow::NativeConstruct()
+{
+	Super::NativeConstruct();
+	UE_LOG(LogTemp, Warning, TEXT("Server Row constructed!!"));
+
+	UINFGameInstance* INFGameInstance = Cast<UINFGameInstance>(GetWorld()->GetGameInstance());
+	if (!ensure(INFGameInstance != nullptr)) return;
+
+	this->SetMenuInterface(INFGameInstance->GetMainMenu()->GetMenuInterface());
+}
 
 bool UServerRow::Initialize()
 {
@@ -14,11 +24,6 @@ bool UServerRow::Initialize()
 	if (!ensure(BtnJoin != nullptr)) return false;
 
 	BtnJoin->OnClicked.AddDynamic(this, &UServerRow::OnBtnJoinClicked);
-
-	UINFGameInstance* INFGameInstance = Cast<UINFGameInstance>(GetWorld()->GetGameInstance());
-	if (!ensure(INFGameInstance != nullptr)) return false;
-
-	this->SetMenuInterface(INFGameInstance->GetMainMenu()->GetMenuInterface());
 
 	return true;
 }
@@ -72,8 +77,8 @@ void UServerRow::OnBtnJoinClicked()
 {
 	if (MenuInterfaceRef != nullptr)
 	{
-		UINFGameInstance* INFGameInstance = Cast<UINFGameInstance>(GetWorld()->GetGameInstance());
-		if (!ensure(INFGameInstance != nullptr)) return;
+		/*UINFGameInstance* INFGameInstance = Cast<UINFGameInstance>(GetWorld()->GetGameInstance());
+		if (!ensure(INFGameInstance != nullptr)) return;*/
 
 		MenuInterfaceRef->Join(this);
 	}

@@ -19,6 +19,8 @@ public:
 	UServerBrowserPanel(const FObjectInitializer& ObjectInitializer);
 	void SetServerList(TArray<FString> ServerNames);
 
+	virtual void NativeConstruct() override;
+
 private:
 	UPROPERTY(meta = (BindWidget))
 	class UPanelWidget* ServerList;

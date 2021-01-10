@@ -19,6 +19,8 @@ class INF_PC_API UServerRow : public UMenuWidget
 	GENERATED_BODY()
 	
 public:
+	virtual void NativeConstruct() override;
+
 	UFUNCTION()
 	void SetServerName(FText Val);
 	UFUNCTION()

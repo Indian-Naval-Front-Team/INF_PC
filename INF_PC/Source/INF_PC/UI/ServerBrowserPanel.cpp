@@ -14,6 +14,17 @@ UServerBrowserPanel::UServerBrowserPanel(const FObjectInitializer& ObjectInitial
 	ServerRowClass = ServerRowBP.Class;
 }
 
+void UServerBrowserPanel::NativeConstruct()
+{
+	Super::NativeConstruct();
+	UE_LOG(LogTemp, Warning, TEXT("ServerBrowserPanel constructed!!"));
+
+	INFGameInstance = Cast<UINFGameInstance>(GetWorld()->GetGameInstance());
+	if (!ensure(INFGameInstance != nullptr)) return;
+
+	INFGameInstance->SetServerBrowserPanel(this);
+}
+
 bool UServerBrowserPanel::Initialize()
 {
 	const bool Success = Super::Initialize();
@@ -23,11 +34,6 @@ bool UServerBrowserPanel::Initialize()
 	if (!ensure(TestButton != nullptr)) return false;
 
 	TestButton->OnClicked.AddDynamic(this, &UServerBrowserPanel::OnBtnServerRowTestClicked);
-
-	INFGameInstance = Cast<UINFGameInstance>(GetWorld()->GetGameInstance());
-	if (!ensure(INFGameInstance != nullptr)) return false;
-
-	INFGameInstance->SetServerBrowserPanel(this);
 
 	return true;
 }

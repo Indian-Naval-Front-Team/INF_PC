@@ -30,6 +30,7 @@ void UINFGameInstance::Init()
 			SessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this, &UINFGameInstance::OnFindSessionsComplete);
 			SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UINFGameInstance::OnCreateSessionsComplete);
 			SessionInterface->OnDestroySessionCompleteDelegates.AddUObject(this, &UINFGameInstance::OnDestroySessionsComplete);
+			SessionInterface->OnJoinSessionCompleteDelegates.AddUObject(this, &UINFGameInstance::OnJoinSessionsComplete);
 		}
 	}
 	else
@@ -83,7 +84,7 @@ void UINFGameInstance::OnCreateSessionsComplete(FName SessionName, bool Success)
 	UWorld* World = GetWorld();
 	if (!ensure(World != nullptr)) return;
 
-	World->ServerTravel("/Game/Maps/Workspace/MultiplayerTestMap");
+	World->ServerTravel("/Game/Maps/Workspace/MultiplayerTestMap?listen");
 }
 
 void UINFGameInstance::OnDestroySessionsComplete(FName SessionName, bool Success)
@@ -152,7 +153,28 @@ void UINFGameInstance::Find()
 
 void UINFGameInstance::OnJoinSessionsComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result)
 {
+	if (!SessionInterface.IsValid()) return;
 
+	FString Address;
+	if (!SessionInterface->GetResolvedConnectString(SessionName, Address))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Could not got ConnectString!"));
+		return;
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Address %s"), *Address);
+	}
+
+	UEngine* Engine = GetEngine();
+	if (!ensure(Engine != nullptr)) return;
+
+	Engine->AddOnScreenDebugMessage(0, 5.0f, FColor::Blue, FString::Printf(TEXT("Joining...%s"), *Address));
+
+	APlayerController* PlayerController = GetFirstLocalPlayerController();
+	if (!ensure(PlayerController != nullptr)) return;
+
+	PlayerController->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
 }
 
 void UINFGameInstance::Join(UServerRow* ServerRow)

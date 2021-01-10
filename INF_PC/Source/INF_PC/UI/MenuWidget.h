@@ -16,6 +16,8 @@ class INF_PC_API UMenuWidget : public UUserWidget
 	GENERATED_BODY()
 
 public:
+	UFUNCTION()
+	virtual void NativeConstruct() override;
 
 	void Setup();
 	IMenuInterface* GetMenuInterface() { return MenuInterfaceRef; };
