@@ -6,6 +6,7 @@
 #include <INF_PC/UI/ServerRow.h>
 
 const static FName SESSION_NAME = TEXT("My Session Game");
+const static FName SERVER_NAME_SETTINGS_KEY = TEXT("ServerName");
 
 UINFGameInstance::UINFGameInstance(const FObjectInitializer& ObjectInitializer)
 {
@@ -52,8 +53,10 @@ void UINFGameInstance::LoadMainMenu()
 	MainMenu->SetMenuInterface(this);
 }
 
-void UINFGameInstance::Host()
+void UINFGameInstance::Host(FServerData Val)
 {
+	ServerData = Val;
+
 	if (SessionInterface.IsValid())
 	{
 		auto ExistingSession = SessionInterface->GetNamedSession(SESSION_NAME);
@@ -113,9 +116,20 @@ void UINFGameInstance::OnFindSessionsComplete(bool Success)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Session found - %s with Ping %d"), *SearchResult.GetSessionIdStr(), SearchResult.PingInMs);
 			FServerData Data;
-			Data.ServerName = SearchResult.GetSessionIdStr();
-			Data.CurrentPlayers = SearchResult.Session.NumOpenPublicConnections;
 			Data.ServerSize = SearchResult.Session.SessionSettings.NumPublicConnections;
+			Data.CurrentPlayers = Data.ServerSize - SearchResult.Session.NumOpenPublicConnections;
+
+			FString ValueData;
+			if (SearchResult.Session.SessionSettings.Get(SERVER_NAME_SETTINGS_KEY, ValueData))
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Data found in Settings %s"), *ValueData);
+				Data.ServerName = ValueData;
+			}
+			else
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Failed to fetch expected data!!"));
+				Data.ServerName = "Could not find Server Name.";
+			}
 			//ServerNames.Add(SearchResult.GetSessionIdStr());
 			ServerDatum.Add(Data);
 		}
@@ -142,6 +156,7 @@ void UINFGameInstance::CreateSession()
 		SessionSettings.NumPublicConnections = 2;
 		SessionSettings.bShouldAdvertise = true;
 		SessionSettings.bUsesPresence = true;
+		SessionSettings.Set(SERVER_NAME_SETTINGS_KEY, ServerData.ServerName, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
 
 		SessionInterface->CreateSession(0, SESSION_NAME, SessionSettings);
 	}

@@ -11,32 +11,32 @@
 #include <OnlineSessionSettings.h>
 #include <Templates/SharedPointer.h>
 #include "INFGameInstance.generated.h"
-
-UENUM()
-enum EServerRestartRules
-{
-	NEVERSHUTDOWN	  UMETA(DisplayName = "Never Shut Down"),
-	ONEMATCH		  UMETA(DisplayName = "Shut down after 1 match"),
-	THREEMATCH		  UMETA(DisplayName = "Shut down after 3 matches"),
-	FIVEMATCH		  UMETA(DisplayName = "Shut down after 5 matches"),
-};
-
-USTRUCT()
-struct FServerData
-{
-	GENERATED_BODY()
-
-	FString ServerName;
-	FString Password;
-	float MapDuration;
-	uint32 TicketsPerTeam;
-	uint16 ServerSize;
-	uint16 PlayersRequiredToStart;
-	EServerRestartRules ServerRestartRule;
-	bool IsLan;
-
-	uint16 CurrentPlayers;
-};
+//
+//UENUM()
+//enum EServerRestartRules
+//{
+//	NEVERSHUTDOWN	  UMETA(DisplayName = "Never Shut Down"),
+//	ONEMATCH		  UMETA(DisplayName = "Shut down after 1 match"),
+//	THREEMATCH		  UMETA(DisplayName = "Shut down after 3 matches"),
+//	FIVEMATCH		  UMETA(DisplayName = "Shut down after 5 matches"),
+//};
+//
+//USTRUCT()
+//struct FServerData
+//{
+//	GENERATED_BODY()
+//
+//	FString ServerName;
+//	FString Password;
+//	float MapDuration;
+//	uint32 TicketsPerTeam;
+//	uint16 ServerSize;
+//	uint16 PlayersRequiredToStart;
+//	EServerRestartRules ServerRestartRule;
+//	bool IsLan;
+//
+//	uint16 CurrentPlayers;
+//};
 
 /**
  * 
@@ -57,13 +57,13 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void LoadMainMenu();
 
-	UFUNCTION(BlueprintCallable)
-	void Host();
+	UFUNCTION()
+	void Host(FServerData Val);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION()
 	void Join(class UServerRow* ServerRow);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION()
 	void Find();
 
 	UFUNCTION(BlueprintCallable)
@@ -75,6 +75,7 @@ private:
 	IOnlineSessionPtr SessionInterface;
 	TSharedPtr<FOnlineSessionSearch> SessionSearch;
 	class UServerBrowserPanel* ServerBrowserPanel;
+	FServerData ServerData;
 
 	void OnCreateSessionsComplete(FName SessionName, bool Success);
 	void OnDestroySessionsComplete(FName SessionName, bool Success);

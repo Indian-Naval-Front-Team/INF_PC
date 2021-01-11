@@ -30,7 +30,8 @@ void UGameRulesWidget::OnBtnListenServerClicked()
 		UE_LOG(LogTemp, Warning, TEXT("Menu Interface Reference is NULL AGAIN!!!"));
 	}
 
-	MenuInterfaceRef->Host();
+	ServerData.ServerName = Input_ServerName->Text.ToString();
+	MenuInterfaceRef->Host(ServerData);
 }
 
 void UGameRulesWidget::OnBtnDedicatedServerClicked()
