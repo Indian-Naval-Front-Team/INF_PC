@@ -22,6 +22,9 @@ class INF_PC_API UINFGameInstance : public UGameInstance, public IMenuInterface
 	GENERATED_BODY()
 	
 public:
+	bool StartMatch{ false };
+	uint32 NumberOfPlayers;
+
 	UINFGameInstance(const FObjectInitializer& ObjectInitializer);
 	UMainMenu* GetMainMenu() const { return MainMenu; };
 

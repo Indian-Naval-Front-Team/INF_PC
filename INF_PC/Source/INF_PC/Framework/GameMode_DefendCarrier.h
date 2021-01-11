@@ -23,6 +23,7 @@ public:
 private:
 	TSubclassOf<UUserWidget> LobbyWidgetClass;
 	class ULobbyWidget* LobbyWidget;
+	class UINFGameInstance* INFGameInstance;
 
 	uint32 NumberOfPlayers{ 0 };
 };

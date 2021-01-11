@@ -4,6 +4,7 @@
 #include "GameMode_DefendCarrier.h"
 #include <INF_PC/UI/LobbyWidget.h>
 #include <INF_PC/TP_Flying/TP_FlyingPawn.h>
+#include <INF_PC/Framework/INFGameInstance.h>
 
 AGameMode_DefendCarrier::AGameMode_DefendCarrier(const FObjectInitializer& ObjectInitializer) : AGameModeParent()
 {
@@ -17,19 +18,41 @@ AGameMode_DefendCarrier::AGameMode_DefendCarrier(const FObjectInitializer& Objec
 
 void AGameMode_DefendCarrier::PostLogin(APlayerController* NewPlayer)
 {
+	Super::PostLogin(NewPlayer);
+
+	INFGameInstance = Cast<UINFGameInstance>(GetWorld()->GetGameInstance());
+	if (!ensure(INFGameInstance != nullptr)) return;
+
+	++NumberOfPlayers;
+
 	if (NumberOfPlayers >= 2)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Reached 2 players..."));
+		LobbyWidget->RemoveFromParent();
+
+		INFGameInstance->StartMatch = true;
+
+		UWorld* World = GetWorld();
+		if (!ensure(World != nullptr)) return;
+
+		bUseSeamlessTravel = true;
+		World->ServerTravel("/Game/Maps/Workspace/MultiplayerTestMap?listen");
 	}
 	else
 	{
-		++NumberOfPlayers;
 		LobbyWidget = CreateWidget<ULobbyWidget>(GetWorld()->GetFirstPlayerController(), LobbyWidgetClass);
 		LobbyWidget->Setup();
+	}
+
+	if (HasAuthority())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Player Logged IN %d!!"), INFGameInstance->NumberOfPlayers);
 	}
 }
 
 void AGameMode_DefendCarrier::Logout(AController* Exiting)
 {
-	--NumberOfPlayers;
+	Super::Logout(Exiting);
+
+	--(INFGameInstance->NumberOfPlayers);
 }
