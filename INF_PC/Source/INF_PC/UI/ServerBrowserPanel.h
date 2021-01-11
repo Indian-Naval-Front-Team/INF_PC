@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include <INF_PC/UI/MenuWidget.h>
 #include <INF_PC/Framework/INFGameInstance.h>
+#include <INF_PC/Framework/GameModeParent.h>
 #include "ServerBrowserPanel.generated.h"
 
 /**

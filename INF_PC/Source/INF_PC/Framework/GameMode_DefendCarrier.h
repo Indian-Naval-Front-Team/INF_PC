@@ -15,5 +15,14 @@ class INF_PC_API AGameMode_DefendCarrier : public AGameModeParent
 	GENERATED_BODY()
 	
 public:
-	AGameMode_DefendCarrier();
+	AGameMode_DefendCarrier(const FObjectInitializer& ObjectInitializer);
+
+	void PostLogin(APlayerController* NewPlayer) override;
+	void Logout(AController* Exiting) override;
+
+private:
+	TSubclassOf<UUserWidget> LobbyWidgetClass;
+	class ULobbyWidget* LobbyWidget;
+
+	uint32 NumberOfPlayers{ 0 };
 };

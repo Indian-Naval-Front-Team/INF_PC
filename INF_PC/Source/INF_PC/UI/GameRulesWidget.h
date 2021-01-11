@@ -7,6 +7,7 @@
 #include "INF_PC/UI/MenuInterface.h"
 #include <INF_PC/UI/MenuWidget.h>
 #include <INF_PC/UI/MainMenu.h>
+#include <INF_PC/Framework/GameModeParent.h>
 #include "UMG/Public/Components/TextBlock.h"
 #include "UMG/Public/Components/EditableTextBox.h"
 #include "UMG/Public/Components/ComboBoxString.h"

@@ -6,37 +6,12 @@
 #include "Engine/GameInstance.h"
 #include "INF_PC/UI/MenuInterface.h"
 #include <INF_PC/UI/MainMenu.h>
+#include <INF_PC/Framework/GameModeParent.h>
 #include <OnlineSubsystem.h>
 #include <Interfaces/OnlineSessionInterface.h>
 #include <OnlineSessionSettings.h>
 #include <Templates/SharedPointer.h>
 #include "INFGameInstance.generated.h"
-//
-//UENUM()
-//enum EServerRestartRules
-//{
-//	NEVERSHUTDOWN	  UMETA(DisplayName = "Never Shut Down"),
-//	ONEMATCH		  UMETA(DisplayName = "Shut down after 1 match"),
-//	THREEMATCH		  UMETA(DisplayName = "Shut down after 3 matches"),
-//	FIVEMATCH		  UMETA(DisplayName = "Shut down after 5 matches"),
-//};
-//
-//USTRUCT()
-//struct FServerData
-//{
-//	GENERATED_BODY()
-//
-//	FString ServerName;
-//	FString Password;
-//	float MapDuration;
-//	uint32 TicketsPerTeam;
-//	uint16 ServerSize;
-//	uint16 PlayersRequiredToStart;
-//	EServerRestartRules ServerRestartRule;
-//	bool IsLan;
-//
-//	uint16 CurrentPlayers;
-//};
 
 /**
  * 
