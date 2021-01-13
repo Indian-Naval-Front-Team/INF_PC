@@ -4,11 +4,16 @@
 #include "GameMode_DefendCarrier.h"
 #include <INF_PC/UI/LobbyWidget.h>
 #include <INF_PC/TP_Flying/TP_FlyingPawn.h>
+#include <INF_PC/Vehicles/JetMaster.h>
 #include <INF_PC/Framework/INFGameInstance.h>
 
 AGameMode_DefendCarrier::AGameMode_DefendCarrier(const FObjectInitializer& ObjectInitializer) : AGameModeParent()
 {
-	DefaultPawnClass = ATP_FlyingPawn::StaticClass();
+	const ConstructorHelpers::FClassFinder<AJetMaster> SeahawkBP(TEXT("/Game/__Blueprints/Vehicles/Indian/Jets/BP_Seahawk"));
+	if (!ensure(SeahawkBP.Class != nullptr)) return;
+
+	//DefaultPawnClass = ATP_FlyingPawn::StaticClass();
+	DefaultPawnClass = SeahawkBP.Class;
 
 	const ConstructorHelpers::FClassFinder<UUserWidget> LobbyWidgetBP(TEXT("/Game/__Blueprints/Widgets/Multiplayer/WBP_LobbyWidget"));
 	if (!ensure(LobbyWidgetBP.Class != nullptr)) return;
@@ -53,6 +58,5 @@ void AGameMode_DefendCarrier::PostLogin(APlayerController* NewPlayer)
 void AGameMode_DefendCarrier::Logout(AController* Exiting)
 {
 	Super::Logout(Exiting);
-
-	--(INFGameInstance->NumberOfPlayers);
+	--NumberOfPlayers;
 }

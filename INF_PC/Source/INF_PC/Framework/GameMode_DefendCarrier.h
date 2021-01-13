@@ -21,6 +21,7 @@ public:
 	void Logout(AController* Exiting) override;
 
 private:
+	TSubclassOf<class AJetMaster> DefaultPawnToSpawn;
 	TSubclassOf<UUserWidget> LobbyWidgetClass;
 	class ULobbyWidget* LobbyWidget;
 	class UINFGameInstance* INFGameInstance;
