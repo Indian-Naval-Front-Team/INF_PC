@@ -91,9 +91,17 @@ void AJetMaster::UpdateVehicleRotation(float DeltaTime)
 {
 	if (Velocity.Size() > 10.0f)
 	{
-		QuatRot = FQuat(FRotator(Pitch * RotMultiplier * DeltaTime, Yaw * RotMultiplier * DeltaTime, Roll * RotMultiplier * DeltaTime));
+		/*QuatRot = FQuat(FRotator(Pitch * DeltaTime, Yaw * DeltaTime, Roll * DeltaTime));
 		Velocity = QuatRot.RotateVector(Velocity);
-		AddActorLocalRotation(QuatRot);
+		AddActorLocalRotation(QuatRot);*/
+
+		FRotator DeltaRotation(0.0f, 0.0f, 0.0f);
+		DeltaRotation.Pitch = Pitch * DeltaTime;
+		DeltaRotation.Yaw = Yaw * DeltaTime;
+		DeltaRotation.Roll = Roll * DeltaTime;
+
+		Velocity = DeltaRotation.RotateVector(Velocity);
+		AddActorLocalRotation(DeltaRotation);
 	}
 }
 
@@ -107,19 +115,35 @@ void AJetMaster::ThrustVehicle(float Value)
 
 void AJetMaster::YawVehicle(float Value)
 {
-	Yaw = Value * YawRate;
+	const float TargetYawRate = Value * YawRate;
+	Yaw = FMath::FInterpTo(Yaw, TargetYawRate, GetWorld()->GetDeltaSeconds(), 2.0f);
+	//Yaw = Value * YawRate;
 	Server_YawVehicle(Value);
 }
 
 void AJetMaster::PitchVehicle(float Value)
 {
-	Pitch = Value * PitchRate;
+	//Pitch = Value * PitchRate;
+	bIntentionalPitch = FMath::Abs(Value) > 0.0f;
+
+	const float TargetPitchRate = Value * PitchRate;
+	Pitch = FMath::FInterpTo(Pitch, TargetPitchRate, GetWorld()->GetDeltaSeconds(), 2.0f);
 	Server_PitchVehicle(Value);
 }
 
 void AJetMaster::RollVehicle(float Value)
 {
-	Roll = Value * RollRate;
+	//Roll = Value * RollRate;
+
+	bIntentionalRoll = FMath::Abs(Value) > 0.0f;
+
+	if (bIntentionalPitch && !bIntentionalRoll)
+	{
+		return;
+	}
+
+	const float TargetRollRate = bIntentionalRoll ? (Value * RollRate) : (GetActorRotation().Roll * -0.5f);
+	Roll = FMath::FInterpTo(Roll, TargetRollRate, GetWorld()->GetDeltaSeconds(), 2.0f);
 	Server_RollVehicle(Value);
 }
 
@@ -132,19 +156,34 @@ void AJetMaster::Server_ThrustVehicle_Implementation(float Value)
 
 void AJetMaster::Server_YawVehicle_Implementation(float Value)
 {
-	Yaw = Value * YawRate;
+	//Yaw = Value * YawRate;
+	const float TargetYawRate = Value * YawRate;
+	Yaw = FMath::FInterpTo(Yaw, TargetYawRate, GetWorld()->GetDeltaSeconds(), 2.0f);
 }
 
 
 void AJetMaster::Server_PitchVehicle_Implementation(float Value)
 {
-	Pitch = Value * PitchRate;
+	//Pitch = Value * PitchRate;
+	bIntentionalPitch = FMath::Abs(Value) > 0.0f;
+
+	const float TargetPitchRate = Value * PitchRate;
+	Pitch = FMath::FInterpTo(Pitch, TargetPitchRate, GetWorld()->GetDeltaSeconds(), 2.0f);
 }
 
 
 void AJetMaster::Server_RollVehicle_Implementation(float Value)
 {
-	Roll = Value * RollRate;
+	//Roll = Value * RollRate;
+	bIntentionalRoll = FMath::Abs(Value) > 0.0f;
+
+	if (bIntentionalPitch && !bIntentionalRoll)
+	{
+		return;
+	}
+
+	const float TargetRollRate = bIntentionalRoll ? (Value * RollRate) : (GetActorRotation().Roll * -2.0f);
+	Roll = FMath::FInterpTo(Roll, TargetRollRate, GetWorld()->GetDeltaSeconds(), 2.0f);
 }
 
 

@@ -76,5 +76,5 @@ DerivedDataCache/*
 
 # Flying Template
 Content/Flying/*
-Content/FlyingCPP/*
+Content/FlyingCPP/Maps/*
 Content/Geometry/*

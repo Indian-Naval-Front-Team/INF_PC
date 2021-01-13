@@ -92,5 +92,7 @@ private:
 		void Server_PitchVehicle(float Value);
 	UFUNCTION(Server, Reliable, WithValidation)
 		void Server_RollVehicle(float Value);
-	
+
+	bool bIntentionalPitch{ false };
+	bool bIntentionalRoll{ false };
 };
