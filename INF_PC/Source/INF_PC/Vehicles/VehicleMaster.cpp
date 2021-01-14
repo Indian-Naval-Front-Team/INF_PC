@@ -39,7 +39,7 @@ void AVehicleMaster::BeginPlay()
 	if (HasAuthority())
 	{
 		// TODO : Change this value to 30.0f or something higher like that while Publishing.
-		NetUpdateFrequency = 30.0f;	// 30.0f while publishing
+		NetUpdateFrequency = 1.0f;	// 30.0f while publishing
 	}
 }
 
@@ -60,15 +60,17 @@ FString AVehicleMaster::GetRoleText(ENetRole role)
 	}
 }
 
-void AVehicleMaster::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+void AVehicleMaster::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> & OutLifetimeProps) const
 {
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
 	DOREPLIFETIME(AVehicleMaster, Velocity);
 	DOREPLIFETIME(AVehicleMaster, Thrust);
 	DOREPLIFETIME(AVehicleMaster, Yaw);
 	DOREPLIFETIME(AVehicleMaster, Pitch);
 	DOREPLIFETIME(AVehicleMaster, Roll);
 	DOREPLIFETIME(AVehicleMaster, Translation);
-	DOREPLIFETIME(AVehicleMaster, QuatRot);
+	//DOREPLIFETIME(AVehicleMaster, QuatRot);
 	DOREPLIFETIME(AVehicleMaster, ReplicatedTransform);
 }
 
@@ -76,7 +78,7 @@ void AVehicleMaster::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 void AVehicleMaster::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	DrawDebugString(GetWorld(), FVector(0.0f, 300.0f, 300.0f), UEnum::GetValueAsString(GetLocalRole()), this, FColor::Green, DeltaTime, false, 2.0f);
 }
 
 // Called to bind functionality to input
@@ -88,4 +90,3 @@ void AVehicleMaster::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	PlayerInputComponent->BindAxis("Pitch/Elevate", this, &AVehicleMaster::PitchVehicle);
 	PlayerInputComponent->BindAxis("Roll", this, &AVehicleMaster::RollVehicle);
 }
-

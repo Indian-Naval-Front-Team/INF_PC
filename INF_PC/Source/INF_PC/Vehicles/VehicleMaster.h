@@ -6,6 +6,23 @@
 #include "GameFramework/Pawn.h"
 #include "VehicleMaster.generated.h"
 
+USTRUCT()
+struct FVehicleMove
+{
+	GENERATED_BODY()
+	
+	UPROPERTY()
+	float Thrust;
+	UPROPERTY()
+	float Yaw;
+	UPROPERTY()
+	float Pitch;
+	UPROPERTY()
+	float Roll;
+	UPROPERTY()
+	float DeltaTime;
+};
+
 UCLASS()
 class INF_PC_API AVehicleMaster : public APawn
 {
@@ -120,14 +137,9 @@ protected:
 	UFUNCTION()
 		virtual void RollVehicle(float Value) {};
 
-	UFUNCTION()
-		virtual void OnRep_ReplicatedTransform() {};
 
 	UPROPERTY(Replicated)
-	FVector Velocity
-	{
-		FVector::ZeroVector
-	};
+	FVector Velocity { FVector::ZeroVector };
 	UPROPERTY(Replicated)
 		float Thrust{ 0.0f };
 	UPROPERTY(Replicated)
@@ -138,11 +150,14 @@ protected:
 		float Roll{ 0.0f };
 	UPROPERTY(Replicated)
 		FVector Translation;
-	UPROPERTY(Replicated)
+	UPROPERTY()
 		FQuat QuatRot;
 
 	UPROPERTY(ReplicatedUsing = OnRep_ReplicatedTransform)
 		FTransform ReplicatedTransform;
+
+	UFUNCTION()
+	virtual void OnRep_ReplicatedTransform() {};
 
 	FVector Force{ FVector::ZeroVector };
 	FVector Acceleration{ FVector::ZeroVector };

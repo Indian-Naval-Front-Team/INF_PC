@@ -40,6 +40,7 @@ void AJetMaster::BeginPlay()
 	Super::BeginPlay();
 	TopSpeedInKms = TopSpeedInKms * 28.0f;
 }
+
 void AJetMaster::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -91,17 +92,17 @@ void AJetMaster::UpdateVehicleRotation(float DeltaTime)
 {
 	if (Velocity.Size() > 10.0f)
 	{
-		/*QuatRot = FQuat(FRotator(Pitch * DeltaTime, Yaw * DeltaTime, Roll * DeltaTime));
+		QuatRot = FQuat(FRotator(Pitch * DeltaTime, Yaw * DeltaTime, Roll * DeltaTime));
 		Velocity = QuatRot.RotateVector(Velocity);
-		AddActorLocalRotation(QuatRot);*/
+		AddActorLocalRotation(QuatRot);
 
-		FRotator DeltaRotation(0.0f, 0.0f, 0.0f);
+		/*FRotator DeltaRotation(0.0f, 0.0f, 0.0f);
 		DeltaRotation.Pitch = Pitch * DeltaTime;
 		DeltaRotation.Yaw = Yaw * DeltaTime;
 		DeltaRotation.Roll = Roll * DeltaTime;
 
 		Velocity = DeltaRotation.RotateVector(Velocity);
-		AddActorLocalRotation(DeltaRotation);
+		AddActorLocalRotation(DeltaRotation);*/
 	}
 }
 
@@ -194,31 +195,18 @@ bool AJetMaster::Server_ThrustVehicle_Validate(float Value)
 
 bool AJetMaster::Server_YawVehicle_Validate(float Value)
 {
-	Engine = GetGameInstance()->GetEngine();
-	if (!ensure(Engine != nullptr)) return false;
-
-	Engine->AddOnScreenDebugMessage(0, 5.0f, FColor::Red, FString::Printf(TEXT("Yaw = %f"), Value));
 	return true;
 }
 
 bool AJetMaster::Server_RollVehicle_Validate(float Value)
 {
-	Engine = GetGameInstance()->GetEngine();
-	if (!ensure(Engine != nullptr)) return false;
-
-	Engine->AddOnScreenDebugMessage(0, 5.0f, FColor::Blue, FString::Printf(TEXT("Roll = %f"), Value));
 	return true;
 }
 
 bool AJetMaster::Server_PitchVehicle_Validate(float Value)
 {
-	Engine = GetGameInstance()->GetEngine();
-	if (!ensure(Engine != nullptr)) return false;
-
-	Engine->AddOnScreenDebugMessage(0, 5.0f, FColor::Green, FString::Printf(TEXT("Pitch = %f"), Value));
 	return true;
 }
-
 
 void AJetMaster::OnRep_ReplicatedTransform()
 {
