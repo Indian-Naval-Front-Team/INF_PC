@@ -11,6 +11,8 @@ struct FVehicleMove
 {
 	GENERATED_BODY()
 	
+	FVehicleMove() {}
+
 	UPROPERTY()
 	float Thrust;
 	UPROPERTY()
@@ -21,6 +23,23 @@ struct FVehicleMove
 	float Roll;
 	UPROPERTY()
 	float DeltaTime;
+	UPROPERTY()
+	float TimeStamp;
+};
+
+USTRUCT()
+struct FVehicleState
+{
+	GENERATED_BODY()
+
+	FVehicleState()	{}
+
+	UPROPERTY()
+	FVehicleMove LastMove; 
+	UPROPERTY()
+	FVector Velocity;
+	UPROPERTY()
+	FTransform VehicleTransform;
 };
 
 UCLASS()
