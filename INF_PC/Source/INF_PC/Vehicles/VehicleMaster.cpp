@@ -64,14 +64,13 @@ void AVehicleMaster::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> & OutL
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(AVehicleMaster, Velocity);
 	DOREPLIFETIME(AVehicleMaster, Thrust);
 	DOREPLIFETIME(AVehicleMaster, Yaw);
 	DOREPLIFETIME(AVehicleMaster, Pitch);
 	DOREPLIFETIME(AVehicleMaster, Roll);
 	DOREPLIFETIME(AVehicleMaster, Translation);
 	//DOREPLIFETIME(AVehicleMaster, QuatRot);
-	DOREPLIFETIME(AVehicleMaster, ReplicatedTransform);
+	DOREPLIFETIME(AVehicleMaster, ServerState);
 }
 
 // Called every frame

@@ -68,7 +68,7 @@ public:
 	virtual void UpdateVehicleRotation(float DeltaTime) override;
 
 	// Update Transform to every client out there if authority.
-	virtual void OnRep_ReplicatedTransform() override;
+	virtual void OnRep_ServerState() override;
 
 	// Called when 'W' or 'S' keys are pressed on the Jet.
 	virtual void ThrustVehicle(float Value) override;
@@ -85,13 +85,15 @@ public:
 private:
 	class UEngine* Engine;
 	UFUNCTION(Server, Reliable, WithValidation)
+		void Server_SendMove(FVehicleMove Move);
+	/*UFUNCTION(Server, Reliable, WithValidation)
 		void Server_ThrustVehicle(float Value);
 	UFUNCTION(Server, Reliable, WithValidation)
 		void Server_YawVehicle(float Value);
 	UFUNCTION(Server, Reliable, WithValidation)
 		void Server_PitchVehicle(float Value);
 	UFUNCTION(Server, Reliable, WithValidation)
-		void Server_RollVehicle(float Value);
+		void Server_RollVehicle(float Value);*/
 
 	bool bIntentionalPitch{ false };
 	bool bIntentionalRoll{ false };

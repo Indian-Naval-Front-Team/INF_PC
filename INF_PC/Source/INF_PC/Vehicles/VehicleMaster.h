@@ -10,7 +10,7 @@ USTRUCT()
 struct FVehicleMove
 {
 	GENERATED_BODY()
-	
+
 	FVehicleMove() {}
 
 	UPROPERTY()
@@ -32,10 +32,10 @@ struct FVehicleState
 {
 	GENERATED_BODY()
 
-	FVehicleState()	{}
+	FVehicleState() {}
 
 	UPROPERTY()
-	FVehicleMove LastMove; 
+	FVehicleMove LastMove;
 	UPROPERTY()
 	FVector Velocity;
 	UPROPERTY()
@@ -156,9 +156,8 @@ protected:
 	UFUNCTION()
 		virtual void RollVehicle(float Value) {};
 
+	FVector Velocity;
 
-	UPROPERTY(Replicated)
-	FVector Velocity { FVector::ZeroVector };
 	UPROPERTY(Replicated)
 		float Thrust{ 0.0f };
 	UPROPERTY(Replicated)
@@ -171,12 +170,11 @@ protected:
 		FVector Translation;
 	UPROPERTY()
 		FQuat QuatRot;
-
-	UPROPERTY(ReplicatedUsing = OnRep_ReplicatedTransform)
-		FTransform ReplicatedTransform;
+	UPROPERTY(Replicated)
+		FVehicleState ServerState;
 
 	UFUNCTION()
-	virtual void OnRep_ReplicatedTransform() {};
+	virtual void OnRep_ServerState() {};
 
 	FVector Force{ FVector::ZeroVector };
 	FVector Acceleration{ FVector::ZeroVector };
