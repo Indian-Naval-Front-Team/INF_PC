@@ -43,32 +43,21 @@ void AVehicleMaster::BeginPlay()
 	}
 }
 
-FString AVehicleMaster::GetRoleText(ENetRole role)
+FVehicleMove AVehicleMaster::CreateMove(float DeltaTime)
 {
-	switch (role)
-	{
-	case ROLE_None:
-		return "None";
-	case ROLE_SimulatedProxy:
-		return "Simulated Proxy";
-	case ROLE_AutonomousProxy:
-		return "Autonomous Proxy";
-	case ROLE_Authority:
-		return "Authority";
-	default:
-		return "ERROR!";
-	}
+	FVehicleMove Move;
+	return Move;
 }
 
 void AVehicleMaster::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> & OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(AVehicleMaster, Thrust);
+	/*DOREPLIFETIME(AVehicleMaster, Thrust);
 	DOREPLIFETIME(AVehicleMaster, Yaw);
 	DOREPLIFETIME(AVehicleMaster, Pitch);
 	DOREPLIFETIME(AVehicleMaster, Roll);
-	DOREPLIFETIME(AVehicleMaster, Translation);
+	DOREPLIFETIME(AVehicleMaster, Translation);*/
 	//DOREPLIFETIME(AVehicleMaster, QuatRot);
 	DOREPLIFETIME(AVehicleMaster, ServerState);
 }

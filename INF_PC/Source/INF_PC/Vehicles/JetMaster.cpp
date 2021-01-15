@@ -41,46 +41,29 @@ void AJetMaster::BeginPlay()
 	TopSpeedInKms = TopSpeedInKms * 28.0f;
 }
 
+void AJetMaster::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
+{
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
+}
+
 void AJetMaster::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 	if (IsLocallyControlled())
 	{
-		FVehicleMove Move;
-		Move.DeltaTime = DeltaTime;
-		Move.Yaw = this->Yaw;
-		Move.Pitch = this->Pitch;
-		Move.Roll = this->Roll;
-		Move.Thrust = this->Thrust;
-		// TODO : Set Timestamp for Move
+		FVehicleMove Move = CreateMove(DeltaTime);
+
+		// Don't add Moves to the UnacknowledgedMoves Table unless you are the client.
+		if (!HasAuthority())
+		{
+			UnacknowledgedMoves.Add(Move);
+			UE_LOG(LogTemp, Warning, TEXT("Queue Length = %d"), UnacknowledgedMoves.Num());
+		}
 
 		Server_SendMove(Move);
+		SimulateMove(Move);
 	}
-
-	Force = Thrust * MaxThrustSpeed * GetActorForwardVector();
-	Force += GetVehicleAirResistance();
-
-	Acceleration = Force / MassInKgs;
-	Velocity += Acceleration * DeltaTime;
-	//UE_LOG(LogTemp, Warning, TEXT("TopSpeed = %f"), TopSpeedInKms);
-	Velocity = FMath::Clamp(Velocity.Size(), 0.0f, TopSpeedInKms) * GetActorForwardVector();
-
-	UpdateVehicleRotation(DeltaTime);
-	UpdateVehiclePosition(DeltaTime);
-
-	// Sending the canonical state to the Clients.
-	if (HasAuthority())
-	{
-		ServerState.VehicleTransform = GetActorTransform();
-		ServerState.Velocity = Velocity;
-		// TODO : Update the Last Move
-	}
-}
-
-void AJetMaster::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
 // JET MOVEMENT AND ROTATION FUNCTIONS
@@ -103,11 +86,11 @@ void AJetMaster::UpdateVehiclePosition(float DeltaTime)
 }
 
 
-void AJetMaster::UpdateVehicleRotation(float DeltaTime)
+void AJetMaster::UpdateVehicleRotation(float DeltaTime, float PitchVal, float YawVal, float RollVal)
 {
 	if (Velocity.Size() > 10.0f)
 	{
-		QuatRot = FQuat(FRotator(Pitch * DeltaTime, Yaw * DeltaTime, Roll * DeltaTime));
+		QuatRot = FQuat(FRotator(PitchVal * DeltaTime, YawVal * DeltaTime, RollVal * DeltaTime));
 		Velocity = QuatRot.RotateVector(Velocity);
 		AddActorLocalRotation(QuatRot);
 
@@ -159,12 +142,60 @@ void AJetMaster::RollVehicle(float Value)
 	Roll = FMath::FInterpTo(Roll, TargetRollRate, GetWorld()->GetDeltaSeconds(), 2.0f);
 }
 
+void AJetMaster::SimulateMove(FVehicleMove Move)
+{
+	Force = Move.Thrust * MaxThrustSpeed * GetActorForwardVector();
+	Force += GetVehicleAirResistance();
+
+	Acceleration = Force / MassInKgs;
+	Velocity += Acceleration * Move.DeltaTime;
+	//UE_LOG(LogTemp, Warning, TEXT("TopSpeed = %f"), TopSpeedInKms);
+	Velocity = FMath::Clamp(Velocity.Size(), 0.0f, TopSpeedInKms) * GetActorForwardVector();
+
+	UpdateVehicleRotation(Move.DeltaTime, Move.Pitch, Move.Yaw, Move.Roll);
+	UpdateVehiclePosition(Move.DeltaTime);
+}
+
+FVehicleMove AJetMaster::CreateMove(float DeltaTime)
+{
+	FVehicleMove Move;
+	Move.DeltaTime = DeltaTime;
+	Move.Yaw = this->Yaw;
+	Move.Pitch = this->Pitch;
+	Move.Roll = this->Roll;
+	Move.Thrust = this->Thrust;
+	Move.TimeStamp = GetWorld()->TimeSeconds;
+
+	return Move;
+}
+
+void AJetMaster::ClearAcknowledgedMoves(FVehicleMove LastMove)
+{
+	TArray<FVehicleMove> NewMoves;
+
+	for (const FVehicleMove & Move : UnacknowledgedMoves)
+	{
+		if (Move.TimeStamp > LastMove.TimeStamp)
+		{
+			NewMoves.Add(Move);
+		}
+	}
+
+	UnacknowledgedMoves = NewMoves;
+}
+
 void AJetMaster::Server_SendMove_Implementation(FVehicleMove Move)
 {
-	Thrust = Move.Thrust;
+	/*Thrust = Move.Thrust;
 	Yaw = Move.Yaw;
 	Pitch = Move.Pitch;
-	Roll = Move.Roll;
+	Roll = Move.Roll;*/
+	SimulateMove(Move);
+
+	// Send the canonical state to the other clients
+	ServerState.LastMove = Move;
+	ServerState.VehicleTransform = GetActorTransform();
+	ServerState.Velocity = Velocity;
 }
 
 bool AJetMaster::Server_SendMove_Validate(FVehicleMove Move)
@@ -237,4 +268,6 @@ void AJetMaster::OnRep_ServerState()
 {
 	SetActorTransform(ServerState.VehicleTransform);
 	Velocity = ServerState.Velocity;
+
+	ClearAcknowledgedMoves(ServerState.LastMove);
 }

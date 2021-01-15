@@ -65,7 +65,7 @@ public:
 	virtual void UpdateVehiclePosition(float DeltaTime) override;
 
 	// Update Vehicle's Rotation on the Client.
-	virtual void UpdateVehicleRotation(float DeltaTime) override;
+	virtual void UpdateVehicleRotation(float DeltaTime, float PitchVal, float YawVal, float RollVal) override;
 
 	// Update Transform to every client out there if authority.
 	virtual void OnRep_ServerState() override;
@@ -86,6 +86,10 @@ private:
 	class UEngine* Engine;
 	UFUNCTION(Server, Reliable, WithValidation)
 		void Server_SendMove(FVehicleMove Move);
+
+	virtual void SimulateMove(FVehicleMove Move) override;
+	virtual FVehicleMove CreateMove(float DeltaTime) override;
+	virtual void ClearAcknowledgedMoves(FVehicleMove LastMove) override;
 	/*UFUNCTION(Server, Reliable, WithValidation)
 		void Server_ThrustVehicle(float Value);
 	UFUNCTION(Server, Reliable, WithValidation)

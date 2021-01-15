@@ -138,7 +138,7 @@ protected:
 		virtual void UpdateVehiclePosition(float DeltaTime) {};
 	// Update Vehicle's Rotation on the Client.
 	UFUNCTION()
-		virtual void UpdateVehicleRotation(float DeltaTime) {};
+		virtual void UpdateVehicleRotation(float DeltaTime, float PitchVal, float YawVal, float RollVal) {};
 
 	// Called when 'W' or 'S' keys are pressed on the Vehicle.
 	UFUNCTION()
@@ -158,23 +158,28 @@ protected:
 
 	FVector Velocity;
 
-	UPROPERTY(Replicated)
+	UPROPERTY()
 		float Thrust{ 0.0f };
-	UPROPERTY(Replicated)
+	UPROPERTY()
 		float Yaw{ 0.0f };
-	UPROPERTY(Replicated)
+	UPROPERTY()
 		float Pitch{ 0.0f };
-	UPROPERTY(Replicated)
+	UPROPERTY()
 		float Roll{ 0.0f };
-	UPROPERTY(Replicated)
+	UPROPERTY()
 		FVector Translation;
 	UPROPERTY()
 		FQuat QuatRot;
 	UPROPERTY(Replicated)
 		FVehicleState ServerState;
 
+	TArray<FVehicleMove> UnacknowledgedMoves;
+
 	UFUNCTION()
 	virtual void OnRep_ServerState() {};
+	virtual void SimulateMove(FVehicleMove Move) {};
+	virtual FVehicleMove CreateMove(float DeltaTime);
+	virtual void ClearAcknowledgedMoves(FVehicleMove LastMove) {};
 
 	FVector Force{ FVector::ZeroVector };
 	FVector Acceleration{ FVector::ZeroVector };
@@ -186,7 +191,5 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	static FString GetRoleText(ENetRole role);
-
-private:
+	//static FString GetRoleText(ENetRole role);
 };
