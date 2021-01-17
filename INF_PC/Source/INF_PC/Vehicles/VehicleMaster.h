@@ -170,14 +170,14 @@ protected:
 		FVector Translation;
 	UPROPERTY()
 		FQuat QuatRot;
-	UPROPERTY(Replicated)
+	UPROPERTY(ReplicatedUsing = OnRep_ServerState)
 		FVehicleState ServerState;
 
 	TArray<FVehicleMove> UnacknowledgedMoves;
 
 	UFUNCTION()
 	virtual void OnRep_ServerState() {};
-	virtual void SimulateMove(FVehicleMove Move) {};
+	virtual void SimulateMove(const FVehicleMove& Move) {};
 	virtual FVehicleMove CreateMove(float DeltaTime);
 	virtual void ClearAcknowledgedMoves(FVehicleMove LastMove) {};
 

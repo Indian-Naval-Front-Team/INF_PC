@@ -87,7 +87,7 @@ private:
 	UFUNCTION(Server, Reliable, WithValidation)
 		void Server_SendMove(FVehicleMove Move);
 
-	virtual void SimulateMove(FVehicleMove Move) override;
+	virtual void SimulateMove(const FVehicleMove& Move) override;
 	virtual FVehicleMove CreateMove(float DeltaTime) override;
 	virtual void ClearAcknowledgedMoves(FVehicleMove LastMove) override;
 	/*UFUNCTION(Server, Reliable, WithValidation)

@@ -2,6 +2,7 @@
 
 
 #include "JetMaster.h"
+#include "GameFrameWork/GameState.h"
 
 AJetMaster::AJetMaster()
 {
@@ -50,19 +51,39 @@ void AJetMaster::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (IsLocallyControlled())
+	//if (IsLocallyControlled())
+	//{
+	//	FVehicleMove Move = CreateMove(DeltaTime);
+
+	//	// Don't add Moves to the UnacknowledgedMoves Table unless you are the client.
+	//	if (!HasAuthority())
+	//	{
+	//		UnacknowledgedMoves.Add(Move);
+	//		SimulateMove(Move);
+	//		UE_LOG(LogTemp, Warning, TEXT("Queue Length = %d"), UnacknowledgedMoves.Num());
+	//	}
+
+	//	Server_SendMove(Move);
+	//}
+
+	if (GetLocalRole() == ROLE_AutonomousProxy)
 	{
 		FVehicleMove Move = CreateMove(DeltaTime);
-
-		// Don't add Moves to the UnacknowledgedMoves Table unless you are the client.
-		if (!HasAuthority())
-		{
-			UnacknowledgedMoves.Add(Move);
-			UE_LOG(LogTemp, Warning, TEXT("Queue Length = %d"), UnacknowledgedMoves.Num());
-		}
-
-		Server_SendMove(Move);
+		UnacknowledgedMoves.Add(Move);
 		SimulateMove(Move);
+		Server_SendMove(Move);
+	}
+
+	// We are the server and also in control of the Pawn.
+	if (GetLocalRole() == ROLE_Authority && IsLocallyControlled())
+	{
+		FVehicleMove Move = CreateMove(DeltaTime);
+		Server_SendMove(Move);
+	}
+
+	if (GetLocalRole() == ROLE_SimulatedProxy)
+	{
+		SimulateMove(ServerState.LastMove);
 	}
 }
 
@@ -142,7 +163,7 @@ void AJetMaster::RollVehicle(float Value)
 	Roll = FMath::FInterpTo(Roll, TargetRollRate, GetWorld()->GetDeltaSeconds(), 2.0f);
 }
 
-void AJetMaster::SimulateMove(FVehicleMove Move)
+void AJetMaster::SimulateMove(const FVehicleMove& Move)
 {
 	Force = Move.Thrust * MaxThrustSpeed * GetActorForwardVector();
 	Force += GetVehicleAirResistance();
@@ -164,7 +185,8 @@ FVehicleMove AJetMaster::CreateMove(float DeltaTime)
 	Move.Pitch = this->Pitch;
 	Move.Roll = this->Roll;
 	Move.Thrust = this->Thrust;
-	Move.TimeStamp = GetWorld()->TimeSeconds;
+	//Move.TimeStamp = GetWorld()->TimeSeconds;
+	Move.TimeStamp = GetWorld()->GetGameState()->GetServerWorldTimeSeconds();
 
 	return Move;
 }
@@ -173,7 +195,7 @@ void AJetMaster::ClearAcknowledgedMoves(FVehicleMove LastMove)
 {
 	TArray<FVehicleMove> NewMoves;
 
-	for (const FVehicleMove & Move : UnacknowledgedMoves)
+	for (const FVehicleMove& Move : UnacknowledgedMoves)
 	{
 		if (Move.TimeStamp > LastMove.TimeStamp)
 		{
@@ -205,69 +227,15 @@ bool AJetMaster::Server_SendMove_Validate(FVehicleMove Move)
 }
 
 // SERVER FUNCTIONS
-//void AJetMaster::Server_ThrustVehicle_Implementation(float Value)
-//{
-//	Thrust = Value * ThrustMultiplier;
-//}
-//
-//
-//void AJetMaster::Server_YawVehicle_Implementation(float Value)
-//{
-//	//Yaw = Value * YawRate;
-//	const float TargetYawRate = Value * YawRate;
-//	Yaw = FMath::FInterpTo(Yaw, TargetYawRate, GetWorld()->GetDeltaSeconds(), 2.0f);
-//}
-//
-//
-//void AJetMaster::Server_PitchVehicle_Implementation(float Value)
-//{
-//	//Pitch = Value * PitchRate;
-//	bIntentionalPitch = FMath::Abs(Value) > 0.0f;
-//
-//	const float TargetPitchRate = Value * PitchRate;
-//	Pitch = FMath::FInterpTo(Pitch, TargetPitchRate, GetWorld()->GetDeltaSeconds(), 2.0f);
-//}
-//
-//
-//void AJetMaster::Server_RollVehicle_Implementation(float Value)
-//{
-//	//Roll = Value * RollRate;
-//	bIntentionalRoll = FMath::Abs(Value) > 0.0f;
-//
-//	if (bIntentionalPitch && !bIntentionalRoll)
-//	{
-//		return;
-//	}
-//
-//	const float TargetRollRate = bIntentionalRoll ? (Value * RollRate) : (GetActorRotation().Roll * -2.0f);
-//	Roll = FMath::FInterpTo(Roll, TargetRollRate, GetWorld()->GetDeltaSeconds(), 2.0f);
-//}
-//
-//
-//bool AJetMaster::Server_ThrustVehicle_Validate(float Value)
-//{
-//	return FMath::Abs(Value) <= 1.0f;
-//}
-//
-//bool AJetMaster::Server_YawVehicle_Validate(float Value)
-//{
-//	return true;
-//}
-//
-//bool AJetMaster::Server_RollVehicle_Validate(float Value)
-//{
-//	return true;
-//}
-//
-//bool AJetMaster::Server_PitchVehicle_Validate(float Value)
-//{
-//	return true;
-//}
-
 void AJetMaster::OnRep_ServerState()
 {
 	SetActorTransform(ServerState.VehicleTransform);
 	Velocity = ServerState.Velocity;
 
 	ClearAcknowledgedMoves(ServerState.LastMove);
+
+	for (const FVehicleMove& Move : UnacknowledgedMoves)
+	{
+		SimulateMove(Move);
+	}
 }
