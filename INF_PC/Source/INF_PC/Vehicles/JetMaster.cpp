@@ -2,7 +2,6 @@
 
 
 #include "JetMaster.h"
-#include "GameFrameWork/GameState.h"
 
 AJetMaster::AJetMaster()
 {
@@ -34,12 +33,13 @@ AJetMaster::AJetMaster()
 	RearWing_Elevator_Left->SetupAttachment(Super::VehicleBody, "RearWing_Elevator_Left");
 	RearWing_Elevator_Right = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RearWing_Elevator_Right"));
 	RearWing_Elevator_Right->SetupAttachment(Super::VehicleBody, "RearWing_Elevator_Right");
+
+	JetMovementComponent = CreateDefaultSubobject<UJetMovementComponent>(TEXT("JetMovementComponent"));
 }
 
 void AJetMaster::BeginPlay()
 {
 	Super::BeginPlay();
-	TopSpeedInKms = TopSpeedInKms * 28.0f;
 }
 
 void AJetMaster::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -51,105 +51,77 @@ void AJetMaster::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	//if (IsLocallyControlled())
-	//{
-	//	FVehicleMove Move = CreateMove(DeltaTime);
-
-	//	// Don't add Moves to the UnacknowledgedMoves Table unless you are the client.
-	//	if (!HasAuthority())
-	//	{
-	//		UnacknowledgedMoves.Add(Move);
-	//		SimulateMove(Move);
-	//		UE_LOG(LogTemp, Warning, TEXT("Queue Length = %d"), UnacknowledgedMoves.Num());
-	//	}
-
-	//	Server_SendMove(Move);
-	//}
+	if (JetMovementComponent == nullptr)
+	{
+		return;
+	}
 
 	if (GetLocalRole() == ROLE_AutonomousProxy)
 	{
-		FVehicleMove Move = CreateMove(DeltaTime);
+		FVehicleMove Move = JetMovementComponent->CreateMove(DeltaTime);
 		UnacknowledgedMoves.Add(Move);
-		SimulateMove(Move);
+		JetMovementComponent->SimulateMove(Move);
 		Server_SendMove(Move);
 	}
 
 	// We are the server and also in control of the Pawn.
 	if (GetLocalRole() == ROLE_Authority && IsLocallyControlled())
 	{
-		FVehicleMove Move = CreateMove(DeltaTime);
+		FVehicleMove Move = JetMovementComponent->CreateMove(DeltaTime);
 		Server_SendMove(Move);
 	}
 
 	if (GetLocalRole() == ROLE_SimulatedProxy)
 	{
-		SimulateMove(ServerState.LastMove);
-	}
-}
-
-// JET MOVEMENT AND ROTATION FUNCTIONS
-FVector AJetMaster::GetVehicleAirResistance()
-{
-	return -Velocity.GetSafeNormal() * Velocity.SizeSquared() * DragCoefficient;
-}
-
-
-FVector AJetMaster::GetVehicleRollingResistance()
-{
-	return FVector::ZeroVector;
-}
-
-
-void AJetMaster::UpdateVehiclePosition(float DeltaTime)
-{
-	Translation = FMath::Clamp(Velocity.Size(), 0.0f, TopSpeedInKms) * GetActorForwardVector() * 100.0f * DeltaTime;
-	AddActorWorldOffset(Translation);
-}
-
-
-void AJetMaster::UpdateVehicleRotation(float DeltaTime, float PitchVal, float YawVal, float RollVal)
-{
-	if (Velocity.Size() > 10.0f)
-	{
-		QuatRot = FQuat(FRotator(PitchVal * DeltaTime, YawVal * DeltaTime, RollVal * DeltaTime));
-		Velocity = QuatRot.RotateVector(Velocity);
-		AddActorLocalRotation(QuatRot);
-
-		/*FRotator DeltaRotation(0.0f, 0.0f, 0.0f);
-		DeltaRotation.Pitch = Pitch * DeltaTime;
-		DeltaRotation.Yaw = Yaw * DeltaTime;
-		DeltaRotation.Roll = Roll * DeltaTime;
-
-		Velocity = DeltaRotation.RotateVector(Velocity);
-		AddActorLocalRotation(DeltaRotation);*/
+		JetMovementComponent->SimulateMove(ServerState.LastMove);
 	}
 }
 
 // INPUT EVENT OVERRIDES
 void AJetMaster::ThrustVehicle(float Value)
 {
-	Thrust = Value * ThrustMultiplier;
+	if (JetMovementComponent == nullptr)
+	{
+		return;
+	}
+
+	JetMovementComponent->SetThrust(Value * JetMovementComponent->GetThrustMultipliyer());
 }
 
 
 void AJetMaster::YawVehicle(float Value)
 {
-	const float TargetYawRate = Value * YawRate;
-	Yaw = FMath::FInterpTo(Yaw, TargetYawRate, GetWorld()->GetDeltaSeconds(), 2.0f);
+	if (JetMovementComponent == nullptr)
+	{
+		return;
+	}
+
+	const float TargetYawRate = Value * JetMovementComponent->GetYawRate();
+	JetMovementComponent->SetYaw(FMath::FInterpTo(JetMovementComponent->GetYaw(), TargetYawRate, GetWorld()->GetDeltaSeconds(), 2.0f));
 	//Yaw = Value * YawRate;
 }
 
 void AJetMaster::PitchVehicle(float Value)
 {
+	if (JetMovementComponent == nullptr)
+	{
+		return;
+	}
+
 	//Pitch = Value * PitchRate;
 	bIntentionalPitch = FMath::Abs(Value) > 0.0f;
 
-	const float TargetPitchRate = Value * PitchRate;
-	Pitch = FMath::FInterpTo(Pitch, TargetPitchRate, GetWorld()->GetDeltaSeconds(), 2.0f);
+	const float TargetPitchRate = Value * JetMovementComponent->GetPitchRate();
+	JetMovementComponent->SetPitch(FMath::FInterpTo(JetMovementComponent->GetPitch(), TargetPitchRate, GetWorld()->GetDeltaSeconds(), 2.0f));
 }
 
 void AJetMaster::RollVehicle(float Value)
 {
+	if (JetMovementComponent == nullptr)
+	{
+		return;
+	}
+
 	//Roll = Value * RollRate;
 
 	bIntentionalRoll = FMath::Abs(Value) > 0.0f;
@@ -159,36 +131,8 @@ void AJetMaster::RollVehicle(float Value)
 		return;
 	}
 
-	const float TargetRollRate = bIntentionalRoll ? (Value * RollRate) : (GetActorRotation().Roll * -0.5f);
-	Roll = FMath::FInterpTo(Roll, TargetRollRate, GetWorld()->GetDeltaSeconds(), 2.0f);
-}
-
-void AJetMaster::SimulateMove(const FVehicleMove& Move)
-{
-	Force = Move.Thrust * MaxThrustSpeed * GetActorForwardVector();
-	Force += GetVehicleAirResistance();
-
-	Acceleration = Force / MassInKgs;
-	Velocity += Acceleration * Move.DeltaTime;
-	//UE_LOG(LogTemp, Warning, TEXT("TopSpeed = %f"), TopSpeedInKms);
-	Velocity = FMath::Clamp(Velocity.Size(), 0.0f, TopSpeedInKms) * GetActorForwardVector();
-
-	UpdateVehicleRotation(Move.DeltaTime, Move.Pitch, Move.Yaw, Move.Roll);
-	UpdateVehiclePosition(Move.DeltaTime);
-}
-
-FVehicleMove AJetMaster::CreateMove(float DeltaTime)
-{
-	FVehicleMove Move;
-	Move.DeltaTime = DeltaTime;
-	Move.Yaw = this->Yaw;
-	Move.Pitch = this->Pitch;
-	Move.Roll = this->Roll;
-	Move.Thrust = this->Thrust;
-	//Move.TimeStamp = GetWorld()->TimeSeconds;
-	Move.TimeStamp = GetWorld()->GetGameState()->GetServerWorldTimeSeconds();
-
-	return Move;
+	const float TargetRollRate = bIntentionalRoll ? (Value * JetMovementComponent->GetRollRate()) : (GetActorRotation().Roll * -0.5f);
+	JetMovementComponent->SetRoll(FMath::FInterpTo(JetMovementComponent->GetRoll(), TargetRollRate, GetWorld()->GetDeltaSeconds(), 2.0f));
 }
 
 void AJetMaster::ClearAcknowledgedMoves(FVehicleMove LastMove)
@@ -208,16 +152,20 @@ void AJetMaster::ClearAcknowledgedMoves(FVehicleMove LastMove)
 
 void AJetMaster::Server_SendMove_Implementation(FVehicleMove Move)
 {
+	if (JetMovementComponent == nullptr)
+	{
+		return;
+	}
 	/*Thrust = Move.Thrust;
 	Yaw = Move.Yaw;
 	Pitch = Move.Pitch;
 	Roll = Move.Roll;*/
-	SimulateMove(Move);
+	JetMovementComponent->SimulateMove(Move);
 
 	// Send the canonical state to the other clients
 	ServerState.LastMove = Move;
 	ServerState.VehicleTransform = GetActorTransform();
-	ServerState.Velocity = Velocity;
+	ServerState.Velocity = JetMovementComponent->GetVelocity();
 }
 
 bool AJetMaster::Server_SendMove_Validate(FVehicleMove Move)
@@ -229,13 +177,18 @@ bool AJetMaster::Server_SendMove_Validate(FVehicleMove Move)
 // SERVER FUNCTIONS
 void AJetMaster::OnRep_ServerState()
 {
+	if (JetMovementComponent == nullptr)
+	{
+		return;
+	}
+
 	SetActorTransform(ServerState.VehicleTransform);
-	Velocity = ServerState.Velocity;
+	JetMovementComponent->SetVelocity(ServerState.Velocity);
 
 	ClearAcknowledgedMoves(ServerState.LastMove);
 
 	for (const FVehicleMove& Move : UnacknowledgedMoves)
 	{
-		SimulateMove(Move);
+		JetMovementComponent->SimulateMove(Move);
 	}
 }

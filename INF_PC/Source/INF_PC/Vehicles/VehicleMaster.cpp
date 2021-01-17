@@ -26,9 +26,10 @@ AVehicleMaster::AVehicleMaster()
 	CameraBoom->SetupAttachment(VehicleBody);
 	MainCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("MainCamera"));
 	MainCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
+	
+	VehicleMovementComponent = CreateDefaultSubobject<UMovementComponentMaster>(TEXT("VehicleMovementComponent"));
 
 	CameraBoom->TargetArmLength = 300.0f;
-
 }
 
 // Called when the game starts or when spawned
@@ -39,26 +40,13 @@ void AVehicleMaster::BeginPlay()
 	if (HasAuthority())
 	{
 		// TODO : Change this value to 30.0f or something higher like that while Publishing.
-		NetUpdateFrequency = 1.0f;	// 30.0f while publishing
+		NetUpdateFrequency = 30.0f;	// 30.0f while publishing
 	}
-}
-
-FVehicleMove AVehicleMaster::CreateMove(float DeltaTime)
-{
-	FVehicleMove Move;
-	return Move;
 }
 
 void AVehicleMaster::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> & OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-	/*DOREPLIFETIME(AVehicleMaster, Thrust);
-	DOREPLIFETIME(AVehicleMaster, Yaw);
-	DOREPLIFETIME(AVehicleMaster, Pitch);
-	DOREPLIFETIME(AVehicleMaster, Roll);
-	DOREPLIFETIME(AVehicleMaster, Translation);*/
-	//DOREPLIFETIME(AVehicleMaster, QuatRot);
 	DOREPLIFETIME(AVehicleMaster, ServerState);
 }
 
