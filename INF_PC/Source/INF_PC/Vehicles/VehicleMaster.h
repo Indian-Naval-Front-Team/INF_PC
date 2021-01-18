@@ -47,15 +47,6 @@ protected:
 	UFUNCTION()
 	virtual void RollVehicle(float Value) {};
 
-	/*UPROPERTY(ReplicatedUsing = OnRep_ServerState)
-	FVehicleState ServerState;
-
-	TArray<FVehicleMove> UnacknowledgedMoves;
-
-	UFUNCTION()
-	virtual void OnRep_ServerState() {};
-	virtual void ClearAcknowledgedMoves(FVehicleMove LastMove) {};*/
-
 	UPROPERTY(VisibleAnywhere)
 	UMovementComponentMaster* VehicleMovementComponent;
 	UPROPERTY(VisibleAnywhere)
@@ -68,6 +59,4 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	//static FString GetRoleText(ENetRole role);
 };

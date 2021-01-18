@@ -74,7 +74,6 @@ void AJetMaster::YawVehicle(float Value)
 
 	const float TargetYawRate = Value * JetMovementComponent->GetYawRate();
 	JetMovementComponent->SetYaw(FMath::FInterpTo(JetMovementComponent->GetYaw(), TargetYawRate, GetWorld()->GetDeltaSeconds(), 2.0f));
-	//Yaw = Value * YawRate;
 }
 
 void AJetMaster::PitchVehicle(float Value)
@@ -84,7 +83,6 @@ void AJetMaster::PitchVehicle(float Value)
 		return;
 	}
 
-	//Pitch = Value * PitchRate;
 	bIntentionalPitch = FMath::Abs(Value) > 0.0f;
 
 	const float TargetPitchRate = Value * JetMovementComponent->GetPitchRate();
@@ -97,8 +95,6 @@ void AJetMaster::RollVehicle(float Value)
 	{
 		return;
 	}
-
-	//Roll = Value * RollRate;
 
 	bIntentionalRoll = FMath::Abs(Value) > 0.0f;
 

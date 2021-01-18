@@ -22,13 +22,20 @@ void UNetworkingComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (TypeOfVehicle == VehicleType::JET)
+	switch (TypeOfVehicle)
 	{
+	case VehicleType::SHIP:
+		break;
+	case VehicleType::JET:
 		MovementComponent = GetOwner()->FindComponentByClass<UJetMovementComponent>();
-	}
-	else if (TypeOfVehicle == VehicleType::OTHERS)
-	{
+		break;
+	case VehicleType::CHOPPER:
+		break;
+	case VehicleType::OTHERS:
 		MovementComponent = GetOwner()->FindComponentByClass<UMovementComponentMaster>();
+		break;
+	default:
+		break;
 	}
 }
 
