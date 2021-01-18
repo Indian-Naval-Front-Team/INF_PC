@@ -9,6 +9,7 @@ UMovementComponentMaster::UMovementComponentMaster()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
+	OwningPawn = Cast<APawn>(GetOwner());
 }
 
 
@@ -30,5 +31,11 @@ FVehicleMove UMovementComponentMaster::CreateMove(float DeltaTime)
 void UMovementComponentMaster::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	if (GetOwner()->GetLocalRole() == ROLE_AutonomousProxy || OwningPawn->IsLocallyControlled())
+	{
+		LastMove = CreateMove(DeltaTime);
+		SimulateMove(LastMove);
+	}
 }
 

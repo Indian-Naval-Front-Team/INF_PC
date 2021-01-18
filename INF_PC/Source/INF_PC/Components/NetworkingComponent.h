@@ -66,4 +66,5 @@ private:
 	UFUNCTION()
 	void OnRep_ServerState();
 	void ClearAcknowledgedMoves(FVehicleMove LastMove);
+	void UpdateServerState(const FVehicleMove& Move);
 };

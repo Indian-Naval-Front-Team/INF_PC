@@ -91,6 +91,8 @@ protected:
 	FVector Force{ FVector::ZeroVector };
 	FVector Acceleration{ FVector::ZeroVector };
 
+	const APawn* OwningPawn;
+	FVehicleMove LastMove;
 
 public:
 	// Called every frame
@@ -104,4 +106,5 @@ public:
 	void SetThrust(float Value) { Thrust = Value; }
 	float GetThrust() { return Thrust; }
 	float GetThrustMultipliyer() { return ThrustMultiplier; }
+	FVehicleMove GetLastMove() { return LastMove; }
 };

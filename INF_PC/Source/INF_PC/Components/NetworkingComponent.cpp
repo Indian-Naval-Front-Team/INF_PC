@@ -49,31 +49,40 @@ void UNetworkingComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>&
 void UNetworkingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	
+
 	if (MovementComponent == nullptr)
 	{
 		return;
 	}
 
-	if (GetOwner()->GetLocalRole() == ROLE_AutonomousProxy)
-	{
-		FVehicleMove Move = MovementComponent->CreateMove(DeltaTime);
-		UnacknowledgedMoves.Add(Move);
-		MovementComponent->SimulateMove(Move);
-		Server_SendMove(Move);
-	}
+	FVehicleMove LastMove = MovementComponent->GetLastMove();
 
 	// We are the server and also in control of the Pawn.
-	if (GetOwner()->GetLocalRole() == ROLE_Authority && OwningPawn->IsLocallyControlled())
+	if (/*GetOwner()->GetLocalRole() == ROLE_Authority && */OwningPawn->IsLocallyControlled())
 	{
-		FVehicleMove Move = MovementComponent->CreateMove(DeltaTime);
-		Server_SendMove(Move);
+		UpdateServerState(LastMove);
 	}
 
+	// We are the Client.
+	if (GetOwner()->GetLocalRole() == ROLE_AutonomousProxy)
+	{
+		UnacknowledgedMoves.Add(LastMove);
+		Server_SendMove(LastMove);
+	}
+
+	// Simulated Proxy Client side.
 	if (GetOwner()->GetLocalRole() == ROLE_SimulatedProxy)
 	{
 		MovementComponent->SimulateMove(ServerState.LastMove);
 	}
+}
+
+void UNetworkingComponent::UpdateServerState(const FVehicleMove& Move)
+{
+	// Send the canonical state to the other clients
+	ServerState.LastMove = Move;
+	ServerState.VehicleTransform = GetOwner()->GetActorTransform();
+	ServerState.Velocity = MovementComponent->GetVelocity();
 }
 
 void UNetworkingComponent::Server_SendMove_Implementation(FVehicleMove Move)
@@ -84,11 +93,7 @@ void UNetworkingComponent::Server_SendMove_Implementation(FVehicleMove Move)
 	}
 
 	MovementComponent->SimulateMove(Move);
-
-	// Send the canonical state to the other clients
-	ServerState.LastMove = Move;
-	ServerState.VehicleTransform = GetOwner()->GetActorTransform();
-	ServerState.Velocity = MovementComponent->GetVelocity();
+	UpdateServerState(Move);
 }
 
 bool UNetworkingComponent::Server_SendMove_Validate(FVehicleMove Move)
