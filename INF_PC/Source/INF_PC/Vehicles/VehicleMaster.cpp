@@ -37,17 +37,11 @@ void AVehicleMaster::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (HasAuthority())
-	{
-		// TODO : Change this value to 30.0f or something higher like that while Publishing.
-		NetUpdateFrequency = 30.0f;	// 30.0f while publishing
-	}
-}
-
-void AVehicleMaster::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> & OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-	DOREPLIFETIME(AVehicleMaster, ServerState);
+	//if (HasAuthority())
+	//{
+	//	// TODO : Change this value to 30.0f or something higher like that while Publishing.
+	//	NetUpdateFrequency = 100.0f;	// 30.0f while publishing
+	//}
 }
 
 // Called every frame

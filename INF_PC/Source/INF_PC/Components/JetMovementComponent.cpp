@@ -4,14 +4,14 @@
 #include "JetMovementComponent.h"
 #include "GameFrameWork/GameState.h"
 
-UJetMovementComponent::UJetMovementComponent()
+UJetMovementComponent::UJetMovementComponent() : UMovementComponentMaster()
 {
 
 }
 
 void UJetMovementComponent::BeginPlay()
 {
-
+	Super::BeginPlay();
 }
 
 void UJetMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)

@@ -56,9 +56,6 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	// Update Transform to every client out there if authority.
-	virtual void OnRep_ServerState() override;
-
 	// Called when 'W' or 'S' keys are pressed on the Jet.
 	virtual void ThrustVehicle(float Value) override;
 
@@ -73,10 +70,10 @@ public:
 
 private:
 	class UEngine* Engine;
-	UFUNCTION(Server, Reliable, WithValidation)
-	void Server_SendMove(FVehicleMove Move);
+	/*UFUNCTION(Server, Reliable, WithValidation)
+	void Server_SendMove(FVehicleMove Move);*/
 
-	virtual void ClearAcknowledgedMoves(FVehicleMove LastMove) override;
+	//virtual void ClearAcknowledgedMoves(FVehicleMove LastMove) override;
 
 	bool bIntentionalPitch{ false };
 	bool bIntentionalRoll{ false };

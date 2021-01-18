@@ -35,6 +35,7 @@ AJetMaster::AJetMaster()
 	RearWing_Elevator_Right->SetupAttachment(Super::VehicleBody, "RearWing_Elevator_Right");
 
 	JetMovementComponent = CreateDefaultSubobject<UJetMovementComponent>(TEXT("JetMovementComponent"));
+	NetworkingComponent = CreateDefaultSubobject<UNetworkingComponent>(TEXT("NetworkingComponent"));
 }
 
 void AJetMaster::BeginPlay()
@@ -50,31 +51,6 @@ void AJetMaster::SetupPlayerInputComponent(class UInputComponent* PlayerInputCom
 void AJetMaster::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	if (JetMovementComponent == nullptr)
-	{
-		return;
-	}
-
-	if (GetLocalRole() == ROLE_AutonomousProxy)
-	{
-		FVehicleMove Move = JetMovementComponent->CreateMove(DeltaTime);
-		UnacknowledgedMoves.Add(Move);
-		JetMovementComponent->SimulateMove(Move);
-		Server_SendMove(Move);
-	}
-
-	// We are the server and also in control of the Pawn.
-	if (GetLocalRole() == ROLE_Authority && IsLocallyControlled())
-	{
-		FVehicleMove Move = JetMovementComponent->CreateMove(DeltaTime);
-		Server_SendMove(Move);
-	}
-
-	if (GetLocalRole() == ROLE_SimulatedProxy)
-	{
-		JetMovementComponent->SimulateMove(ServerState.LastMove);
-	}
 }
 
 // INPUT EVENT OVERRIDES
@@ -133,62 +109,4 @@ void AJetMaster::RollVehicle(float Value)
 
 	const float TargetRollRate = bIntentionalRoll ? (Value * JetMovementComponent->GetRollRate()) : (GetActorRotation().Roll * -0.5f);
 	JetMovementComponent->SetRoll(FMath::FInterpTo(JetMovementComponent->GetRoll(), TargetRollRate, GetWorld()->GetDeltaSeconds(), 2.0f));
-}
-
-void AJetMaster::ClearAcknowledgedMoves(FVehicleMove LastMove)
-{
-	TArray<FVehicleMove> NewMoves;
-
-	for (const FVehicleMove& Move : UnacknowledgedMoves)
-	{
-		if (Move.TimeStamp > LastMove.TimeStamp)
-		{
-			NewMoves.Add(Move);
-		}
-	}
-
-	UnacknowledgedMoves = NewMoves;
-}
-
-void AJetMaster::Server_SendMove_Implementation(FVehicleMove Move)
-{
-	if (JetMovementComponent == nullptr)
-	{
-		return;
-	}
-	/*Thrust = Move.Thrust;
-	Yaw = Move.Yaw;
-	Pitch = Move.Pitch;
-	Roll = Move.Roll;*/
-	JetMovementComponent->SimulateMove(Move);
-
-	// Send the canonical state to the other clients
-	ServerState.LastMove = Move;
-	ServerState.VehicleTransform = GetActorTransform();
-	ServerState.Velocity = JetMovementComponent->GetVelocity();
-}
-
-bool AJetMaster::Server_SendMove_Validate(FVehicleMove Move)
-{
-	// TODO : Make validation better!
-	return true;
-}
-
-// SERVER FUNCTIONS
-void AJetMaster::OnRep_ServerState()
-{
-	if (JetMovementComponent == nullptr)
-	{
-		return;
-	}
-
-	SetActorTransform(ServerState.VehicleTransform);
-	JetMovementComponent->SetVelocity(ServerState.Velocity);
-
-	ClearAcknowledgedMoves(ServerState.LastMove);
-
-	for (const FVehicleMove& Move : UnacknowledgedMoves)
-	{
-		JetMovementComponent->SimulateMove(Move);
-	}
 }

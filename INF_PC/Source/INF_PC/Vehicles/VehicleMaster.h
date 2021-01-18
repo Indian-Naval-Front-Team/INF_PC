@@ -5,23 +5,10 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include <INF_PC/Components/MovementComponentMaster.h>
+#include <INF_PC/Components/NetworkingComponent.h>
 #include "VehicleMaster.generated.h"
 
 
-USTRUCT()
-struct FVehicleState
-{
-	GENERATED_BODY()
-
-	FVehicleState() {}
-
-	UPROPERTY()
-	FVehicleMove LastMove;
-	UPROPERTY()
-	FVector Velocity;
-	UPROPERTY()
-	FTransform VehicleTransform;
-};
 
 UCLASS()
 class INF_PC_API AVehicleMaster : public APawn
@@ -60,17 +47,20 @@ protected:
 	UFUNCTION()
 	virtual void RollVehicle(float Value) {};
 
-	UPROPERTY(ReplicatedUsing = OnRep_ServerState)
+	/*UPROPERTY(ReplicatedUsing = OnRep_ServerState)
 	FVehicleState ServerState;
 
 	TArray<FVehicleMove> UnacknowledgedMoves;
 
 	UFUNCTION()
 	virtual void OnRep_ServerState() {};
-	virtual void ClearAcknowledgedMoves(FVehicleMove LastMove) {};
+	virtual void ClearAcknowledgedMoves(FVehicleMove LastMove) {};*/
 
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere)
 	UMovementComponentMaster* VehicleMovementComponent;
+	UPROPERTY(VisibleAnywhere)
+	UNetworkingComponent* NetworkingComponent;
+
 
 public:	
 	// Called every frame
