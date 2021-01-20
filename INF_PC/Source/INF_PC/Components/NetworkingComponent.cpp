@@ -73,7 +73,8 @@ void UNetworkingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 	// Simulated Proxy Client side.
 	if (GetOwner()->GetLocalRole() == ROLE_SimulatedProxy)
 	{
-		MovementComponent->SimulateMove(ServerState.LastMove);
+		//MovementComponent->SimulateMove(ServerState.LastMove);
+		ClientTick(DeltaTime);
 	}
 }
 
@@ -83,6 +84,42 @@ void UNetworkingComponent::UpdateServerState(const FVehicleMove& Move)
 	ServerState.LastMove = Move;
 	ServerState.VehicleTransform = GetOwner()->GetActorTransform();
 	ServerState.Velocity = MovementComponent->GetVelocity();
+}
+
+void UNetworkingComponent::ClientTick(float DeltaTime)
+{
+	ClientTimeSinceUpdate += DeltaTime;
+
+	if (ClientTimeBetweenLastUpdates < KINDA_SMALL_NUMBER)
+	{
+		return;
+	}
+
+	if (MovementComponent == nullptr)
+	{
+		return;
+	}
+
+	float LerpRatio = ClientTimeSinceUpdate / ClientTimeBetweenLastUpdates;
+	float VelocityToDerivativeInCms = ClientTimeBetweenLastUpdates * 100.0f;
+
+	FVector TargetLocation = ServerState.VehicleTransform.GetLocation();
+	FVector StartLocation = ClientStartTransform.GetLocation();
+	FVector StartDerivative = ClientStartVelocity * VelocityToDerivativeInCms;
+	FVector TargetDerivative = ServerState.Velocity * VelocityToDerivativeInCms;
+
+	FVector NewLocation = FMath::CubicInterp(StartLocation, StartDerivative, TargetLocation, TargetDerivative, LerpRatio);
+	//FVector NewLocation = FMath::LerpStable(StartLocation, TargetLocation, LerpRatio);
+	GetOwner()->SetActorLocation(NewLocation);
+
+	FVector NewDrivative = FMath::CubicInterpDerivative(StartLocation, StartDerivative, TargetLocation, TargetDerivative, LerpRatio);
+	FVector NewVelocity = NewDrivative / VelocityToDerivativeInCms;
+	MovementComponent->SetVelocity(NewVelocity);
+
+	FQuat TargetRotation = ServerState.VehicleTransform.GetRotation();
+	FQuat StartRotation = ClientStartTransform.GetRotation();
+	FQuat NewRotation = FQuat::Slerp(StartRotation, TargetRotation, LerpRatio);
+	GetOwner()->SetActorRotation(NewRotation);
 }
 
 void UNetworkingComponent::Server_SendMove_Implementation(FVehicleMove Move)
@@ -103,6 +140,34 @@ bool UNetworkingComponent::Server_SendMove_Validate(FVehicleMove Move)
 }
 
 void UNetworkingComponent::OnRep_ServerState()
+{
+	if (GetOwner()->GetLocalRole() == ROLE_AutonomousProxy)
+	{
+		AutonomousProxy_OnRep_ServerState();
+	}
+	else if (GetOwner()->GetLocalRole() == ROLE_SimulatedProxy)
+	{
+		SimulatedProxy_OnRep_ServerState();
+	}
+}
+
+void UNetworkingComponent::SimulatedProxy_OnRep_ServerState()
+{
+	if (MovementComponent == nullptr)
+	{
+		return;
+	}
+
+	ClientTimeBetweenLastUpdates = ClientTimeSinceUpdate;
+	ClientTimeSinceUpdate = 0.0f;
+
+	ClientStartTransform = GetOwner()->GetActorTransform();
+
+	// snapshot the velocity
+	ClientStartVelocity = MovementComponent->GetVelocity();
+}
+
+void UNetworkingComponent::AutonomousProxy_OnRep_ServerState()
 {
 	if (MovementComponent == nullptr)
 	{

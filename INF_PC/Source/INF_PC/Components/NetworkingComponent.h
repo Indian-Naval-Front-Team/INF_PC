@@ -63,8 +63,17 @@ private:
 	TArray<FVehicleMove> UnacknowledgedMoves;
 	const APawn* OwningPawn;
 
+	float ClientTimeSinceUpdate;
+	float ClientTimeBetweenLastUpdates;
+	FTransform ClientStartTransform;
+	FVector ClientStartVelocity;
+
 	UFUNCTION()
 	void OnRep_ServerState();
+	void SimulatedProxy_OnRep_ServerState();
+	void AutonomousProxy_OnRep_ServerState();
 	void ClearAcknowledgedMoves(FVehicleMove LastMove);
 	void UpdateServerState(const FVehicleMove& Move);
+
+	void ClientTick(float DeltaTime);
 };

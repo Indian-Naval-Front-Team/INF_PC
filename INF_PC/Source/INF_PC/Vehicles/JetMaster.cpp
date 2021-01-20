@@ -5,8 +5,6 @@
 
 AJetMaster::AJetMaster()
 {
-	bReplicates = true;
-
 	Cockpit = CreateDefaultSubobject<UChildActorComponent>(TEXT("Cockpit"));
 	Cockpit->SetupAttachment(Super::VehicleBody, "Cockpit");
 	Wing_Left = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Wing_Left"));
@@ -36,6 +34,10 @@ AJetMaster::AJetMaster()
 
 	JetMovementComponent = CreateDefaultSubobject<UJetMovementComponent>(TEXT("JetMovementComponent"));
 	NetworkingComponent = CreateDefaultSubobject<UNetworkingComponent>(TEXT("NetworkingComponent"));
+
+	SetReplicates(true);
+	SetReplicateMovement(false);
+	JetMovementComponent->SetIsReplicated(true);
 }
 
 void AJetMaster::BeginPlay()
