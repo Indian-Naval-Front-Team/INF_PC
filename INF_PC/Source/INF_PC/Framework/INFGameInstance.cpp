@@ -153,7 +153,7 @@ void UINFGameInstance::CreateSession()
 
 		FOnlineSessionSettings SessionSettings;
 		SessionSettings.bIsLANMatch = LanMatchTemp;
-		SessionSettings.NumPublicConnections = 3;
+		SessionSettings.NumPublicConnections = 2;
 		SessionSettings.bShouldAdvertise = true;
 		SessionSettings.bUsesPresence = true;
 		SessionSettings.Set(SERVER_NAME_SETTINGS_KEY, ServerData.ServerName, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);

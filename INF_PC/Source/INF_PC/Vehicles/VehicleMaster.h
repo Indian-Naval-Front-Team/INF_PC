@@ -4,24 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
-#include <INF_PC/Components/MovementComponentMaster.h>
 #include "VehicleMaster.generated.h"
 
 
-USTRUCT()
-struct FVehicleState
-{
-	GENERATED_BODY()
-
-	FVehicleState() {}
-
-	UPROPERTY()
-	FVehicleMove LastMove;
-	UPROPERTY()
-	FVector Velocity;
-	UPROPERTY()
-	FTransform VehicleTransform;
-};
 
 UCLASS()
 class INF_PC_API AVehicleMaster : public APawn
@@ -33,6 +18,80 @@ public:
 	AVehicleMaster();
 
 protected:
+												// Variables
+										// Vehicle Setup/Constants
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vehicle Setup|Movement|Constants")
+	float TopSpeedInKms{ 0.0f };
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vehicle Setup|Movement|Constants")
+	float MassInKgs{ 1000.0f };
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vehicle Setup|Movement|Constants")
+	float DragCoefficient{ 0.4f };
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vehicle Setup|Movement|Constants")
+	float MaxThrustSpeed{ 0.0f };
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vehicle Setup|Movement|Constants")
+	float MinThrustRequired{ 0.0f };
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vehicle Setup|Movement|Constants")
+	float ThrustMultiplier{ 0.0f };
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vehicle Setup|Movement|Constants")
+	float Gravity{ 981.0f };
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vehicle Setup|Movement|Constants")
+	float YawRate{ 0.0f };
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vehicle Setup|Movement|Constants")
+	float PitchRate{ 0.0f };
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vehicle Setup|Movement|Constants")
+	float RollRate{ 0.0f };
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vehicle Setup|Movement|Constants")
+	float RotMultiplier{ 20.0f };
+									// Vehicle Setup/Constants/Control Surfaces
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vehicle Setup|Movement|Constants|Control Surfaces")
+	float MaxFlapPitch{ 10.0f };
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vehicle Setup|Movement|Constants|Control Surfaces")
+	float MaxElevatorPitch{ 25.0f };
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vehicle Setup|Movement|Constants|Control Surfaces")
+	float MaxAileronPitch{ 45.0f };
+									// Vehicle Setup/Constants/Dynamic Vars
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Vehicle Setup|Movement|Dynamic Vars")
+	float ThrustSpeed{ 0.0f };
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Vehicle Setup|Movement|Dynamic Vars")
+	float CurrentSpeed{ 0.0f };
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Vehicle Setup|Movement|Dynamic Vars")
+	float AppliedGravity{ 0.0f };
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Vehicle Setup|Movement|Dynamic Vars")
+	FVector NewVehiclePosition;
+									// Vehicle Setup/Constants/Rotation
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Vehicle Setup|Movement|Rotation")
+	float TargetYaw{ 0.0f };
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Vehicle Setup|Movement|Rotation")
+	float CurrentYaw{ 0.0f };
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Vehicle Setup|Movement|Rotation")
+	float TargetPitch{ 0.0f };
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Vehicle Setup|Movement|Rotation")
+	float CurrentPitch{ 0.0f };
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Vehicle Setup|Movement|Rotation")
+	float TargetRoll{ 0.0f };
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Vehicle Setup|Movement|Rotation")
+	float CurrentRoll{ 0.0f };
+	UPROPERTY(Replicated)
+	FVector Velocity;
+	UPROPERTY(Replicated)
+	float Thrust{ 0.0f };
+	UPROPERTY(Replicated)
+	float Yaw{ 0.0f };
+	UPROPERTY(Replicated)
+	float Pitch{ 0.0f };
+	UPROPERTY(Replicated)
+	float Roll{ 0.0f };
+	UPROPERTY(Replicated)
+	FVector Translation;
+	UPROPERTY(Replicated)
+	FQuat QuatRot;
+	UPROPERTY(ReplicatedUsing = OnRep_ReplicatedTransform)
+	FTransform ReplicatedTransform;
+
+	FVector Force{ FVector::ZeroVector };
+	FVector Acceleration{ FVector::ZeroVector };
+	FRotator NewRotation;
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
@@ -47,30 +106,28 @@ protected:
 	// Called when 'W' or 'S' keys are pressed on the Vehicle.
 	UFUNCTION()
 	virtual void ThrustVehicle(float Value) {};
-
 	// Called when the 'A' or 'D' keys are pressed to Yaw the vehicle.
 	UFUNCTION()
 	virtual void YawVehicle(float Value) {};
-
 	// Called when the Mouse is moved up/down to Pitch the Vehicle Up/Down.
 	UFUNCTION()
 	virtual void PitchVehicle(float Value) {};
-
 	// Called when the Mouse is moved left/right to Roll the Vehicle Left/Right.
 	UFUNCTION()
 	virtual void RollVehicle(float Value) {};
-
-	UPROPERTY(ReplicatedUsing = OnRep_ServerState)
-	FVehicleState ServerState;
-
-	TArray<FVehicleMove> UnacknowledgedMoves;
-
+	// Get the Air Resistance of the vehicle using the formula(-velocityNormal * velocity^2 * dragCoefficient).
 	UFUNCTION()
-	virtual void OnRep_ServerState() {};
-	virtual void ClearAcknowledgedMoves(FVehicleMove LastMove) {};
-
-	UPROPERTY()
-	UMovementComponentMaster* VehicleMovementComponent;
+	virtual FVector GetVehicleAirResistance() { return FVector::ZeroVector; }
+	// Get the Rolling Resistance of the vehicle using the formula(-velocityNormal * rollingResistanceCoefficient * normalForce).
+	UFUNCTION()
+	virtual FVector GetVehicleRollingResistance() { return FVector::ZeroVector; }
+	
+	UFUNCTION()
+	virtual void UpdateVehiclePosition(float DeltaTime) {};
+	UFUNCTION()
+	virtual void UpdateVehicleRotation(float DeltaTime) {};
+	UFUNCTION()
+	virtual void OnRep_ReplicatedTransform() {};
 
 public:	
 	// Called every frame
@@ -78,6 +135,5 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	//static FString GetRoleText(ENetRole role);
+	static FString GetRoleText(ENetRole role);
 };

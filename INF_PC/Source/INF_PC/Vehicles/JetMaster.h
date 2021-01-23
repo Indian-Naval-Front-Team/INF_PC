@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include <INF_PC/Vehicles/VehicleMaster.h>
-#include <INF_PC/Components/JetMovementComponent.h>
 #include "JetMaster.generated.h"
 
 /**
@@ -56,9 +55,6 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	// Update Transform to every client out there if authority.
-	virtual void OnRep_ServerState() override;
-
 	// Called when 'W' or 'S' keys are pressed on the Jet.
 	virtual void ThrustVehicle(float Value) override;
 
@@ -71,16 +67,26 @@ public:
 	// Called when the Mouse is moved left/right to Roll the Vehicle Left/Right.
 	virtual void RollVehicle(float Value) override;
 
-private:
-	class UEngine* Engine;
-	UFUNCTION(Server, Reliable, WithValidation)
-	void Server_SendMove(FVehicleMove Move);
+	virtual FVector GetVehicleAirResistance() override;
+	virtual FVector GetVehicleRollingResistance() override;
+	virtual void UpdateVehiclePosition(float DeltaTime) override;
+	virtual void UpdateVehicleRotation(float DeltaTime) override;
+	virtual void OnRep_ReplicatedTransform() override;
 
-	virtual void ClearAcknowledgedMoves(FVehicleMove LastMove) override;
+private:
 
 	bool bIntentionalPitch{ false };
 	bool bIntentionalRoll{ false };
 
-	UPROPERTY(VisibleAnywhere)
-	UJetMovementComponent* JetMovementComponent;
+private:
+	class UEngine* Engine;
+
+	UFUNCTION(Server, Unreliable, WithValidation)
+	void Server_ThrustVehicle(float Value);
+	UFUNCTION(Server, Unreliable, WithValidation)
+	void Server_YawVehicle(float Value);
+	UFUNCTION(Server, Unreliable, WithValidation)
+	void Server_PitchVehicle(float Value);
+	UFUNCTION(Server, Unreliable, WithValidation)
+	void Server_RollVehicle(float Value);
 };

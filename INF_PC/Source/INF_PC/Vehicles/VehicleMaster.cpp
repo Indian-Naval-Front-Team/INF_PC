@@ -26,8 +26,6 @@ AVehicleMaster::AVehicleMaster()
 	CameraBoom->SetupAttachment(VehicleBody);
 	MainCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("MainCamera"));
 	MainCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
-	
-	VehicleMovementComponent = CreateDefaultSubobject<UMovementComponentMaster>(TEXT("VehicleMovementComponent"));
 
 	CameraBoom->TargetArmLength = 300.0f;
 }
@@ -36,25 +34,27 @@ AVehicleMaster::AVehicleMaster()
 void AVehicleMaster::BeginPlay()
 {
 	Super::BeginPlay();
-
-	if (HasAuthority())
-	{
-		// TODO : Change this value to 30.0f or something higher like that while Publishing.
-		NetUpdateFrequency = 30.0f;	// 30.0f while publishing
-	}
-}
-
-void AVehicleMaster::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> & OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-	DOREPLIFETIME(AVehicleMaster, ServerState);
 }
 
 // Called every frame
 void AVehicleMaster::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	DrawDebugString(GetWorld(), FVector(0.0f, 300.0f, 300.0f), UEnum::GetValueAsString(GetLocalRole()), this, FColor::Green, DeltaTime, false, 2.0f);
+	//DrawDebugString(GetWorld(), FVector(0.0f, 300.0f, 300.0f), UEnum::GetValueAsString(GetLocalRole()), this, FColor::Green, DeltaTime, false, 2.0f);
+}
+
+void AVehicleMaster::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AVehicleMaster, Velocity);
+	DOREPLIFETIME(AVehicleMaster, Thrust);
+	DOREPLIFETIME(AVehicleMaster, Yaw);
+	DOREPLIFETIME(AVehicleMaster, Pitch);
+	DOREPLIFETIME(AVehicleMaster, Roll);
+	DOREPLIFETIME(AVehicleMaster, Translation);
+	DOREPLIFETIME(AVehicleMaster, QuatRot);
+	DOREPLIFETIME(AVehicleMaster, ReplicatedTransform);
 }
 
 // Called to bind functionality to input
