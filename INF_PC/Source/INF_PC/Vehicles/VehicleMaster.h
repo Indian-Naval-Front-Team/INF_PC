@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "Net/UnrealNetwork.h"
 #include "VehicleMaster.generated.h"
 
 
@@ -81,9 +82,9 @@ protected:
 	float Pitch{ 0.0f };
 	UPROPERTY(Replicated)
 	float Roll{ 0.0f };
-	UPROPERTY(Replicated)
+	UPROPERTY()
 	FVector Translation;
-	UPROPERTY(Replicated)
+	UPROPERTY()
 	FQuat QuatRot;
 	UPROPERTY(ReplicatedUsing = OnRep_ReplicatedTransform)
 	FTransform ReplicatedTransform;
@@ -128,6 +129,7 @@ protected:
 	virtual void UpdateVehicleRotation(float DeltaTime) {};
 	UFUNCTION()
 	virtual void OnRep_ReplicatedTransform() {};
+
 
 public:	
 	// Called every frame

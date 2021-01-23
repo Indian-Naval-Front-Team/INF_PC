@@ -9,7 +9,6 @@
 #include "Engine/DemoNetDriver.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "Net/UnrealNetwork.h"
 
 // Sets default values
 AVehicleMaster::AVehicleMaster()
@@ -34,6 +33,7 @@ AVehicleMaster::AVehicleMaster()
 void AVehicleMaster::BeginPlay()
 {
 	Super::BeginPlay();
+
 }
 
 // Called every frame
@@ -52,8 +52,8 @@ void AVehicleMaster::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 	DOREPLIFETIME(AVehicleMaster, Yaw);
 	DOREPLIFETIME(AVehicleMaster, Pitch);
 	DOREPLIFETIME(AVehicleMaster, Roll);
-	DOREPLIFETIME(AVehicleMaster, Translation);
-	DOREPLIFETIME(AVehicleMaster, QuatRot);
+	/*DOREPLIFETIME(AVehicleMaster, Translation);
+	DOREPLIFETIME(AVehicleMaster, QuatRot);*/
 	DOREPLIFETIME(AVehicleMaster, ReplicatedTransform);
 }
 

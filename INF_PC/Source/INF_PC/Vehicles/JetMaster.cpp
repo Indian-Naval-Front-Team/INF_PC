@@ -2,6 +2,7 @@
 
 
 #include "JetMaster.h"
+#include "Net/UnrealNetwork.h"
 
 AJetMaster::AJetMaster()
 {
@@ -38,7 +39,12 @@ AJetMaster::AJetMaster()
 void AJetMaster::BeginPlay()
 {
 	Super::BeginPlay();
-	TopSpeedInKms = TopSpeedInKms * 28.0f;
+	//TopSpeedInKms = TopSpeedInKms * 28.0f;
+
+	if (HasAuthority())
+	{
+		//NetUpdateFrequency = 1.0f;
+	}
 }
 
 void AJetMaster::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -53,9 +59,9 @@ void AJetMaster::Tick(float DeltaTime)
 	Force = Thrust * MaxThrustSpeed * GetActorForwardVector();
 	Force += GetVehicleAirResistance();
 	Acceleration = Force / MassInKgs;
-	Velocity += Acceleration * DeltaTime;
-	UE_LOG(LogTemp, Warning, TEXT("Speed = %f"), Velocity.Size());
-	//Velocity = FMath::Clamp(Velocity.Size(), 0.0f, TopSpeedInKms) * GetActorForwardVector();
+	Velocity = Velocity + Acceleration * DeltaTime;
+	//UE_LOG(LogTemp, Warning, TEXT("Speed = %f"), Velocity.Size());
+	Velocity = FMath::Clamp(Velocity.Size(), 0.0f, TopSpeedInKms) * GetActorForwardVector();
 
 	UpdateVehicleRotation(DeltaTime);
 	UpdateVehiclePosition(DeltaTime);
@@ -79,7 +85,8 @@ FVector AJetMaster::GetVehicleRollingResistance()
 
 void AJetMaster::UpdateVehiclePosition(float DeltaTime)
 {
-	Translation = FMath::Clamp(Velocity.Size(), 0.0f, TopSpeedInKms) * GetActorForwardVector() * 100.0f * DeltaTime;
+	//Translation = FMath::Clamp(Velocity.Size(), 0.0f, TopSpeedInKms) * GetActorForwardVector() * 100.0f * DeltaTime;
+	Translation = Velocity * 100.0f * DeltaTime;
 	AddActorWorldOffset(Translation);
 }
 
@@ -96,7 +103,9 @@ void AJetMaster::UpdateVehicleRotation(float DeltaTime)
 // INPUT EVENT OVERRIDES
 void AJetMaster::ThrustVehicle(float Value)
 {
-	Thrust = Value * ThrustMultiplier;
+	const float TargetThrust = Value * ThrustMultiplier;
+	Thrust = FMath::FInterpTo(Thrust, TargetThrust, GetWorld()->GetDeltaSeconds(), 10.0f);
+	//Thrust = Value * ThrustMultiplier;
 	Server_ThrustVehicle(Value);
 }
 
@@ -137,7 +146,9 @@ void AJetMaster::RollVehicle(float Value)
 // SERVER FUNCTIONS
 void AJetMaster::Server_ThrustVehicle_Implementation(float Value)
 {
-	Thrust = Value * ThrustMultiplier;
+	const float TargetThrust = Value * ThrustMultiplier;
+	Thrust = FMath::FInterpTo(Thrust, TargetThrust, GetWorld()->GetDeltaSeconds(), 10.0f);
+	//Thrust = Value * ThrustMultiplier;
 }
 
 void AJetMaster::Server_YawVehicle_Implementation(float Value)
@@ -190,4 +201,5 @@ bool AJetMaster::Server_PitchVehicle_Validate(float Value)
 void AJetMaster::OnRep_ReplicatedTransform()
 {
 	SetActorTransform(ReplicatedTransform);
+	//UE_LOG(LogTemp, Warning, TEXT("Replicated Transform at time %f"), GetWorld()->GetRealTimeSeconds());
 }
