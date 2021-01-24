@@ -47,14 +47,11 @@ void AVehicleMaster::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(AVehicleMaster, Velocity);
-	DOREPLIFETIME(AVehicleMaster, Thrust);
+	/*DOREPLIFETIME(AVehicleMaster, Thrust);
 	DOREPLIFETIME(AVehicleMaster, Yaw);
 	DOREPLIFETIME(AVehicleMaster, Pitch);
-	DOREPLIFETIME(AVehicleMaster, Roll);
-	/*DOREPLIFETIME(AVehicleMaster, Translation);
-	DOREPLIFETIME(AVehicleMaster, QuatRot);*/
-	DOREPLIFETIME(AVehicleMaster, ReplicatedTransform);
+	DOREPLIFETIME(AVehicleMaster, Roll);*/
+	DOREPLIFETIME(AVehicleMaster, ServerState);
 }
 
 // Called to bind functionality to input

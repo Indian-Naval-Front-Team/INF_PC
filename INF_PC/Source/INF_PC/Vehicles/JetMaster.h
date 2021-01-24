@@ -67,11 +67,11 @@ public:
 	// Called when the Mouse is moved left/right to Roll the Vehicle Left/Right.
 	virtual void RollVehicle(float Value) override;
 
-	virtual FVector GetVehicleAirResistance() override;
-	virtual FVector GetVehicleRollingResistance() override;
+	virtual FVector_NetQuantize GetVehicleAirResistance() override;
+	virtual FVector_NetQuantize GetVehicleRollingResistance() override;
 	virtual void UpdateVehiclePosition(float DeltaTime) override;
-	virtual void UpdateVehicleRotation(float DeltaTime) override;
-	virtual void OnRep_ReplicatedTransform() override;
+	virtual void UpdateVehicleRotation(float DeltaTime, float YawVal, float PitchVal, float RollVal) override;
+	virtual void OnRep_ServerState() override;
 
 private:
 
@@ -82,11 +82,7 @@ private:
 	class UEngine* Engine;
 
 	UFUNCTION(Server, Unreliable, WithValidation)
-	void Server_ThrustVehicle(float Value);
-	UFUNCTION(Server, Unreliable, WithValidation)
-	void Server_YawVehicle(float Value);
-	UFUNCTION(Server, Unreliable, WithValidation)
-	void Server_PitchVehicle(float Value);
-	UFUNCTION(Server, Unreliable, WithValidation)
-	void Server_RollVehicle(float Value);
+	void Server_SendMove(FPawnMove Move);
+
+	void SimulateMove(FPawnMove PawnMove) override;
 };

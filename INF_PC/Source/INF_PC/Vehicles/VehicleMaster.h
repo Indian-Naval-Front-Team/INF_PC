@@ -7,7 +7,42 @@
 #include "Net/UnrealNetwork.h"
 #include "VehicleMaster.generated.h"
 
+USTRUCT()
+struct FPawnMove
+{
+	GENERATED_BODY()
 
+	FPawnMove() {}
+
+	UPROPERTY()
+	float Thrust{ 0.0f };
+	UPROPERTY()
+	float Yaw{ 0.0f };
+	UPROPERTY()
+	float Pitch{ 0.0f };
+	UPROPERTY()
+	float Roll{ 0.0f };
+
+	UPROPERTY()
+	float DeltaTime{ 0.0f };
+	uint8_t MoveIndex{ 0 };
+};
+
+USTRUCT()
+struct FPawnState
+{
+	GENERATED_BODY()
+
+public:
+	FPawnState() {}
+
+	UPROPERTY()
+	FPawnMove LastMove;
+	UPROPERTY()
+	FVector_NetQuantize Velocity;
+	UPROPERTY()
+	FTransform PawnTransform;
+};
 
 UCLASS()
 class INF_PC_API AVehicleMaster : public APawn
@@ -58,7 +93,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Vehicle Setup|Movement|Dynamic Vars")
 	float AppliedGravity{ 0.0f };
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Vehicle Setup|Movement|Dynamic Vars")
-	FVector NewVehiclePosition;
+	FVector_NetQuantize NewVehiclePosition;
 									// Vehicle Setup/Constants/Rotation
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Vehicle Setup|Movement|Rotation")
 	float TargetYaw{ 0.0f };
@@ -72,25 +107,23 @@ protected:
 	float TargetRoll{ 0.0f };
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Vehicle Setup|Movement|Rotation")
 	float CurrentRoll{ 0.0f };
-	UPROPERTY(Replicated)
-	FVector Velocity;
-	UPROPERTY(Replicated)
+
+	UPROPERTY(ReplicatedUsing = OnRep_ServerState)
+	FPawnState ServerState;
+
 	float Thrust{ 0.0f };
-	UPROPERTY(Replicated)
 	float Yaw{ 0.0f };
-	UPROPERTY(Replicated)
 	float Pitch{ 0.0f };
-	UPROPERTY(Replicated)
 	float Roll{ 0.0f };
+
 	UPROPERTY()
-	FVector Translation;
+	FVector_NetQuantize Translation;
 	UPROPERTY()
 	FQuat QuatRot;
-	UPROPERTY(ReplicatedUsing = OnRep_ReplicatedTransform)
-	FTransform ReplicatedTransform;
 
-	FVector Force{ FVector::ZeroVector };
-	FVector Acceleration{ FVector::ZeroVector };
+	FVector_NetQuantize Velocity;
+	FVector_NetQuantize Force{ FVector_NetQuantize::ZeroVector };
+	FVector_NetQuantize Acceleration{ FVector_NetQuantize::ZeroVector };
 	FRotator NewRotation;
 
 	// Called when the game starts or when spawned
@@ -118,18 +151,20 @@ protected:
 	virtual void RollVehicle(float Value) {};
 	// Get the Air Resistance of the vehicle using the formula(-velocityNormal * velocity^2 * dragCoefficient).
 	UFUNCTION()
-	virtual FVector GetVehicleAirResistance() { return FVector::ZeroVector; }
+	virtual FVector_NetQuantize GetVehicleAirResistance() { return FVector_NetQuantize::ZeroVector; }
 	// Get the Rolling Resistance of the vehicle using the formula(-velocityNormal * rollingResistanceCoefficient * normalForce).
 	UFUNCTION()
-	virtual FVector GetVehicleRollingResistance() { return FVector::ZeroVector; }
+	virtual FVector_NetQuantize GetVehicleRollingResistance() { return FVector_NetQuantize::ZeroVector; }
 	
 	UFUNCTION()
 	virtual void UpdateVehiclePosition(float DeltaTime) {};
 	UFUNCTION()
-	virtual void UpdateVehicleRotation(float DeltaTime) {};
+	virtual void UpdateVehicleRotation(float DeltaTime, float YawVal, float PitchVal, float RollVal) {};
 	UFUNCTION()
-	virtual void OnRep_ReplicatedTransform() {};
+	virtual void OnRep_ServerState() {};
 
+	FPawnMove VehicleMove;
+	virtual void SimulateMove(FPawnMove PawnMove) {};
 
 public:	
 	// Called every frame

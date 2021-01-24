@@ -56,31 +56,28 @@ void AJetMaster::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	Force = Thrust * MaxThrustSpeed * GetActorForwardVector();
-	Force += GetVehicleAirResistance();
-	Acceleration = Force / MassInKgs;
-	Velocity = Velocity + Acceleration * DeltaTime;
-	//UE_LOG(LogTemp, Warning, TEXT("Speed = %f"), Velocity.Size());
-	Velocity = FMath::Clamp(Velocity.Size(), 0.0f, TopSpeedInKms) * GetActorForwardVector();
-
-	UpdateVehicleRotation(DeltaTime);
-	UpdateVehiclePosition(DeltaTime);
-
-	if (HasAuthority())
+	if (IsLocallyControlled())
 	{
-		ReplicatedTransform = GetActorTransform();
+		VehicleMove.DeltaTime = DeltaTime;
+		VehicleMove.Thrust = this->Thrust;
+		VehicleMove.Pitch = this->Pitch;
+		VehicleMove.Roll = this->Roll;
+		VehicleMove.Yaw = this->Yaw;
+		// TODO : Update VehicleMove.MoveIndex
+
+		Server_SendMove(VehicleMove);
 	}
 }
 
 // JET MOVEMENT AND ROTATION FUNCTIONS
-FVector AJetMaster::GetVehicleAirResistance()
+FVector_NetQuantize AJetMaster::GetVehicleAirResistance()
 {
 	return -Velocity.GetSafeNormal() * Velocity.SizeSquared() * DragCoefficient;
 }
 
-FVector AJetMaster::GetVehicleRollingResistance()
+FVector_NetQuantize AJetMaster::GetVehicleRollingResistance()
 {
-	return FVector::ZeroVector;
+	return FVector_NetQuantize::ZeroVector;
 }
 
 void AJetMaster::UpdateVehiclePosition(float DeltaTime)
@@ -90,11 +87,11 @@ void AJetMaster::UpdateVehiclePosition(float DeltaTime)
 	AddActorWorldOffset(Translation);
 }
 
-void AJetMaster::UpdateVehicleRotation(float DeltaTime)
+void AJetMaster::UpdateVehicleRotation(float DeltaTime, float YawVal, float PitchVal, float RollVal)
 {
 	if (Velocity.Size() > 10.0f)
 	{
-		QuatRot = FQuat(FRotator(Pitch * DeltaTime, Yaw * DeltaTime, Roll * DeltaTime));
+		QuatRot = FQuat(FRotator(PitchVal * DeltaTime, YawVal * DeltaTime, RollVal * DeltaTime));
 		Velocity = QuatRot.RotateVector(Velocity);
 		AddActorLocalRotation(QuatRot);
 	}
@@ -106,7 +103,7 @@ void AJetMaster::ThrustVehicle(float Value)
 	const float TargetThrust = Value * ThrustMultiplier;
 	Thrust = FMath::FInterpTo(Thrust, TargetThrust, GetWorld()->GetDeltaSeconds(), 10.0f);
 	//Thrust = Value * ThrustMultiplier;
-	Server_ThrustVehicle(Value);
+	//Server_ThrustVehicle(Value);
 }
 
 
@@ -115,7 +112,7 @@ void AJetMaster::YawVehicle(float Value)
 	const float TargetYawRate = Value * YawRate;
 	Yaw = FMath::FInterpTo(Yaw, TargetYawRate, GetWorld()->GetDeltaSeconds(), 1.0f);
 	//Yaw = Value * YawRate;
-	Server_YawVehicle(Value);
+	//Server_YawVehicle(Value);
 }
 
 void AJetMaster::PitchVehicle(float Value)
@@ -125,7 +122,7 @@ void AJetMaster::PitchVehicle(float Value)
 	const float TargetPitchRate = Value * PitchRate;
 	Pitch = FMath::FInterpTo(Pitch, TargetPitchRate, GetWorld()->GetDeltaSeconds(), 1.0f);
 
-	Server_PitchVehicle(Value);
+	//Server_PitchVehicle(Value);
 }
 
 void AJetMaster::RollVehicle(float Value)
@@ -140,66 +137,41 @@ void AJetMaster::RollVehicle(float Value)
 	const float TargetRollRate = bIntentionalRoll ? (Value * RollRate) : (GetActorRotation().Roll * -0.5f);
 	Roll = FMath::FInterpTo(Roll, TargetRollRate, GetWorld()->GetDeltaSeconds(), 2.0f);
 
-	Server_RollVehicle(Value);
+	//Server_RollVehicle(Value);
 }
+
+void AJetMaster::SimulateMove(FPawnMove PawnMove)
+{
+	Force = PawnMove.Thrust * MaxThrustSpeed * GetActorForwardVector();
+	Force += GetVehicleAirResistance();
+	Acceleration = Force / MassInKgs;
+	Velocity = Velocity + Acceleration * PawnMove.DeltaTime;
+	//UE_LOG(LogTemp, Warning, TEXT("Speed = %f"), Velocity.Size());
+	Velocity = FMath::Clamp(Velocity.Size(), 0.0f, TopSpeedInKms) * GetActorForwardVector();
+
+	UpdateVehicleRotation(PawnMove.DeltaTime, PawnMove.Yaw, PawnMove.Pitch, PawnMove.Roll);
+	UpdateVehiclePosition(PawnMove.DeltaTime);
+}
+
 
 // SERVER FUNCTIONS
-void AJetMaster::Server_ThrustVehicle_Implementation(float Value)
+void AJetMaster::Server_SendMove_Implementation(FPawnMove Move)
 {
-	const float TargetThrust = Value * ThrustMultiplier;
-	Thrust = FMath::FInterpTo(Thrust, TargetThrust, GetWorld()->GetDeltaSeconds(), 10.0f);
-	//Thrust = Value * ThrustMultiplier;
+	SimulateMove(Move);
+
+	ServerState.LastMove = Move;
+	ServerState.PawnTransform = GetActorTransform();
+	ServerState.Velocity = this->Velocity;
 }
 
-void AJetMaster::Server_YawVehicle_Implementation(float Value)
-{
-	const float TargetYawRate = Value * YawRate;
-	Yaw = FMath::FInterpTo(Yaw, TargetYawRate, GetWorld()->GetDeltaSeconds(), 1.0f);
-}
-
-void AJetMaster::Server_PitchVehicle_Implementation(float Value)
-{
-	bIntentionalPitch = FMath::Abs(Value) > 0.0f;
-
-	const float TargetPitchRate = Value * PitchRate;
-	Pitch = FMath::FInterpTo(Pitch, TargetPitchRate, GetWorld()->GetDeltaSeconds(), 1.0f);
-}
-
-void AJetMaster::Server_RollVehicle_Implementation(float Value)
-{
-	bIntentionalRoll = FMath::Abs(Value) > 0.0f;
-
-	if (bIntentionalPitch && !bIntentionalRoll)
-	{
-		return;
-	}
-
-	const float TargetRollRate = bIntentionalRoll ? (Value * RollRate) : (GetActorRotation().Roll * -0.5f);
-	Roll = FMath::FInterpTo(Roll, TargetRollRate, GetWorld()->GetDeltaSeconds(), 2.0f);
-}
-
-bool AJetMaster::Server_ThrustVehicle_Validate(float Value)
-{
-	return FMath::Abs(Value) <= 1.0f;
-}
-
-bool AJetMaster::Server_YawVehicle_Validate(float Value)
+bool AJetMaster::Server_SendMove_Validate(FPawnMove Move)
 {
 	return true;
 }
 
-bool AJetMaster::Server_RollVehicle_Validate(float Value)
+void AJetMaster::OnRep_ServerState()
 {
-	return true;
-}
-
-bool AJetMaster::Server_PitchVehicle_Validate(float Value)
-{
-	return true;
-}
-
-void AJetMaster::OnRep_ReplicatedTransform()
-{
-	SetActorTransform(ReplicatedTransform);
+	SetActorTransform(ServerState.PawnTransform);
+	this->Velocity = ServerState.Velocity;
 	//UE_LOG(LogTemp, Warning, TEXT("Replicated Transform at time %f"), GetWorld()->GetRealTimeSeconds());
 }
