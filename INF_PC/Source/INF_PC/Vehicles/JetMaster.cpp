@@ -40,10 +40,11 @@ void AJetMaster::BeginPlay()
 {
 	Super::BeginPlay();
 	//TopSpeedInKms = TopSpeedInKms * 28.0f;
+	GameStateRef = GetWorld()->GetGameState();
 
 	if (HasAuthority())
 	{
-		//NetUpdateFrequency = 1.0f;
+		NetUpdateFrequency = 1.0f;
 	}
 }
 
@@ -58,14 +59,15 @@ void AJetMaster::Tick(float DeltaTime)
 
 	if (IsLocallyControlled())
 	{
-		VehicleMove.DeltaTime = DeltaTime;
-		VehicleMove.Thrust = this->Thrust;
-		VehicleMove.Pitch = this->Pitch;
-		VehicleMove.Roll = this->Roll;
-		VehicleMove.Yaw = this->Yaw;
-		// TODO : Update VehicleMove.MoveIndex
+		FPawnMove Move = CreateMove(DeltaTime);
 
-		Server_SendMove(VehicleMove);
+		if (!HasAuthority())
+		{
+			UnacknowledgedMoves.Add(Move);
+			SimulateMove(Move);
+		}
+
+		Server_SendMove(Move);
 	}
 }
 
@@ -140,7 +142,36 @@ void AJetMaster::RollVehicle(float Value)
 	//Server_RollVehicle(Value);
 }
 
-void AJetMaster::SimulateMove(FPawnMove PawnMove)
+FPawnMove AJetMaster::CreateMove(float DeltaTime)
+{
+	FPawnMove VehicleMove;
+
+	VehicleMove.DeltaTime = DeltaTime;
+	VehicleMove.Thrust = this->Thrust;
+	VehicleMove.Pitch = this->Pitch;
+	VehicleMove.Roll = this->Roll;
+	VehicleMove.Yaw = this->Yaw;
+	VehicleMove.TimeStamp = GameStateRef->GetServerWorldTimeSeconds();
+
+	return VehicleMove;
+}
+
+void AJetMaster::ClearUnacknowledgedMoves(FPawnMove LastMove)
+{
+	TArray<FPawnMove> NewMoves;
+
+	for (const FPawnMove & Move : UnacknowledgedMoves)
+	{
+		if (Move.TimeStamp > LastMove.TimeStamp)
+		{
+			NewMoves.Add(Move);
+		}
+	}
+
+	UnacknowledgedMoves = NewMoves;
+}
+
+void AJetMaster::SimulateMove(const FPawnMove& PawnMove)
 {
 	Force = PawnMove.Thrust * MaxThrustSpeed * GetActorForwardVector();
 	Force += GetVehicleAirResistance();
@@ -174,4 +205,10 @@ void AJetMaster::OnRep_ServerState()
 	SetActorTransform(ServerState.PawnTransform);
 	this->Velocity = ServerState.Velocity;
 	//UE_LOG(LogTemp, Warning, TEXT("Replicated Transform at time %f"), GetWorld()->GetRealTimeSeconds());
+	ClearUnacknowledgedMoves(ServerState.LastMove);
+
+	for (const FPawnMove& Move : UnacknowledgedMoves)
+	{
+		SimulateMove(Move);
+	}
 }

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include <INF_PC/Vehicles/VehicleMaster.h>
+#include "GameFramework/GameStateBase.h"
 #include "JetMaster.generated.h"
 
 /**
@@ -83,6 +84,9 @@ private:
 
 	UFUNCTION(Server, Unreliable, WithValidation)
 	void Server_SendMove(FPawnMove Move);
+	FPawnMove CreateMove(float DeltaTime);
+	void ClearUnacknowledgedMoves(FPawnMove LastMove);
+	AGameStateBase* GameStateRef;
 
-	void SimulateMove(FPawnMove PawnMove) override;
+	void SimulateMove(const FPawnMove& PawnMove) override;
 };

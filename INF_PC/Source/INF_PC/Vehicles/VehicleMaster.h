@@ -25,7 +25,8 @@ struct FPawnMove
 
 	UPROPERTY()
 	float DeltaTime{ 0.0f };
-	uint8_t MoveIndex{ 0 };
+	UPROPERTY()
+	float TimeStamp{ 0.0f };
 };
 
 USTRUCT()
@@ -163,8 +164,9 @@ protected:
 	UFUNCTION()
 	virtual void OnRep_ServerState() {};
 
-	FPawnMove VehicleMove;
-	virtual void SimulateMove(FPawnMove PawnMove) {};
+	TArray<FPawnMove> UnacknowledgedMoves;
+	virtual void SimulateMove(const FPawnMove& PawnMove) {};
+
 
 public:	
 	// Called every frame
