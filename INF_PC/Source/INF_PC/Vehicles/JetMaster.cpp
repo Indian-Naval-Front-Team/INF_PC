@@ -104,7 +104,7 @@ void AJetMaster::UpdateVehicleRotation(float DeltaTime)
 void AJetMaster::ThrustVehicle(float Value)
 {
 	const float TargetThrust = Value * ThrustMultiplier;
-	Thrust = FMath::FInterpTo(Thrust, TargetThrust, GetWorld()->GetDeltaSeconds(), 10.0f);
+	Thrust = FMath::FInterpTo(Thrust, TargetThrust, GetWorld()->GetDeltaSeconds(), 1.0f);
 	//Thrust = Value * ThrustMultiplier;
 	Server_ThrustVehicle(Value);
 }
