@@ -57,17 +57,23 @@ void AJetMaster::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (IsLocallyControlled())
+	if (GetLocalRole() == ROLE_AutonomousProxy)
 	{
 		FPawnMove Move = CreateMove(DeltaTime);
-
-		if (!HasAuthority())
-		{
-			UnacknowledgedMoves.Add(Move);
-			SimulateMove(Move);
-		}
-
+		SimulateMove(Move);
+		UnacknowledgedMoves.Add(Move);
 		Server_SendMove(Move);
+	}
+
+	if (GetLocalRole() == ROLE_Authority && IsLocallyControlled())
+	{
+		FPawnMove Move = CreateMove(DeltaTime);
+		Server_SendMove(Move);
+	}
+
+	if (GetLocalRole() == ROLE_SimulatedProxy)
+	{
+		SimulateMove(ServerState.LastMove);
 	}
 }
 
@@ -103,7 +109,7 @@ void AJetMaster::UpdateVehicleRotation(float DeltaTime, float YawVal, float Pitc
 void AJetMaster::ThrustVehicle(float Value)
 {
 	const float TargetThrust = Value * ThrustMultiplier;
-	Thrust = FMath::FInterpTo(Thrust, TargetThrust, GetWorld()->GetDeltaSeconds(), 10.0f);
+	Thrust = FMath::FInterpTo(Thrust, TargetThrust, GetWorld()->GetDeltaSeconds(), 1.0f);
 	//Thrust = Value * ThrustMultiplier;
 	//Server_ThrustVehicle(Value);
 }
