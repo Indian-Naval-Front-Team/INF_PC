@@ -66,10 +66,15 @@ void AJetMaster::Tick(float DeltaTime)
 	UpdateVehicleRotation(DeltaTime);
 	UpdateVehiclePosition(DeltaTime);
 
-	if (HasAuthority())
+	if (GetLocalRole() == ROLE_Authority)
 	{
-		ReplicatedTransform = GetActorTransform();
+		//ReplicatedTransform = GetActorTransform();
+		Multicast_UpdateAllTransforms();
 	}
+	/*else if(GetLocalRole() == ROLE_AutonomousProxy || GetLocalRole() == ROLE_SimulatedProxy)
+	{
+		Server_UpdateAllTransforms();
+	}*/
 }
 
 // JET MOVEMENT AND ROTATION FUNCTIONS
@@ -202,4 +207,24 @@ void AJetMaster::OnRep_ReplicatedTransform()
 {
 	SetActorTransform(ReplicatedTransform);
 	//UE_LOG(LogTemp, Warning, TEXT("Replicated Transform at time %f"), GetWorld()->GetRealTimeSeconds());
+}
+
+void AJetMaster::Server_UpdateAllTransforms_Implementation()
+{
+	Multicast_UpdateAllTransforms();
+}
+
+bool AJetMaster::Server_UpdateAllTransforms_Validate()
+{
+	return true;
+}
+
+void AJetMaster::Multicast_UpdateAllTransforms_Implementation()
+{
+	SetActorLocationAndRotation(GetActorLocation(), GetActorRotation());
+}
+
+bool AJetMaster::Multicast_UpdateAllTransforms_Validate()
+{
+	return true;
 }

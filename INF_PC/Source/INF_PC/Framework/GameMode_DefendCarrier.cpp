@@ -43,6 +43,7 @@ void AGameMode_DefendCarrier::PostLogin(APlayerController* NewPlayer)
 	}
 	else
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Players so far : %d"), NumberOfPlayers);
 		LobbyWidget = CreateWidget<ULobbyWidget>(GetWorld()->GetFirstPlayerController(), LobbyWidgetClass);
 		LobbyWidget->Setup();
 	}

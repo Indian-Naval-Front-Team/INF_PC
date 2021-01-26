@@ -81,12 +81,17 @@ private:
 private:
 	class UEngine* Engine;
 
-	UFUNCTION(Server, Unreliable, WithValidation)
+	UFUNCTION(Server, Reliable, WithValidation)
 	void Server_ThrustVehicle(float Value);
-	UFUNCTION(Server, Unreliable, WithValidation)
+	UFUNCTION(Server, Reliable, WithValidation)
 	void Server_YawVehicle(float Value);
-	UFUNCTION(Server, Unreliable, WithValidation)
+	UFUNCTION(Server, Reliable, WithValidation)
 	void Server_PitchVehicle(float Value);
-	UFUNCTION(Server, Unreliable, WithValidation)
+	UFUNCTION(Server, Reliable, WithValidation)
 	void Server_RollVehicle(float Value);
+
+	UFUNCTION(Server, Reliable, WithValidation)
+	void Server_UpdateAllTransforms();
+	UFUNCTION(NetMulticast, Reliable, WithValidation)
+	void Multicast_UpdateAllTransforms();
 };

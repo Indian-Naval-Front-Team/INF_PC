@@ -7,7 +7,33 @@
 #include "Net/UnrealNetwork.h"
 #include "VehicleMaster.generated.h"
 
+USTRUCT()
+struct FPawnMove
+{
+	GENERATED_BODY()
+	
+	UPROPERTY()
+	float Thrust{ 0.0f };
+	UPROPERTY()
+	float Yaw{ 0.0f };
+	UPROPERTY()
+	float Pitch{ 0.0f };
+	UPROPERTY()
+	float Roll{ 0.0f };
+	UPROPERTY()
+	float DeltaTime{ 0.0f };
+};
 
+USTRUCT()
+struct FPawnState
+{
+	GENERATED_BODY()
+
+	UPROPERTY()
+	FVector Velocity{ FVector::ZeroVector };
+	UPROPERTY()
+	FTransform PawnTransform;
+};
 
 UCLASS()
 class INF_PC_API AVehicleMaster : public APawn
