@@ -3,7 +3,6 @@
 
 #include "GameMode_DefendCarrier.h"
 #include <INF_PC/UI/LobbyWidget.h>
-#include <INF_PC/TP_Flying/TP_FlyingPawn.h>
 #include <INF_PC/Vehicles/JetMaster.h>
 #include <INF_PC/Framework/INFGameInstance.h>
 
@@ -12,7 +11,6 @@ AGameMode_DefendCarrier::AGameMode_DefendCarrier(const FObjectInitializer& Objec
 	const ConstructorHelpers::FClassFinder<AJetMaster> SeahawkBP(TEXT("/Game/__Blueprints/Vehicles/Indian/Jets/BP_Seahawk"));
 	if (!ensure(SeahawkBP.Class != nullptr)) return;
 
-	//DefaultPawnClass = ATP_FlyingPawn::StaticClass();
 	DefaultPawnClass = SeahawkBP.Class;
 
 	const ConstructorHelpers::FClassFinder<UUserWidget> LobbyWidgetBP(TEXT("/Game/__Blueprints/Widgets/Multiplayer/WBP_LobbyWidget"));
@@ -30,9 +28,9 @@ void AGameMode_DefendCarrier::PostLogin(APlayerController* NewPlayer)
 
 	++NumberOfPlayers;
 
-	if (NumberOfPlayers >= 3)
+	if (NumberOfPlayers >= 2)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Reached 3 players..."));
+		UE_LOG(LogTemp, Warning, TEXT("Reached 2 players..."));
 		LobbyWidget->RemoveFromParent();
 
 		INFGameInstance->StartMatch = true;

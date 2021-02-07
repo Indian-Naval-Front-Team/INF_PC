@@ -1,1 +1,1 @@
-& "C:\Program Files\Epic Games\UE_4.26\Engine\Binaries\Win64\UE4Editor.exe" "C:\Work\Neosphere Interactive\Indian Naval Front\INF_PC\INF_PC\INF_PC.uproject" -game -log -nosteam
+& "C:\Program Files\Epic Games\UE_4.26\Engine\Binaries\Win64\UE4Editor.exe" "C:\Work\Neosphere Interactive\Indian Naval Front\Forked\INF_PC\INF_PC\INF_PC.uproject" -game -log -nosteam

@@ -15,42 +15,45 @@ class INF_PC_API AJetMaster : public AVehicleMaster
 	GENERATED_BODY()
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Cockpit, meta = (AllowPrivateAccess = "true"))
-		class UChildActorComponent* Cockpit;
+	class UChildActorComponent* Cockpit;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Mesh, meta = (AllowPrivateAccess = "true"))
-		class UStaticMeshComponent* Wing_Left;
+	class UStaticMeshComponent* Wing_Left;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Mesh, meta = (AllowPrivateAccess = "true"))
-		class UStaticMeshComponent* Wing_Right;
+	class UStaticMeshComponent* Wing_Right;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Mesh, meta = (AllowPrivateAccess = "true"))
-		class UStaticMeshComponent* Wheel_Front;
+	class UStaticMeshComponent* Wheel_Front;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Mesh, meta = (AllowPrivateAccess = "true"))
-		class UStaticMeshComponent* Wheel_Right;
+	class UStaticMeshComponent* Wheel_Right;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Mesh, meta = (AllowPrivateAccess = "true"))
-		class UStaticMeshComponent* Wheel_Left;
+	class UStaticMeshComponent* Wheel_Left;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Mesh, meta = (AllowPrivateAccess = "true"))
-		class UStaticMeshComponent* TailHook;
+	class UStaticMeshComponent* TailHook;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Mesh, meta = (AllowPrivateAccess = "true"))
-		class UStaticMeshComponent* RightWing_Flap;
+	class UStaticMeshComponent* RightWing_Flap;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Mesh, meta = (AllowPrivateAccess = "true"))
-		class UStaticMeshComponent* RightWing_Aileron;
+	class UStaticMeshComponent* RightWing_Aileron;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Mesh, meta = (AllowPrivateAccess = "true"))
-		class UStaticMeshComponent* LeftWing_Aileron;
+	class UStaticMeshComponent* LeftWing_Aileron;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Mesh, meta = (AllowPrivateAccess = "true"))
-		class UStaticMeshComponent* LeftWing_Flap;
+	class UStaticMeshComponent* LeftWing_Flap;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Mesh, meta = (AllowPrivateAccess = "true"))
-		class UStaticMeshComponent* RearWing_Elevator_Left;
+	class UStaticMeshComponent* RearWing_Elevator_Left;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Mesh, meta = (AllowPrivateAccess = "true"))
-		class UStaticMeshComponent* RearWing_Elevator_Right;
+	class UStaticMeshComponent* RearWing_Elevator_Right;
+	UPROPERTY(VisibleDefaultsOnly, Category="Vehicle Setup|Weapons")
+	FName LeftGunAttachSocketName;
+	UPROPERTY(VisibleDefaultsOnly, Category="Vehicle Setup|Weapons")
+	FName RightGunAttachSocketName;
 
 public:
 	AJetMaster();
+	virtual FVector GetPawnViewLocation() const override;
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-public:
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -67,9 +70,6 @@ public:
 	// Update Vehicle's Rotation on the Client.
 	virtual void UpdateVehicleRotation(float DeltaTime, float PitchVal, float YawVal, float RollVal) override;
 
-	// Update Transform to every client out there if authority.
-	virtual void OnRep_ServerState() override;
-
 	// Called when 'W' or 'S' keys are pressed on the Jet.
 	virtual void ThrustVehicle(float Value) override;
 
@@ -82,22 +82,32 @@ public:
 	// Called when the Mouse is moved left/right to Roll the Vehicle Left/Right.
 	virtual void RollVehicle(float Value) override;
 
+	virtual void FireSelectedWeapon() override;
+	virtual void StopFiringSelectedWeapon() override;
+
+	UFUNCTION(Server, Reliable, WithValidation)
+	void ServerFire();
+	UFUNCTION(NetMulticast, Reliable, WithValidation)
+	void MulticastFire();
+	UFUNCTION(Server, Reliable, WithValidation)
+    void ServerStopFire();
+	UFUNCTION(NetMulticast, Reliable, WithValidation)
+    void MulticastStopFire();
+
+	virtual void ClientTick(float DeltaTime) override;
+	// Update Transform to every client out there, if authority.
+	virtual void OnRep_ServerState() override;
+	virtual void SimulatedProxy_OnRepServerState() override;
+	virtual void AutonomousProxy_OnRepServerState() override;
+
 private:
 	class UEngine* Engine;
 	UFUNCTION(Server, Reliable, WithValidation)
-		void Server_SendMove(FVehicleMove Move);
+	void Server_SendMove(FVehicleMove Move);
 
 	virtual void SimulateMove(const FVehicleMove& Move) override;
 	virtual FVehicleMove CreateMove(float DeltaTime) override;
 	virtual void ClearAcknowledgedMoves(FVehicleMove LastMove) override;
-	/*UFUNCTION(Server, Reliable, WithValidation)
-		void Server_ThrustVehicle(float Value);
-	UFUNCTION(Server, Reliable, WithValidation)
-		void Server_YawVehicle(float Value);
-	UFUNCTION(Server, Reliable, WithValidation)
-		void Server_PitchVehicle(float Value);
-	UFUNCTION(Server, Reliable, WithValidation)
-		void Server_RollVehicle(float Value);*/
 
 	bool bIntentionalPitch{ false };
 	bool bIntentionalRoll{ false };
