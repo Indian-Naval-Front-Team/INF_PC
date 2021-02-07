@@ -17,7 +17,9 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
-	
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Components")
+	class UBoxComponent* CollisionComp;
 	UPROPERTY(EditDefaultsOnly, Category="Components")
 	class UStaticMeshComponent* ProjectileMesh;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Components")

@@ -240,7 +240,7 @@ void AJetMaster::ServerFire_Implementation()
 		LeftGun->StartFire();
 		RightGun->StartFire();
 
-		MulticastFire();
+		//MulticastFire();
 	}
 }
 
@@ -271,7 +271,7 @@ void AJetMaster::ServerStopFire_Implementation()
 		LeftGun->StopFire();
 		RightGun->StopFire();
 
-		MulticastStopFire();
+		//MulticastStopFire();
 	}
 }
 

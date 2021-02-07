@@ -98,11 +98,18 @@ void AJetGun::Fire()
 			// ProjectileTransform.SetRotation(MuzzleSocketRotation);
 			// ProjectileTransform.SetScale3D(FVector(1.0f));
 		}
+
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 		
 		// Jet Gun Firing
-		Projectile = GetWorld()->SpawnActorDeferred<AProjectileMaster>(ProjectileClass, WeaponMainBody->GetSocketTransform(WeaponMuzzleSocketName));
+		Projectile = GetWorld()->SpawnActorDeferred<AProjectileMaster>(ProjectileClass, WeaponMainBody->GetSocketTransform(WeaponMuzzleSocketName), this);
+		//UE_LOG(LogTemp, Warning, TEXT("Instigator = %s"), *Projectile->GetInstigator()->GetName());
+		
 		if (Projectile)
 		{
+			Projectile->SetInstigator(Cast<APawn>(GetOwner()));
+			Projectile->SetOwner(this);
 			Projectile->SetProjectileSpeed(Cast<AVehicleMaster>(GetOwner())->GetVehicleSpeed() * 100.0f + 40000.0f);
 			UGameplayStatics::FinishSpawningActor(Projectile, WeaponMainBody->GetSocketTransform(WeaponMuzzleSocketName));
 		}

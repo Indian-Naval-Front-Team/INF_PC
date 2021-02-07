@@ -3,6 +3,7 @@
 
 #include "INF_PC/Projectiles/ProjectileMaster.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "Components/BoxComponent.h"
 
 // Sets default values
 AProjectileMaster::AProjectileMaster()
@@ -11,16 +12,23 @@ AProjectileMaster::AProjectileMaster()
 	PrimaryActorTick.bCanEverTick = true;
 	bReplicates = true;
 
+	CollisionComp = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionComp"));
 	ProjectileMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ProjectileMesh"));
 	ProjectileComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileComponent"));
 
-	RootComponent = ProjectileMesh;
+	
+	CollisionComp->SetCollisionProfileName("Projectile");
+	ProjectileComponent->UpdatedComponent = CollisionComp;
+	
+	RootComponent = CollisionComp;
+	ProjectileMesh->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
 void AProjectileMaster::BeginPlay()
 {
 	Super::BeginPlay();
+	CollisionComp->IgnoreActorWhenMoving(GetInstigator(), true);
 }
 
 // Called every frame
