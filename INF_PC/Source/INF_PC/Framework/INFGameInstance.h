@@ -47,6 +47,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void RefreshServerList();
 
+	UFUNCTION()
+	void StartSession();
+
 private:
 	TSubclassOf<class UUserWidget> MainMenuClass;
 	UMainMenu* MainMenu;

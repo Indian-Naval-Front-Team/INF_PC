@@ -153,7 +153,7 @@ void UINFGameInstance::CreateSession()
 
 		FOnlineSessionSettings SessionSettings;
 		SessionSettings.bIsLANMatch = LanMatchTemp;
-		SessionSettings.NumPublicConnections = 2;
+		SessionSettings.NumPublicConnections = 3;
 		SessionSettings.bShouldAdvertise = true;
 		SessionSettings.bUsesPresence = true;
 		SessionSettings.Set(SERVER_NAME_SETTINGS_KEY, ServerData.ServerName, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
@@ -222,4 +222,10 @@ void UINFGameInstance::Join(UServerRow* ServerRow)
 
 	// Join the Session by the Session Index.
 	SessionInterface->JoinSession(0, SESSION_NAME, SessionSearch->SearchResults[ServerRow->GetSessionIndex()]);
+}
+
+void UINFGameInstance::StartSession()
+{
+	if (!SessionInterface.IsValid()) return;
+	SessionInterface->StartSession(SESSION_NAME);
 }

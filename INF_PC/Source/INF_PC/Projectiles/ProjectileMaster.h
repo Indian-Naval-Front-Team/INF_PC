@@ -27,6 +27,14 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Projectile Setup")
 	class UParticleSystem* ImpactParticles;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Damage")
+	float Damage;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Weapon")
+	TSubclassOf<class UDamageType> DamageType;
+
+	UFUNCTION()
+	void HandleComponentHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
 public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetProjectileSpeed(const float Speed);

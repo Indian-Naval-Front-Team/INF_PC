@@ -11,6 +11,7 @@
 AJetMaster::AJetMaster()
 {
 	bReplicates = true;
+	SetRootComponent(VehicleBody);
 
 	Cockpit = CreateDefaultSubobject<UChildActorComponent>(TEXT("Cockpit"));
 	Cockpit->SetupAttachment(Super::VehicleBody, "Cockpit");
@@ -57,6 +58,8 @@ void AJetMaster::BeginPlay()
 {
 	Super::BeginPlay();
 	TopSpeedInKms = TopSpeedInKms * 28.0f;
+	NetUpdateFrequency = 5.0f;
+	MinNetUpdateFrequency = 3.0f;
 
 	if (GetLocalRole() == ROLE_Authority)
 	{
@@ -240,7 +243,7 @@ void AJetMaster::ServerFire_Implementation()
 		LeftGun->StartFire();
 		RightGun->StartFire();
 
-		//MulticastFire();
+		MulticastFire();
 	}
 }
 
@@ -271,7 +274,7 @@ void AJetMaster::ServerStopFire_Implementation()
 		LeftGun->StopFire();
 		RightGun->StopFire();
 
-		//MulticastStopFire();
+		MulticastStopFire();
 	}
 }
 
@@ -316,8 +319,8 @@ FVehicleMove AJetMaster::CreateMove(float DeltaTime)
 	Move.Pitch = this->Pitch;
 	Move.Roll = this->Roll;
 	Move.Thrust = this->Thrust;
-	//Move.TimeStamp = GetWorld()->TimeSeconds;
-	Move.TimeStamp = GetWorld()->GetGameState()->GetServerWorldTimeSeconds();
+	Move.TimeStamp = GetWorld()->TimeSeconds;
+	//Move.TimeStamp = GetWorld()->GetGameState()->GetServerWorldTimeSeconds();
 
 	return Move;
 }

@@ -65,7 +65,8 @@ protected:
 	class UCameraComponent* MainCamera;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Components")
 	class UWidgetComponent* CrosshairWidget;
-
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Components")
+	class UHealthComponent* HealthComponent;
 	// Variables
 
 // Vehicle Setup/Constants

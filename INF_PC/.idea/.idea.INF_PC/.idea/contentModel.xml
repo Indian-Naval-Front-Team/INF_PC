@@ -49129,6 +49129,10 @@
       </e>
       <e p="Source" t="Include">
         <e p="INF_PC" t="Include">
+          <e p="Components" t="Include">
+            <e p="HealthComponent.cpp" t="Include" />
+            <e p="HealthComponent.h" t="Include" />
+          </e>
           <e p="Framework" t="Include">
             <e p="GameMode_DefendCarrier.cpp" t="Include" />
             <e p="GameMode_DefendCarrier.h" t="Include" />

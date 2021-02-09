@@ -7,6 +7,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/InputComponent.h"
 #include "Components/WidgetComponent.h"
+#include "INF_PC/Components/HealthComponent.h"
 #include "Engine/DemoNetDriver.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -20,7 +21,8 @@ AVehicleMaster::AVehicleMaster()
 	bReplicates = true;
 	SetReplicateMovement(false);
 
-	RootComponent = VehicleBody;
+	SetRootComponent(VehicleBody);
+	//RootComponent = VehicleBody;
 
 	VehicleBody = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("VehicleBody"));
 	VehicleBody->SetupAttachment(RootComponent);
@@ -30,6 +32,7 @@ AVehicleMaster::AVehicleMaster()
 	MainCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	CrosshairWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("CrosshairWidget"));
 	CrosshairWidget->SetupAttachment(VehicleBody);
+	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
 
 	CameraBoom->TargetArmLength = 300.0f;
 	CrosshairWidget->SetWidgetSpace(EWidgetSpace::Screen);
@@ -69,7 +72,7 @@ void AVehicleMaster::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> & OutL
 void AVehicleMaster::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	//DrawDebugString(GetWorld(), FVector(0.0f, 300.0f, 300.0f), UEnum::GetValueAsString(GetLocalRole()), this, FColor::Green, DeltaTime, false, 2.0f);
+	DrawDebugString(GetWorld(), FVector(0.0f, 300.0f, 300.0f), UEnum::GetValueAsString(GetLocalRole()), this, FColor::Green, DeltaTime, false, 2.0f);
 }
 
 // Called to bind functionality to input

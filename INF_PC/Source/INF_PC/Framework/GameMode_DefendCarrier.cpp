@@ -28,21 +28,23 @@ void AGameMode_DefendCarrier::PostLogin(APlayerController* NewPlayer)
 
 	++NumberOfPlayers;
 
-	if (NumberOfPlayers >= 2)
+	if (NumberOfPlayers >= 3)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Reached 2 players..."));
-		LobbyWidget->RemoveFromParent();
+		UEngine* Engine = GetGameInstance()->GetEngine();
+		if (!ensure(Engine != nullptr)) return;
 
-		INFGameInstance->StartMatch = true;
+		Engine->AddOnScreenDebugMessage(0, 5.0f, FColor::Green, FString::Printf(TEXT("3 Players Joined!!")));
+		UE_LOG(LogTemp, Warning, TEXT("Reached 3 players..."));
 
-		UWorld* World = GetWorld();
-		if (!ensure(World != nullptr)) return;
-
-		bUseSeamlessTravel = true;
-		World->ServerTravel("/Game/Maps/Workspace/MultiplayerTestMap?listen");
+		GetWorldTimerManager().SetTimer(GameStartTimer, this, &AGameMode_DefendCarrier::StartGame, 5.0f);
 	}
 	else
 	{
+		UEngine* Engine = GetGameInstance()->GetEngine();
+		if (!ensure(Engine != nullptr)) return;
+
+		Engine->AddOnScreenDebugMessage(0, 10.0f, FColor::Green, FString::Printf(TEXT("Num players joined : %d"), NumberOfPlayers));
+		
 		LobbyWidget = CreateWidget<ULobbyWidget>(GetWorld()->GetFirstPlayerController(), LobbyWidgetClass);
 		LobbyWidget->Setup();
 	}
@@ -51,6 +53,29 @@ void AGameMode_DefendCarrier::PostLogin(APlayerController* NewPlayer)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Player Logged IN %d!!"), INFGameInstance->NumberOfPlayers);
 	}
+}
+
+void AGameMode_DefendCarrier::StartGame()
+{
+	auto GameInstanceRef = Cast<UINFGameInstance>(GetGameInstance());
+
+	if (GameInstanceRef == nullptr)
+	{
+		return;
+	}
+
+	LobbyWidget->RemoveFromParent();
+	UEngine* Engine = GetGameInstance()->GetEngine();
+	if (!ensure(Engine != nullptr)) return;
+	Engine->AddOnScreenDebugMessage(0, 5.0f, FColor::Green, FString::Printf(TEXT("Game started!!")));
+	
+	GameInstanceRef->StartSession();
+
+	UWorld* World = GetWorld();
+	if (!ensure(World != nullptr)) return;
+
+	bUseSeamlessTravel = true;
+	World->ServerTravel("/Game/Maps/Workspace/MultiplayerTestMap?listen");
 }
 
 void AGameMode_DefendCarrier::Logout(AController* Exiting)

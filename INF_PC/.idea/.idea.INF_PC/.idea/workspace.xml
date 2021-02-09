@@ -6,15 +6,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ce627d93-d8e8-4bba-ae4a-27b3cc6e508a" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/Source/INF_PC/Components/HealthComponent.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/INF_PC/Components/HealthComponent.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.INF_PC/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.INF_PC/.idea/contentModel.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.INF_PC/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.INF_PC/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Config/DefaultGame.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultGame.ini" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Maps/Workspace/ForTestingInEditor.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/Workspace/ForTestingInEditor.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Maps/Workspace/MultiplayerTestMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/Workspace/MultiplayerTestMap.umap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/__Blueprints/Projectiles/Projectile_JetGun.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/__Blueprints/Projectiles/Projectile_JetGun.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/__Blueprints/Vehicles/Indian/Jets/BP_Seahawk.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/__Blueprints/Vehicles/Indian/Jets/BP_Seahawk.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/__Blueprints/Widgets/WBP_Crosshair.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/__Blueprints/Widgets/WBP_Crosshair.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/INF_PC/Framework/GameMode_DefendCarrier.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/INF_PC/Framework/GameMode_DefendCarrier.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/INF_PC/Framework/GameMode_DefendCarrier.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/INF_PC/Framework/GameMode_DefendCarrier.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/INF_PC/Framework/INFGameInstance.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/INF_PC/Framework/INFGameInstance.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/INF_PC/Framework/INFGameInstance.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/INF_PC/Framework/INFGameInstance.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/INF_PC/Projectiles/ProjectileMaster.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/INF_PC/Projectiles/ProjectileMaster.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/INF_PC/Projectiles/ProjectileMaster.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/INF_PC/Projectiles/ProjectileMaster.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/INF_PC/Vehicles/JetMaster.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/INF_PC/Vehicles/JetMaster.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/INF_PC/Weapons/Guns/JetGun.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/INF_PC/Weapons/Guns/JetGun.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/INF_PC/Vehicles/VehicleMaster.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/INF_PC/Vehicles/VehicleMaster.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/INF_PC/Vehicles/VehicleMaster.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/INF_PC/Vehicles/VehicleMaster.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,9 +37,14 @@
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/../../../../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/CoreUObject/Public/UObject/Object.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../../Program Files/Epic Games/UE_4.26/Engine/Plugins/Online/IOS/OnlineSubsystemIOS/Source/Private/OnlineStoreKitHelper.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/Engine/Classes/Components/PrimitiveComponent.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/Engine/Private/GameInstance.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/Engine/Classes/Engine/GameInstance.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/Core/Private/Lumin/LuminPlatformMisc.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/Engine/Classes/GameFramework/Actor.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/Engine/Classes/Camera/CameraComponent.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/Core/Public/Logging/LogMacros.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/Engine/Classes/Engine/Engine.h" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <changedPaths>
@@ -39,16 +54,22 @@
       <option value="$PROJECT_DIR$/Source/INF_PC/Weapons/Guns/ShipAAGun.cpp" />
       <option value="$PROJECT_DIR$/Source/INF_PC/INF_PC.Build.cs" />
       <option value="$PROJECT_DIR$/Source/INF_PC/INF_PC.h" />
-      <option value="$PROJECT_DIR$/Source/INF_PC/Vehicles/VehicleMaster.cpp" />
-      <option value="$PROJECT_DIR$/Source/INF_PC/Vehicles/VehicleMaster.h" />
       <option value="$PROJECT_DIR$/Source/INF_PC/Weapons/Guns/JetGun.h" />
       <option value="$PROJECT_DIR$/Source/INF_PC/Weapons/WeaponMaster.h" />
       <option value="$PROJECT_DIR$/Source/INF_PC/Weapons/WeaponMaster.cpp" />
       <option value="$PROJECT_DIR$/Source/INF_PC/Vehicles/JetMaster.h" />
-      <option value="$PROJECT_DIR$/Source/INF_PC/Vehicles/JetMaster.cpp" />
-      <option value="$PROJECT_DIR$/Source/INF_PC/Weapons/Guns/JetGun.cpp" />
+      <option value="$PROJECT_DIR$/Source/INF_PC/Vehicles/VehicleMaster.h" />
+      <option value="$PROJECT_DIR$/Source/INF_PC/Components/HealthComponent.h" />
       <option value="$PROJECT_DIR$/Source/INF_PC/Projectiles/ProjectileMaster.h" />
+      <option value="$PROJECT_DIR$/Source/INF_PC/Components/HealthComponent.cpp" />
+      <option value="$PROJECT_DIR$/Source/INF_PC/Weapons/Guns/JetGun.cpp" />
       <option value="$PROJECT_DIR$/Source/INF_PC/Projectiles/ProjectileMaster.cpp" />
+      <option value="$PROJECT_DIR$/Source/INF_PC/Vehicles/JetMaster.cpp" />
+      <option value="$PROJECT_DIR$/Source/INF_PC/Vehicles/VehicleMaster.cpp" />
+      <option value="$PROJECT_DIR$/Source/INF_PC/Framework/GameMode_DefendCarrier.h" />
+      <option value="$PROJECT_DIR$/Source/INF_PC/Framework/INFGameInstance.h" />
+      <option value="$PROJECT_DIR$/Source/INF_PC/Framework/INFGameInstance.cpp" />
+      <option value="$PROJECT_DIR$/Source/INF_PC/Framework/GameMode_DefendCarrier.cpp" />
     </changedPaths>
   </component>
   <component name="ProjectId" id="1nyMoHcCWIqMrSAetWIQ7jbw07e" />
@@ -292,7 +313,10 @@
       <workItem from="1612502835249" duration="13759000" />
       <workItem from="1612527099466" duration="7456000" />
       <workItem from="1612586662921" duration="28940000" />
-      <workItem from="1612682951024" duration="10725000" />
+      <workItem from="1612682951024" duration="17507000" />
+      <workItem from="1612756167033" duration="10719000" />
+      <workItem from="1612790770703" duration="2828000" />
+      <workItem from="1612845976642" duration="3310000" />
     </task>
     <servers />
   </component>
