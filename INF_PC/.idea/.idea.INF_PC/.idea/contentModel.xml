@@ -49140,6 +49140,8 @@
             <e p="GameModeParent.h" t="Include" />
             <e p="INFGameInstance.cpp" t="Include" />
             <e p="INFGameInstance.h" t="Include" />
+            <e p="INFGameState.cpp" t="Include" />
+            <e p="INFGameState.h" t="Include" />
             <e p="INFPlayerController.cpp" t="Include" />
             <e p="INFPlayerController.h" t="Include" />
             <e p="LobbyGameMode_DefendCarrier.cpp" t="Include" />

@@ -13,5 +13,20 @@ UCLASS()
 class INF_PC_API AINFPlayerController : public APlayerController
 {
 	GENERATED_BODY()
+
+public:
+	AINFPlayerController();
+
+	UFUNCTION()
+	void ToggleLobbyWidget(bool ShowWidget = false);
+
+private:
+	TSubclassOf<UUserWidget> LobbyWidgetClass;
+	class ULobbyWidget* LobbyWidget;
 	
+	UPROPERTY(ReplicatedUsing=OnRep_ShowLobbyWidget)
+	bool bShowLobbyWidget;
+
+	UFUNCTION()
+	void OnRep_ShowLobbyWidget();
 };

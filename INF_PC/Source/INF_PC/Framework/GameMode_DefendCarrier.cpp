@@ -6,6 +6,10 @@
 #include <INF_PC/Vehicles/JetMaster.h>
 #include <INF_PC/Framework/INFGameInstance.h>
 
+
+#include "INFGameState.h"
+#include "INFPlayerController.h"
+
 AGameMode_DefendCarrier::AGameMode_DefendCarrier(const FObjectInitializer& ObjectInitializer) : AGameModeParent()
 {
 	const ConstructorHelpers::FClassFinder<AJetMaster> SeahawkBP(TEXT("/Game/__Blueprints/Vehicles/Indian/Jets/BP_Seahawk"));
@@ -26,33 +30,39 @@ void AGameMode_DefendCarrier::PostLogin(APlayerController* NewPlayer)
 	INFGameInstance = Cast<UINFGameInstance>(GetWorld()->GetGameInstance());
 	if (!ensure(INFGameInstance != nullptr)) return;
 
+	UEngine* Engine = GetGameInstance()->GetEngine();
+	if (!ensure(Engine != nullptr)) return;
+
 	++NumberOfPlayers;
 
-	if (NumberOfPlayers >= 3)
+	Engine->AddOnScreenDebugMessage(0, 10.0f, FColor::Green, FString::Printf(TEXT("Num players joined : %d"), NumberOfPlayers));
+
+	if (!LobbyWidget)
 	{
-		UEngine* Engine = GetGameInstance()->GetEngine();
-		if (!ensure(Engine != nullptr)) return;
-
-		Engine->AddOnScreenDebugMessage(0, 5.0f, FColor::Green, FString::Printf(TEXT("3 Players Joined!!")));
-		UE_LOG(LogTemp, Warning, TEXT("Reached 3 players..."));
-
-		GetWorldTimerManager().SetTimer(GameStartTimer, this, &AGameMode_DefendCarrier::StartGame, 5.0f);
-	}
-	else
-	{
-		UEngine* Engine = GetGameInstance()->GetEngine();
-		if (!ensure(Engine != nullptr)) return;
-
-		Engine->AddOnScreenDebugMessage(0, 10.0f, FColor::Green, FString::Printf(TEXT("Num players joined : %d"), NumberOfPlayers));
-		
+		// Show the Lobby Widget on the Server.
 		LobbyWidget = CreateWidget<ULobbyWidget>(GetWorld()->GetFirstPlayerController(), LobbyWidgetClass);
 		LobbyWidget->Setup();
 	}
 
-	if (HasAuthority())
+	// Show the Lobby Widget on the Clients.
+	AINFPlayerController* PC = Cast<AINFPlayerController>(NewPlayer);
+	PC->ToggleLobbyWidget(true);
+
+	// Collect the Player Controllers in the Table.
+	PlayerControllerTable.AddUnique(PC);
+	
+	if (NumberOfPlayers >= 2)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Player Logged IN %d!!"), INFGameInstance->NumberOfPlayers);
+		Engine->AddOnScreenDebugMessage(0, 5.0f, FColor::Green, FString::Printf(TEXT("2 Players Joined!!")));
+		UE_LOG(LogTemp, Warning, TEXT("Reached 2 players..."));
+
+		GetWorldTimerManager().SetTimer(GameStartTimer, this, &AGameMode_DefendCarrier::StartGame, 5.0f);
 	}
+
+	// if (HasAuthority())
+	// {
+	// 	UE_LOG(LogTemp, Warning, TEXT("Player Logged IN %d!!"), INFGameInstance->NumberOfPlayers);
+	// }
 }
 
 void AGameMode_DefendCarrier::StartGame()
@@ -64,7 +74,17 @@ void AGameMode_DefendCarrier::StartGame()
 		return;
 	}
 
+	// Remove the Lobby Widget from the Server.
 	LobbyWidget->RemoveFromParent();
+
+	// Remove the Lobby Widgets from all the Clients.
+	for (auto PC : PlayerControllerTable)
+	{
+		PC->ToggleLobbyWidget();
+	}
+
+	PlayerControllerTable.Empty();
+	
 	UEngine* Engine = GetGameInstance()->GetEngine();
 	if (!ensure(Engine != nullptr)) return;
 	Engine->AddOnScreenDebugMessage(0, 5.0f, FColor::Green, FString::Printf(TEXT("Game started!!")));
@@ -75,6 +95,7 @@ void AGameMode_DefendCarrier::StartGame()
 	if (!ensure(World != nullptr)) return;
 
 	bUseSeamlessTravel = true;
+	bGameStarted = true;
 	World->ServerTravel("/Game/Maps/Workspace/MultiplayerTestMap?listen");
 }
 

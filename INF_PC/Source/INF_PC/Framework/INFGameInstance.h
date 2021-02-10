@@ -30,7 +30,7 @@ public:
 
 	void SetServerBrowserPanel(class UServerBrowserPanel* Val) { ServerBrowserPanel = Val; };
 
-	virtual void Init();
+	virtual void Init() override;
 
 	UFUNCTION(BlueprintCallable)
 	void LoadMainMenu();
@@ -50,6 +50,10 @@ public:
 	UFUNCTION()
 	void StartSession();
 
+	void CreateSession();
+	void CreateLobbyWidget(TSubclassOf<UUserWidget> LobbyWidgetClass, class AINFPlayerController* PC);
+	void RemoveLobbyWidget();
+
 private:
 	TSubclassOf<class UUserWidget> MainMenuClass;
 	UMainMenu* MainMenu;
@@ -57,11 +61,10 @@ private:
 	TSharedPtr<FOnlineSessionSearch> SessionSearch;
 	class UServerBrowserPanel* ServerBrowserPanel;
 	FServerData ServerData;
+	class ULobbyWidget* LobbyWidget;
 
 	void OnCreateSessionsComplete(FName SessionName, bool Success);
 	void OnDestroySessionsComplete(FName SessionName, bool Success);
 	void OnFindSessionsComplete(bool Success);
 	void OnJoinSessionsComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result);
-
-	void CreateSession();
 };

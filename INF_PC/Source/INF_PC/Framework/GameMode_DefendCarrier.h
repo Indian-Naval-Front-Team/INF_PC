@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameModeParent.h"
+
 #include "GameMode_DefendCarrier.generated.h"
 
 /**
@@ -20,6 +21,11 @@ public:
 	void PostLogin(APlayerController* NewPlayer) override;
 	void Logout(AController* Exiting) override;
 
+	UPROPERTY(BlueprintReadOnly)
+	bool bGameStarted;
+	UPROPERTY(BlueprintReadWrite)
+	class ULobbyWidget* LobbyWidgetRef;
+
 private:
 	TSubclassOf<class AJetMaster> DefaultPawnToSpawn;
 	TSubclassOf<UUserWidget> LobbyWidgetClass;
@@ -27,6 +33,7 @@ private:
 	class UINFGameInstance* INFGameInstance;
 
 	uint32 NumberOfPlayers{ 0 };
+	TArray<class AINFPlayerController*> PlayerControllerTable;
 
 	FTimerHandle GameStartTimer;
 	void StartGame();

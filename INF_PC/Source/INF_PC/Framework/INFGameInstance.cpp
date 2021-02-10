@@ -5,6 +5,8 @@
 #include <INF_PC/UI/ServerBrowserPanel.h>
 #include <INF_PC/UI/ServerRow.h>
 
+#include "INF_PC/UI/LobbyWidget.h"
+
 const static FName SESSION_NAME = TEXT("My Session Game");
 const static FName SERVER_NAME_SETTINGS_KEY = TEXT("ServerName");
 
@@ -20,6 +22,8 @@ UINFGameInstance::UINFGameInstance(const FObjectInitializer& ObjectInitializer)
 
 void UINFGameInstance::Init()
 {
+	Super::Init();
+	
 	IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
 
 	if (Subsystem != nullptr)
@@ -153,13 +157,24 @@ void UINFGameInstance::CreateSession()
 
 		FOnlineSessionSettings SessionSettings;
 		SessionSettings.bIsLANMatch = LanMatchTemp;
-		SessionSettings.NumPublicConnections = 3;
+		SessionSettings.NumPublicConnections = 2;
 		SessionSettings.bShouldAdvertise = true;
 		SessionSettings.bUsesPresence = true;
 		SessionSettings.Set(SERVER_NAME_SETTINGS_KEY, ServerData.ServerName, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
 
 		SessionInterface->CreateSession(0, SESSION_NAME, SessionSettings);
 	}
+}
+
+void UINFGameInstance::CreateLobbyWidget(TSubclassOf<UUserWidget> LobbyWidgetClass, class AINFPlayerController* PC)
+{
+	LobbyWidget = CreateWidget<ULobbyWidget>(GetFirstLocalPlayerController(), LobbyWidgetClass);
+	LobbyWidget->AddToViewport();
+}
+
+void UINFGameInstance::RemoveLobbyWidget()
+{
+	LobbyWidget->RemoveFromParent();
 }
 
 void UINFGameInstance::Find()

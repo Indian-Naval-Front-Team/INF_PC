@@ -64,7 +64,7 @@ struct FServerData
 {
 	GENERATED_BODY()
 
-		FString ServerName;
+	FString ServerName;
 	FString Password;
 	float MapDuration;
 	uint32 TicketsPerTeam;
