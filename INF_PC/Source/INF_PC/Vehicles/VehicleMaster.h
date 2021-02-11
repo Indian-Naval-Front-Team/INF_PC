@@ -30,6 +30,23 @@ struct FVehicleMove
 };
 
 USTRUCT()
+struct FVehicleMoveNew
+{
+	GENERATED_BODY()
+
+	UPROPERTY()
+	FVector_NetQuantize Force;
+	UPROPERTY()
+	FVector_NetQuantize Velocity;
+	UPROPERTY()
+	float Yaw;
+	UPROPERTY()
+	float Pitch;
+	UPROPERTY()
+	float Roll;
+};
+
+USTRUCT()
 struct FVehicleState
 {
 	GENERATED_BODY()
@@ -180,6 +197,8 @@ protected:
 	FQuat QuatRot;
 	UPROPERTY(ReplicatedUsing = OnRep_ServerState)
 	FVehicleState ServerState;
+	UPROPERTY(ReplicatedUsing=OnRep_VehicleMove)
+	FVehicleMove VehicleMove;
 
 	TArray<FVehicleMove> UnacknowledgedMoves;
 
@@ -190,6 +209,8 @@ protected:
 
 	UFUNCTION()
 	virtual void OnRep_ServerState() {};
+	UFUNCTION()
+	virtual void OnRep_VehicleMove() {};
 	virtual void SimulatedProxy_OnRepServerState() {};
 	virtual void AutonomousProxy_OnRepServerState() {};
 

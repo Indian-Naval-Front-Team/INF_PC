@@ -66,6 +66,7 @@ void AVehicleMaster::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> & OutL
 	DOREPLIFETIME(AVehicleMaster, ServerState);
 	DOREPLIFETIME(AVehicleMaster, LeftGun);
 	DOREPLIFETIME(AVehicleMaster, RightGun);
+	DOREPLIFETIME(AVehicleMaster, VehicleMove);
 }
 
 // Called every frame

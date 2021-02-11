@@ -216,87 +216,6 @@ void AJetMaster::RollVehicle(float Value)
 	Roll = FMath::FInterpTo(Roll, TargetRollRate, GetWorld()->GetDeltaSeconds(), 2.0f);
 }
 
-void AJetMaster::FireSelectedWeapon()
-{
-	// if (LeftGun && RightGun)
-	// {
-	// 	LeftGun->StartFire();
-	// 	RightGun->StartFire();
-	// }
-	ServerFire();
-}
-
-void AJetMaster::StopFiringSelectedWeapon()
-{
-	// if (LeftGun && RightGun)
-	// {
-	// 	LeftGun->StopFire();
-	// 	RightGun->StopFire();
-	// }
-	ServerStopFire();
-}
-
-void AJetMaster::ServerFire_Implementation()
-{
-	if (LeftGun && RightGun)
-	{
-		LeftGun->StartFire();
-		RightGun->StartFire();
-
-		MulticastFire();
-	}
-}
-
-bool AJetMaster::ServerFire_Validate()
-{
-	return true;
-}
-
-void AJetMaster::MulticastFire_Implementation()
-{
-	if (LeftGun && RightGun)
-	{
-		LeftGun->StartFire();
-		RightGun->StartFire();
-	}
-}
-
-bool AJetMaster::MulticastFire_Validate()
-{
-	return true;
-}
-
-
-void AJetMaster::ServerStopFire_Implementation()
-{
-	if (LeftGun && RightGun)
-	{
-		LeftGun->StopFire();
-		RightGun->StopFire();
-
-		MulticastStopFire();
-	}
-}
-
-bool AJetMaster::ServerStopFire_Validate()
-{
-	return true;
-}
-
-void AJetMaster::MulticastStopFire_Implementation()
-{
-	if (LeftGun && RightGun)
-	{
-		LeftGun->StopFire();
-		RightGun->StopFire();
-	}
-}
-
-bool AJetMaster::MulticastStopFire_Validate()
-{
-	return true;
-}
-
 void AJetMaster::SimulateMove(const FVehicleMove& Move)
 {
 	Force = Move.Thrust * MaxThrustSpeed * GetActorForwardVector();
@@ -392,4 +311,76 @@ void AJetMaster::AutonomousProxy_OnRepServerState()
 	{
 		SimulateMove(Move);
 	}
+}
+
+// FIRING FUNCTIONS
+void AJetMaster::FireSelectedWeapon()
+{
+	ServerFire();
+}
+
+void AJetMaster::StopFiringSelectedWeapon()
+{
+	ServerStopFire();
+}
+
+void AJetMaster::ServerFire_Implementation()
+{
+	if (LeftGun && RightGun)
+	{
+		LeftGun->StartFire();
+		RightGun->StartFire();
+
+		MulticastFire();
+	}
+}
+
+bool AJetMaster::ServerFire_Validate()
+{
+	return true;
+}
+
+void AJetMaster::MulticastFire_Implementation()
+{
+	if (LeftGun && RightGun)
+	{
+		LeftGun->StartFire();
+		RightGun->StartFire();
+	}
+}
+
+bool AJetMaster::MulticastFire_Validate()
+{
+	return true;
+}
+
+
+void AJetMaster::ServerStopFire_Implementation()
+{
+	if (LeftGun && RightGun)
+	{
+		LeftGun->StopFire();
+		RightGun->StopFire();
+
+		MulticastStopFire();
+	}
+}
+
+bool AJetMaster::ServerStopFire_Validate()
+{
+	return true;
+}
+
+void AJetMaster::MulticastStopFire_Implementation()
+{
+	if (LeftGun && RightGun)
+	{
+		LeftGun->StopFire();
+		RightGun->StopFire();
+	}
+}
+
+bool AJetMaster::MulticastStopFire_Validate()
+{
+	return true;
 }
