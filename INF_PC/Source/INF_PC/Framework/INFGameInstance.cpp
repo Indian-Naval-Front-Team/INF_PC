@@ -88,7 +88,7 @@ void UINFGameInstance::OnCreateSessionsComplete(FName SessionName, bool Success)
 	UWorld* World = GetWorld();
 	if (!ensure(World != nullptr)) return;
 
-	World->ServerTravel("/Game/Maps/Workspace/MultiplayerTestMap?listen");
+	World->ServerTravel("/Game/Maps/Workspace/WaterMap?listen");
 }
 
 void UINFGameInstance::OnDestroySessionsComplete(FName SessionName, bool Success)

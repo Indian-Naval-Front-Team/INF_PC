@@ -40,7 +40,7 @@ void AVehicleMaster::BeginPlay()
 	if (HasAuthority())
 	{
 		// TODO : Change this value to 30.0f or something higher like that while Publishing.
-		NetUpdateFrequency = 10.0f;	// 30.0f while publishing
+		//NetUpdateFrequency = 5.0f;	// 30.0f while publishing
 	}
 }
 
@@ -48,7 +48,7 @@ void AVehicleMaster::BeginPlay()
 void AVehicleMaster::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	//DrawDebugString(GetWorld(), FVector(0.0f, 300.0f, 300.0f), UEnum::GetValueAsString(GetLocalRole()), this, FColor::Green, DeltaTime, false, 2.0f);
+	//DrawDebugString(GetWorld(), FVector(0.0f, 300.0f, 300.0f), UEnum::GetValueAsString(GetLocalRole()), this, FColor::Black, DeltaTime, false, 2.0f);
 }
 
 // Called to bind functionality to input

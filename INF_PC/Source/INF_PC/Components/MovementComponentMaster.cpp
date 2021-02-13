@@ -17,7 +17,7 @@ UMovementComponentMaster::UMovementComponentMaster()
 void UMovementComponentMaster::BeginPlay()
 {
 	Super::BeginPlay();
-	TopSpeedInKms = TopSpeedInKms * 28.0f;
+	//TopSpeedInKms = TopSpeedInKms * 28.0f;
 }
 
 

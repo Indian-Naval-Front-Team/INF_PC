@@ -58,7 +58,7 @@ void UNetworkingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 	FVehicleMove LastMove = MovementComponent->GetLastMove();
 
 	// We are the server and also in control of the Pawn.
-	if (/*GetOwner()->GetLocalRole() == ROLE_Authority && */OwningPawn->IsLocallyControlled())
+	if (GetOwner()->GetLocalRole() == ROLE_Authority && OwningPawn->IsLocallyControlled())
 	{
 		UpdateServerState(LastMove);
 	}

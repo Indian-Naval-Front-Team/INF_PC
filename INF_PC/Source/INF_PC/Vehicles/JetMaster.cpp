@@ -36,6 +36,7 @@ AJetMaster::AJetMaster()
 	NetworkingComponent = CreateDefaultSubobject<UNetworkingComponent>(TEXT("NetworkingComponent"));
 
 	SetReplicates(true);
+	//bReplicates = true;
 	SetReplicateMovement(false);
 	JetMovementComponent->SetIsReplicated(true);
 }

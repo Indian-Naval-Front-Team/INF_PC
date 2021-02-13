@@ -3,7 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/GameModeBase.h"
+//#include "GameFramework/GameModeBase.h"
+#include "GameFramework/GameMode.h"
 #include "GameModeParent.generated.h"
 
 UENUM()
@@ -64,7 +65,7 @@ struct FServerData
 {
 	GENERATED_BODY()
 
-		FString ServerName;
+	FString ServerName;
 	FString Password;
 	float MapDuration;
 	uint32 TicketsPerTeam;
@@ -80,7 +81,7 @@ struct FServerData
  * 
  */
 UCLASS()
-class INF_PC_API AGameModeParent : public AGameModeBase
+class INF_PC_API AGameModeParent : public AGameMode
 {
 	GENERATED_BODY()
 	

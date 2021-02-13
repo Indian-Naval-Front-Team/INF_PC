@@ -61,7 +61,7 @@ void UJetMovementComponent::SimulateMove(const FVehicleMove& Move)
 	Acceleration = Force / MassInKgs;
 	Velocity += Acceleration * Move.DeltaTime;
 	//UE_LOG(LogTemp, Warning, TEXT("TopSpeed = %f"), TopSpeedInKms);
-	Velocity = FMath::Clamp(Velocity.Size(), 0.0f, TopSpeedInKms) * GetOwner()->GetActorForwardVector();
+	//Velocity = FMath::Clamp(Velocity.Size(), 0.0f, TopSpeedInKms) * GetOwner()->GetActorForwardVector();
 
 	UpdateVehicleRotation(Move.DeltaTime, Move.Pitch, Move.Yaw, Move.Roll);
 	UpdateVehiclePosition(Move.DeltaTime);
