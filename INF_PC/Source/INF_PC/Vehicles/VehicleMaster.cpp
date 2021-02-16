@@ -8,7 +8,9 @@
 #include "Components/InputComponent.h"
 #include "Engine/DemoNetDriver.h"
 #include "GameFramework/Controller.h"
+#include "Components/WidgetComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "INF_PC/Components/HealthComponent.h"
 #include "Net/UnrealNetwork.h"
 
 // Sets default values
@@ -26,6 +28,9 @@ AVehicleMaster::AVehicleMaster()
 	CameraBoom->SetupAttachment(VehicleBody);
 	MainCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("MainCamera"));
 	MainCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
+	CrosshairWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("CrosshairWidget"));
+	CrosshairWidget->SetupAttachment(VehicleBody);
+	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
 	
 	VehicleMovementComponent = CreateDefaultSubobject<UMovementComponentMaster>(TEXT("VehicleMovementComponent"));
 
@@ -44,6 +49,13 @@ void AVehicleMaster::BeginPlay()
 	}
 }
 
+void AVehicleMaster::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(AVehicleMaster, LeftGun);
+	DOREPLIFETIME(AVehicleMaster, RightGun);
+}
+
 // Called every frame
 void AVehicleMaster::Tick(float DeltaTime)
 {
@@ -59,4 +71,7 @@ void AVehicleMaster::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	PlayerInputComponent->BindAxis("Yaw/Azimuth", this, &AVehicleMaster::YawVehicle);
 	PlayerInputComponent->BindAxis("Pitch/Elevate", this, &AVehicleMaster::PitchVehicle);
 	PlayerInputComponent->BindAxis("Roll", this, &AVehicleMaster::RollVehicle);
+	
+	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AVehicleMaster::FireSelectedWeapon);
+	PlayerInputComponent->BindAction("Fire", IE_Released, this, &AVehicleMaster::StopFiringSelectedWeapon);
 }

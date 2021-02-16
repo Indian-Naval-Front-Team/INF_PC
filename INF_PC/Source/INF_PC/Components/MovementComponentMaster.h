@@ -3,8 +3,18 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "Components/ActorComponent.h"
 #include "MovementComponentMaster.generated.h"
+
+UENUM()
+enum class VehicleType
+{
+	Ship		UMETA(DisplayName = "Ship"),
+    Jet			UMETA(DisplayName = "Jet"),
+    Chopper		UMETA(DisplayName = "Chopper"),
+    Others		UMETA(DisplayName = "Others")
+};
 
 
 USTRUCT()
@@ -45,24 +55,26 @@ protected:
 	// Variables
 
 // Vehicle Setup/Constants
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Constants")
-		float TopSpeedInKms{ 0.0f };
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Constants")
-		float MassInKgs{ 1000.0f };
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Constants")
-		float DragCoefficient{ 0.4f };
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Constants")
-		float MaxThrustSpeed{ 0.0f };
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Constants")
-		float MinThrustRequired{ 0.0f };
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Constants")
-		float ThrustMultiplier{ 0.0f };
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Constants")
-		float Gravity{ 981.0f };
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Constants")
-		float YawRate{ 0.0f };
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Constants")
-		float RotMultiplier{ 20.0f };
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Constants")
+	VehicleType TypeOfVehicle;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Constants")
+	float TopSpeedInKms{ 0.0f };
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Constants")
+	float MassInKgs{ 1000.0f };
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Constants")
+	float DragCoefficient{ 0.4f };
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Constants")
+	float MaxThrustSpeed{ 0.0f };
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Constants")
+	float MinThrustRequired{ 0.0f };
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Constants")
+	float ThrustMultiplier{ 0.0f };
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Constants")
+	float Gravity{ 981.0f };
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Constants")
+	float YawRate{ 0.0f };
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Constants")
+	float RotMultiplier{ 20.0f };
 
 	// Update Vehicle's Position on the Client.
 	UFUNCTION()
@@ -101,10 +113,13 @@ public:
 	virtual void SimulateMove(const FVehicleMove& Move) {};
 	virtual FVehicleMove CreateMove(float DeltaTime);
 
-	void SetVelocity(FVector Value) { Velocity = Value; }
-	FVector GetVelocity() { return Velocity; }
-	void SetThrust(float Value) { Thrust = Value; }
-	float GetThrust() { return Thrust; }
-	float GetThrustMultipliyer() { return ThrustMultiplier; }
-	FVehicleMove GetLastMove() { return LastMove; }
+	VehicleType GetVehicleType() const { return TypeOfVehicle; }
+	void SetTopSpeedInKms(const float Value) { TopSpeedInKms = Value; }
+	float GetTopSpeedInKms() const { return TopSpeedInKms; }
+	void SetVelocity(const FVector Value) { Velocity = Value; }
+	FVector GetVelocity() const { return Velocity; }
+	void SetThrust(const float Value) { Thrust = Value; }
+	float GetThrust() const { return Thrust; }
+	float GetThrustMultipliyer() const { return ThrustMultiplier; }
+	FVehicleMove GetLastMove() const { return LastMove; }
 };

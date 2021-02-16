@@ -49130,6 +49130,8 @@
       <e p="Source" t="Include">
         <e p="INF_PC" t="Include">
           <e p="Components" t="Include">
+            <e p="HealthComponent.cpp" t="Include" />
+            <e p="HealthComponent.h" t="Include" />
             <e p="JetMovementComponent.cpp" t="Include" />
             <e p="JetMovementComponent.h" t="Include" />
             <e p="MovementComponentMaster.cpp" t="Include" />
@@ -49156,6 +49158,10 @@
           <e p="INF_PC.Build.cs" t="Include" />
           <e p="INF_PC.cpp" t="Include" />
           <e p="INF_PC.h" t="Include" />
+          <e p="Projectiles" t="Include">
+            <e p="ProjectileMaster.cpp" t="Include" />
+            <e p="ProjectileMaster.h" t="Include" />
+          </e>
           <e p="UI" t="Include">
             <e p="GameModesWidget.cpp" t="Include" />
             <e p="GameModesWidget.h" t="Include" />
@@ -49181,10 +49187,20 @@
             <e p="TrainingIslandWidget.h" t="Include" />
           </e>
           <e p="Vehicles" t="Include">
+            <e p="CockpitMaster.cpp" t="Include" />
+            <e p="CockpitMaster.h" t="Include" />
             <e p="JetMaster.cpp" t="Include" />
             <e p="JetMaster.h" t="Include" />
             <e p="VehicleMaster.cpp" t="Include" />
             <e p="VehicleMaster.h" t="Include" />
+          </e>
+          <e p="Weapons" t="Include">
+            <e p="Guns" t="Include">
+              <e p="JetGun.cpp" t="Include" />
+              <e p="JetGun.h" t="Include" />
+            </e>
+            <e p="WeaponMaster.cpp" t="Include" />
+            <e p="WeaponMaster.h" t="Include" />
           </e>
         </e>
         <e p="INF_PC.Target.cs" t="Include" />

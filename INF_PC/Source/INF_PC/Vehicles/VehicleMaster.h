@@ -24,12 +24,18 @@ protected:
 	virtual void BeginPlay() override;
 
 	// Components
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Components")
 	class UStaticMeshComponent* VehicleBody;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Components")
 	class USpringArmComponent* CameraBoom;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Components")
 	class UCameraComponent* MainCamera;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Components")
+	class UWidgetComponent* CrosshairWidget;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Components")
+	class UHealthComponent* HealthComponent;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Vehicle Setup|Weapons")
+	TArray<TSubclassOf<class AWeaponMaster>> Arsenal;
 
 	// Called when 'W' or 'S' keys are pressed on the Vehicle.
 	UFUNCTION()
@@ -47,10 +53,18 @@ protected:
 	UFUNCTION()
 	virtual void RollVehicle(float Value) {};
 
-	UPROPERTY(VisibleAnywhere)
+	virtual void FireSelectedWeapon() {};
+	virtual void StopFiringSelectedWeapon() {};
+
+	UPROPERTY(VisibleDefaultsOnly)
 	UMovementComponentMaster* VehicleMovementComponent;
 	UPROPERTY(VisibleAnywhere)
 	UNetworkingComponent* NetworkingComponent;
+
+	UPROPERTY(Replicated)
+	class AWeaponMaster* LeftGun;
+	UPROPERTY(Replicated)
+	AWeaponMaster* RightGun;
 
 
 public:	
@@ -59,4 +73,11 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	virtual FVector GetPawnViewLocation() const override { return FVector::ZeroVector; };
+	float GetVehicleSpeed() const
+	{
+		return VehicleMovementComponent->GetVelocity().Size();
+	}
+	class AWeaponMaster* GetLeftGun() const { return LeftGun; }
+	class AWeaponMaster* GetRightGun() const { return RightGun; }
 };

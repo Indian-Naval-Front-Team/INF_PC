@@ -21,17 +21,18 @@ UNetworkingComponent::UNetworkingComponent()
 void UNetworkingComponent::BeginPlay()
 {
 	Super::BeginPlay();
+	MovementComponent = GetOwner()->FindComponentByClass<UMovementComponentMaster>();
 
-	switch (TypeOfVehicle)
+	switch (MovementComponent->GetVehicleType())
 	{
-	case VehicleType::SHIP:
+	case VehicleType::Ship:
 		break;
-	case VehicleType::JET:
+	case VehicleType::Jet:
 		MovementComponent = GetOwner()->FindComponentByClass<UJetMovementComponent>();
 		break;
-	case VehicleType::CHOPPER:
+	case VehicleType::Chopper:
 		break;
-	case VehicleType::OTHERS:
+	case VehicleType::Others:
 		MovementComponent = GetOwner()->FindComponentByClass<UMovementComponentMaster>();
 		break;
 	default:

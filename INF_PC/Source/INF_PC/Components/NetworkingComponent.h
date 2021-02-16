@@ -8,15 +8,6 @@
 #include "NetworkingComponent.generated.h"
 
 
-UENUM()
-enum class VehicleType
-{
-	SHIP		UMETA(DisplayName = "Ship"),
-	JET			UMETA(DisplayName = "Jet"),
-	CHOPPER		UMETA(DisplayName = "Chopper"),
-	OTHERS		UMETA(DisplayName = "Others")
-};
-
 USTRUCT()
 struct FVehicleState
 {
@@ -49,9 +40,6 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	
-	UPROPERTY(EditAnywhere)
-	VehicleType TypeOfVehicle;
-
 private:
 	UPROPERTY()
 	UMovementComponentMaster* MovementComponent;
@@ -59,6 +47,8 @@ private:
 	FVehicleState ServerState;
 	UFUNCTION(Server, Reliable, WithValidation)
 	void Server_SendMove(FVehicleMove Move);
+	
+	
 
 	TArray<FVehicleMove> UnacknowledgedMoves;
 	const APawn* OwningPawn;

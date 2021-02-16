@@ -3,6 +3,12 @@
 
 #include "JetMaster.h"
 
+
+#include "Camera/CameraComponent.h"
+#include "Components/WidgetComponent.h"
+#include "INF_PC/Weapons/WeaponMaster.h"
+#include "Kismet/KismetMathLibrary.h"
+
 AJetMaster::AJetMaster()
 {
 	Cockpit = CreateDefaultSubobject<UChildActorComponent>(TEXT("Cockpit"));
@@ -39,11 +45,58 @@ AJetMaster::AJetMaster()
 	//bReplicates = true;
 	SetReplicateMovement(false);
 	JetMovementComponent->SetIsReplicated(true);
+
+	LeftGunAttachSocketName = "Gun_Left";
+	RightGunAttachSocketName = "Gun_Right";
 }
 
 void AJetMaster::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	JetMovementComponent->SetTopSpeedInKms(JetMovementComponent->GetTopSpeedInKms() * 28.0f);
+	// NetUpdateFrequency = 5.0f;
+	// MinNetUpdateFrequency = 3.0f;
+
+	if (GetLocalRole() == ROLE_Authority)
+	{
+		// Spawn the Jet Gun.
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+		LeftGun = GetWorld()->SpawnActor<AWeaponMaster>(Arsenal[0], FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
+		RightGun = GetWorld()->SpawnActor<AWeaponMaster>(Arsenal[1], FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
+
+		if (LeftGun && RightGun)
+		{
+			LeftGun->SetOwner(this);
+			LeftGun->SetWeaponOwner(this);
+			RightGun->SetOwner(this);
+			RightGun->SetWeaponOwner(this);
+			
+			LeftGun->AttachToComponent(VehicleBody, FAttachmentTransformRules::SnapToTargetNotIncludingScale, LeftGunAttachSocketName);
+			RightGun->AttachToComponent(VehicleBody, FAttachmentTransformRules::SnapToTargetNotIncludingScale, RightGunAttachSocketName);
+
+			FQuat LeftGunRot = (UKismetMathLibrary::FindLookAtRotation(LeftGun->GetActorLocation(), CrosshairWidget->GetComponentLocation())).Quaternion();
+			FQuat RightGunRot = (UKismetMathLibrary::FindLookAtRotation(RightGun->GetActorLocation(), CrosshairWidget->GetComponentLocation())).Quaternion();
+
+			RightGunRot = FQuat(FRotator(RightGunRot.Rotator().Pitch, RightGun->GetActorRotation().Yaw, RightGunRot.Rotator().Roll));
+			LeftGunRot = FQuat(FRotator(LeftGunRot.Rotator().Pitch, LeftGun->GetActorRotation().Yaw, LeftGunRot.Rotator().Roll));
+			
+			LeftGun->SetActorRotation(LeftGunRot);
+			RightGun->SetActorRotation(RightGunRot);
+		}
+	}
+}
+
+FVector AJetMaster::GetPawnViewLocation() const
+{
+	if (MainCamera)
+	{
+		return MainCamera->GetComponentLocation();
+	}
+
+	return Super::GetPawnViewLocation();
 }
 
 void AJetMaster::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -108,4 +161,74 @@ void AJetMaster::RollVehicle(float Value)
 
 	const float TargetRollRate = bIntentionalRoll ? (Value * JetMovementComponent->GetRollRate()) : (GetActorRotation().Roll * -0.5f);
 	JetMovementComponent->SetRoll(FMath::FInterpTo(JetMovementComponent->GetRoll(), TargetRollRate, GetWorld()->GetDeltaSeconds(), 2.0f));
+}
+
+void AJetMaster::FireSelectedWeapon()
+{
+	ServerFire();
+}
+
+void AJetMaster::StopFiringSelectedWeapon()
+{
+	ServerStopFire();
+}
+
+void AJetMaster::ServerFire_Implementation()
+{	
+	if (LeftGun && RightGun)
+	{
+		LeftGun->StartFire();
+		RightGun->StartFire();
+
+		//MulticastFire();
+	}
+}
+
+bool AJetMaster::ServerFire_Validate()
+{
+	return true;
+}
+
+void AJetMaster::MulticastFire_Implementation()
+{
+	if (LeftGun && RightGun)
+	{
+		LeftGun->StartFire();
+		RightGun->StartFire();
+	}
+}
+
+bool AJetMaster::MulticastFire_Validate()
+{
+	return true;
+}
+
+void AJetMaster::ServerStopFire_Implementation()
+{
+	if (LeftGun && RightGun)
+	{
+		LeftGun->StopFire();
+		RightGun->StopFire();
+
+		//MulticastStopFire();
+	}
+}
+
+bool AJetMaster::ServerStopFire_Validate()
+{
+	return true;
+}
+
+void AJetMaster::MulticastStopFire_Implementation()
+{
+	if (LeftGun && RightGun)
+	{
+		LeftGun->StopFire();
+		RightGun->StopFire();
+	}
+}
+
+bool AJetMaster::MulticastStopFire_Validate()
+{
+	return true;
 }

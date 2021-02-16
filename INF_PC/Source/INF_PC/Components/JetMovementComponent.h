@@ -54,13 +54,13 @@ public:
 	virtual FVehicleMove CreateMove(float DeltaTime) override;
 
 	void SetYaw(float Value) { Yaw = Value; }
-	float GetYaw() { return Yaw; }
+	float GetYaw() const { return Yaw; }
 	void SetPitch(float Value) { Pitch = Value; }
-	float GetPitch() { return Pitch; }
+	float GetPitch() const { return Pitch; }
 	void SetRoll(float Value) { Roll = Value; }
-	float GetRoll() { return Roll; }
-	float GetRollRate() { return RollRate; }
-	float GetPitchRate() { return PitchRate; }
-	float GetYawRate() { return YawRate; }
-	float GetRotMultiplier() { return RotMultiplier; }
+	float GetRoll() const { return Roll; }
+	float GetRollRate() const { return RollRate; }
+	float GetPitchRate() const { return PitchRate; }
+	float GetYawRate() const { return YawRate; }
+	float GetRotMultiplier() const { return RotMultiplier; }
 };

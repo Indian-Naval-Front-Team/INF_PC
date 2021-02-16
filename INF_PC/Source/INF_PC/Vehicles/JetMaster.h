@@ -41,9 +41,15 @@ class INF_PC_API AJetMaster : public AVehicleMaster
 	class UStaticMeshComponent* RearWing_Elevator_Left;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Mesh, meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent* RearWing_Elevator_Right;
+	UPROPERTY(VisibleDefaultsOnly, Category="Vehicle Setup|Weapons")
+	FName LeftGunAttachSocketName;
+	UPROPERTY(VisibleDefaultsOnly, Category="Vehicle Setup|Weapons")
+	FName RightGunAttachSocketName;
+	
 
 public:
 	AJetMaster();
+	virtual FVector GetPawnViewLocation() const override;
 
 protected:
 	// Called when the game starts or when spawned
@@ -67,6 +73,18 @@ private:
 
 	// Called when the Mouse is moved left/right to Roll the Vehicle Left/Right.
 	virtual void RollVehicle(float Value) override;
+	
+	virtual void FireSelectedWeapon() override;
+	virtual void StopFiringSelectedWeapon() override;
+	
+	UFUNCTION(Server, Reliable, WithValidation)
+    virtual void ServerFire();
+	UFUNCTION(NetMulticast, Reliable, WithValidation)
+    virtual void MulticastFire();
+	UFUNCTION(Server, Reliable, WithValidation)
+    virtual void ServerStopFire();
+	UFUNCTION(NetMulticast, Reliable, WithValidation)
+    virtual void MulticastStopFire();
 
 private:
 	class UEngine* Engine;
