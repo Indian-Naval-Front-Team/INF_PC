@@ -50,17 +50,19 @@ class INF_PC_API AJetMaster : public AVehicleMaster
 public:
 	AJetMaster();
 	virtual FVector GetPawnViewLocation() const override;
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	int32 GetMaxRockets() const { return MaxRockets; }
+	int32 GetRocketsAvailable() const { return RocketsAvailable; }
+	void SetMaxRockets(const int32 Value) { MaxRockets = Value; RocketsAvailable = MaxRockets; }
+	void UpdateRocketsAvailable();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-private:
+	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	// Called when 'W' or 'S' keys are pressed on the Jet.
 	virtual void ThrustVehicle(float Value) override;
@@ -91,7 +93,18 @@ private:
 
 	bool bIntentionalPitch{ false };
 	bool bIntentionalRoll{ false };
+	bool bRocketMode { false };
+
+	int32 MaxRockets;
+	int32 RocketsAvailable;
 
 	UPROPERTY(VisibleAnywhere)
 	UJetMovementComponent* JetMovementComponent;
+
+	void ToggleRocketMode();
+	
+	void SetupJetGuns();
+	void SetupJetRockets(int NumRockets);
+	void SetupJetBombs();
+	void SetupJetTorpedos();
 };

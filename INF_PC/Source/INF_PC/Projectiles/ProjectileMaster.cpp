@@ -57,7 +57,6 @@ void AProjectileMaster::HandleComponentHit(UPrimitiveComponent* HitComponent, AA
 void AProjectileMaster::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 void AProjectileMaster::SetProjectileSpeed(const float Speed)

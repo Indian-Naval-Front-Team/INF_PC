@@ -3,6 +3,8 @@
 
 #include "INF_PC/Weapons/WeaponMaster.h"
 #include "Engine/DemoNetDriver.h"
+#include "INF_PC/Vehicles/VehicleMaster.h"
+#include "INF_PC/Components/MovementComponentMaster.h"
 #include "INF_PC/Components/JetMovementComponent.h"
 
 // Sets default values

@@ -49199,6 +49199,10 @@
               <e p="JetGun.cpp" t="Include" />
               <e p="JetGun.h" t="Include" />
             </e>
+            <e p="ProjectileWeapons" t="Include">
+              <e p="JetRocket.cpp" t="Include" />
+              <e p="JetRocket.h" t="Include" />
+            </e>
             <e p="WeaponMaster.cpp" t="Include" />
             <e p="WeaponMaster.h" t="Include" />
           </e>

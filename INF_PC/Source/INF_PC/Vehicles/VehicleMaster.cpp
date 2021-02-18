@@ -5,6 +5,7 @@
 
 #include "DrawDebugHelpers.h"
 #include "Camera/CameraComponent.h"
+#include "Chaos/AABBTree.h"
 #include "Components/InputComponent.h"
 #include "Engine/DemoNetDriver.h"
 #include "GameFramework/Controller.h"
@@ -47,6 +48,8 @@ void AVehicleMaster::BeginPlay()
 		// TODO : Change this value to 30.0f or something higher like that while Publishing.
 		//NetUpdateFrequency = 5.0f;	// 30.0f while publishing
 	}
+
+	SetupVehicleWeaponTable();
 }
 
 void AVehicleMaster::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -54,6 +57,7 @@ void AVehicleMaster::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(AVehicleMaster, LeftGun);
 	DOREPLIFETIME(AVehicleMaster, RightGun);
+	DOREPLIFETIME(AVehicleMaster, JetRockets);
 }
 
 // Called every frame
@@ -74,4 +78,23 @@ void AVehicleMaster::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AVehicleMaster::FireSelectedWeapon);
 	PlayerInputComponent->BindAction("Fire", IE_Released, this, &AVehicleMaster::StopFiringSelectedWeapon);
+}
+
+void AVehicleMaster::SetupVehicleWeaponTable()
+{
+	for (const TPair<TSubclassOf<AWeaponMaster>, int>& Pair : Arsenal)
+	{
+		EWeaponType WeaponTypeTemp = Pair.Key->GetDefaultObject<AWeaponMaster>()->GetWeaponType();
+		FWeaponSetup WeaponSetupTemp;
+		WeaponSetupTemp.Weapon = Pair.Key;
+		WeaponSetupTemp.NumWeapon = Pair.Value;
+		
+		WeaponTable.Add(WeaponTypeTemp, WeaponSetupTemp);
+	}
+
+																		// DEBUG ONLY : Print out the contents of the WeaponTable
+	// for (const TPair<EWeaponType, FWeaponSetup>& Pair : WeaponTable)
+	// {
+	// 	UE_LOG(LogTemp, Warning, TEXT("WeaponType = %s, WeaponClass = %s"), *StaticEnum<EWeaponType>()->GetValueAsString(Pair.Key), *Pair.Value.Weapon->GetName());
+	// }
 }

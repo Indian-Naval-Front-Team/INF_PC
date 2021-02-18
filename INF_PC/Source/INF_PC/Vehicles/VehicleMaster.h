@@ -6,6 +6,7 @@
 #include "GameFramework/Pawn.h"
 #include <INF_PC/Components/MovementComponentMaster.h>
 #include <INF_PC/Components/NetworkingComponent.h>
+#include "INF_PC/Weapons/WeaponMaster.h"
 #include "VehicleMaster.generated.h"
 
 
@@ -35,7 +36,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Components")
 	class UHealthComponent* HealthComponent;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Vehicle Setup|Weapons")
-	TArray<TSubclassOf<class AWeaponMaster>> Arsenal;
+	TMap<TSubclassOf<AWeaponMaster>, int> Arsenal;
 
 	// Called when 'W' or 'S' keys are pressed on the Vehicle.
 	UFUNCTION()
@@ -62,11 +63,17 @@ protected:
 	UNetworkingComponent* NetworkingComponent;
 
 	UPROPERTY(Replicated)
-	class AWeaponMaster* LeftGun;
+	AWeaponMaster* LeftGun;
 	UPROPERTY(Replicated)
 	AWeaponMaster* RightGun;
+	UPROPERTY(Replicated)
+	TArray<class AJetRocket*> JetRockets;
 
+	UPROPERTY()
+	EWeaponType SelectedWeaponType;
 
+	TMap<EWeaponType, FWeaponSetup> GetWeaponTable() const { return WeaponTable; }
+	
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -80,4 +87,8 @@ public:
 	}
 	class AWeaponMaster* GetLeftGun() const { return LeftGun; }
 	class AWeaponMaster* GetRightGun() const { return RightGun; }
+
+private:
+	TMap<EWeaponType, FWeaponSetup> WeaponTable;
+	void SetupVehicleWeaponTable();
 };

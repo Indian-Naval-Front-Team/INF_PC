@@ -7,6 +7,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/WidgetComponent.h"
 #include "INF_PC/Weapons/WeaponMaster.h"
+#include "INF_PC/Weapons/ProjectileWeapons/JetRocket.h"
 #include "Kismet/KismetMathLibrary.h"
 
 AJetMaster::AJetMaster()
@@ -50,41 +51,65 @@ AJetMaster::AJetMaster()
 	RightGunAttachSocketName = "Gun_Right";
 }
 
+void AJetMaster::UpdateRocketsAvailable()
+{
+	if (RocketsAvailable > 0)
+	{
+		RocketsAvailable--;
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("No more Rockets available!"));
+	}
+}
+
 void AJetMaster::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	SelectedWeaponType = EWeaponType::JetGun;
 	JetMovementComponent->SetTopSpeedInKms(JetMovementComponent->GetTopSpeedInKms() * 28.0f);
 	// NetUpdateFrequency = 5.0f;
 	// MinNetUpdateFrequency = 3.0f;
 
 	if (GetLocalRole() == ROLE_Authority)
 	{
-		// Spawn the Jet Gun.
-		FActorSpawnParameters SpawnParams;
-		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-
-		LeftGun = GetWorld()->SpawnActor<AWeaponMaster>(Arsenal[0], FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
-		RightGun = GetWorld()->SpawnActor<AWeaponMaster>(Arsenal[1], FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
-
-		if (LeftGun && RightGun)
+		for (const TPair<EWeaponType, FWeaponSetup>& Pair : GetWeaponTable())
 		{
-			LeftGun->SetOwner(this);
-			LeftGun->SetWeaponOwner(this);
-			RightGun->SetOwner(this);
-			RightGun->SetWeaponOwner(this);
-			
-			LeftGun->AttachToComponent(VehicleBody, FAttachmentTransformRules::SnapToTargetNotIncludingScale, LeftGunAttachSocketName);
-			RightGun->AttachToComponent(VehicleBody, FAttachmentTransformRules::SnapToTargetNotIncludingScale, RightGunAttachSocketName);
-
-			FQuat LeftGunRot = (UKismetMathLibrary::FindLookAtRotation(LeftGun->GetActorLocation(), CrosshairWidget->GetComponentLocation())).Quaternion();
-			FQuat RightGunRot = (UKismetMathLibrary::FindLookAtRotation(RightGun->GetActorLocation(), CrosshairWidget->GetComponentLocation())).Quaternion();
-
-			RightGunRot = FQuat(FRotator(RightGunRot.Rotator().Pitch, RightGun->GetActorRotation().Yaw, RightGunRot.Rotator().Roll));
-			LeftGunRot = FQuat(FRotator(LeftGunRot.Rotator().Pitch, LeftGun->GetActorRotation().Yaw, LeftGunRot.Rotator().Roll));
-			
-			LeftGun->SetActorRotation(LeftGunRot);
-			RightGun->SetActorRotation(RightGunRot);
+			switch (Pair.Key)
+			{
+			case EWeaponType::ShipAAGun: break;
+			case EWeaponType::ShipCannon: break;
+			case EWeaponType::Missile: break;
+			case EWeaponType::ShipTorpedo: break;
+			case EWeaponType::JetGun:
+				if (Pair.Value.NumWeapon > 0)
+				{
+					SetupJetGuns();
+				}
+				break;
+			case EWeaponType::JetRocket:
+				if (Pair.Value.NumWeapon > 0)
+				{
+					SetupJetRockets(Pair.Value.NumWeapon);
+				}
+				break;
+			case EWeaponType::BirdBomb:
+				if (Pair.Value.NumWeapon > 0)
+				{
+					SetupJetBombs();
+				}
+				break;
+			case EWeaponType::BirdTorpedo:
+				if (Pair.Value.NumWeapon > 0)
+				{
+					SetupJetTorpedos();
+				}
+				break;
+			case EWeaponType::AAGunSingleBarrel: break;
+			case EWeaponType::AAGunFourBarrel: break;
+			default: ;
+			}
 		}
 	}
 }
@@ -102,6 +127,68 @@ FVector AJetMaster::GetPawnViewLocation() const
 void AJetMaster::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	PlayerInputComponent->BindAction("ActivateJetRocket", IE_Pressed, this, &AJetMaster::ToggleRocketMode);
+	PlayerInputComponent->BindAction("ActivateJetRocket", IE_Released, this, &AJetMaster::ToggleRocketMode);
+}
+
+void AJetMaster::SetupJetGuns()
+{
+	// Spawn the Jet Guns which all the Jets will have.
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		
+	LeftGun = GetWorld()->SpawnActor<AWeaponMaster>(GetWeaponTable().Find(EWeaponType::JetGun)->Weapon, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
+	RightGun = GetWorld()->SpawnActor<AWeaponMaster>(GetWeaponTable().Find(EWeaponType::JetGun)->Weapon, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
+
+	if (LeftGun && RightGun)
+	{
+		LeftGun->SetOwner(this);
+		LeftGun->SetWeaponOwner(this);
+		RightGun->SetOwner(this);
+		RightGun->SetWeaponOwner(this);
+			
+		LeftGun->AttachToComponent(VehicleBody, FAttachmentTransformRules::SnapToTargetNotIncludingScale, LeftGunAttachSocketName);
+		RightGun->AttachToComponent(VehicleBody, FAttachmentTransformRules::SnapToTargetNotIncludingScale, RightGunAttachSocketName);
+
+		FQuat LeftGunRot = (UKismetMathLibrary::FindLookAtRotation(LeftGun->GetActorLocation(), CrosshairWidget->GetComponentLocation())).Quaternion();
+		FQuat RightGunRot = (UKismetMathLibrary::FindLookAtRotation(RightGun->GetActorLocation(), CrosshairWidget->GetComponentLocation())).Quaternion();
+
+		RightGunRot = FQuat(FRotator(RightGunRot.Rotator().Pitch, RightGun->GetActorRotation().Yaw, RightGunRot.Rotator().Roll));
+		LeftGunRot = FQuat(FRotator(LeftGunRot.Rotator().Pitch, LeftGun->GetActorRotation().Yaw, LeftGunRot.Rotator().Roll));
+			
+		LeftGun->SetActorRotation(LeftGunRot);
+		RightGun->SetActorRotation(RightGunRot);
+	}
+}
+
+void AJetMaster::SetupJetRockets(const int NumRockets)
+{
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+	JetRockets.SetNum(NumRockets);
+	SetMaxRockets(NumRockets);
+	
+	for (int SocketIndex = 0; SocketIndex < NumRockets; SocketIndex++)
+	{
+		AJetRocket* JetRocket = GetWorld()->SpawnActor<AJetRocket>(GetWeaponTable().Find(EWeaponType::JetRocket)->Weapon, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
+		JetRockets[SocketIndex] = JetRocket;
+		
+		JetRockets[SocketIndex]->SetOwner(this);
+		JetRockets[SocketIndex]->SetWeaponOwner(this);
+
+		const FName JetSocketName("Rocket_" + FString::FromInt(SocketIndex));
+
+		JetRockets[SocketIndex]->AttachToComponent(VehicleBody, FAttachmentTransformRules::SnapToTargetNotIncludingScale, JetSocketName);
+	}
+}
+
+void AJetMaster::SetupJetBombs()
+{
+}
+
+void AJetMaster::SetupJetTorpedos()
+{
 }
 
 void AJetMaster::Tick(float DeltaTime)
@@ -163,6 +250,20 @@ void AJetMaster::RollVehicle(float Value)
 	JetMovementComponent->SetRoll(FMath::FInterpTo(JetMovementComponent->GetRoll(), TargetRollRate, GetWorld()->GetDeltaSeconds(), 2.0f));
 }
 
+void AJetMaster::ToggleRocketMode()
+{
+	bRocketMode = !bRocketMode;
+	
+	if (bRocketMode)
+	{
+		SelectedWeaponType = EWeaponType::JetRocket;
+	}
+	else
+	{
+		SelectedWeaponType = EWeaponType::JetGun;
+	}
+}
+
 void AJetMaster::FireSelectedWeapon()
 {
 	ServerFire();
@@ -174,13 +275,41 @@ void AJetMaster::StopFiringSelectedWeapon()
 }
 
 void AJetMaster::ServerFire_Implementation()
-{	
-	if (LeftGun && RightGun)
+{
+	switch (SelectedWeaponType)
 	{
-		LeftGun->StartFire();
-		RightGun->StartFire();
+	case EWeaponType::ShipAAGun: break;
+	case EWeaponType::ShipCannon: break;
+	case EWeaponType::Missile: break;
+	case EWeaponType::ShipTorpedo: break;
+	case EWeaponType::JetGun:
+		if (LeftGun && RightGun)
+		{
+			LeftGun->StartFire();
+			RightGun->StartFire();
 
-		//MulticastFire();
+			//MulticastFire();
+		}
+		break;
+	case EWeaponType::JetRocket:
+		if (RocketsAvailable > 0)
+		{
+			JetRockets[RocketsAvailable - 1]->SetOwningJet(this);
+			JetRockets[RocketsAvailable - 1]->StartFire();
+			JetRockets[RocketsAvailable - 1]->Destroy();
+			JetRockets.RemoveAt(RocketsAvailable - 1);
+			UpdateRocketsAvailable();
+			UE_LOG(LogTemp, Warning, TEXT("RocketsAvailable = %d"), RocketsAvailable);	
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("No more rockets available to fire!!!"));
+		}
+		break;
+	case EWeaponType::BirdTorpedo: break;
+	case EWeaponType::AAGunSingleBarrel: break;
+	case EWeaponType::AAGunFourBarrel: break;
+	default: ;
 	}
 }
 
@@ -205,12 +334,28 @@ bool AJetMaster::MulticastFire_Validate()
 
 void AJetMaster::ServerStopFire_Implementation()
 {
-	if (LeftGun && RightGun)
+	switch (SelectedWeaponType)
 	{
-		LeftGun->StopFire();
-		RightGun->StopFire();
+	case EWeaponType::ShipAAGun: break;
+	case EWeaponType::ShipCannon: break;
+	case EWeaponType::Missile: break;
+	case EWeaponType::ShipTorpedo: break;
+	case EWeaponType::JetGun:
+		if (LeftGun && RightGun)
+		{
+			LeftGun->StopFire();
+			RightGun->StopFire();
 
-		//MulticastStopFire();
+			//MulticastFire();
+		}
+		break;
+	case EWeaponType::JetRocket:
+		UE_LOG(LogTemp, Warning, TEXT("Stop rocket fire!!"));
+		break;
+	case EWeaponType::BirdTorpedo: break;
+	case EWeaponType::AAGunSingleBarrel: break;
+	case EWeaponType::AAGunFourBarrel: break;
+	default: ;
 	}
 }
 
