@@ -20,10 +20,20 @@ public:
 	virtual void StartFire() override;
 	virtual void StopFire() override;
 	
+	void SetOwningJet(class AJetMaster* JetRef) { OwningJet = JetRef; }
+	
 protected:
 	virtual void BeginPlay() override;
 	virtual void Fire() override;
 	
 	UFUNCTION(Server, Reliable, WithValidation)
     virtual void ServerFire();
+	virtual void TickActor(float DeltaTime, ELevelTick TickType, FActorTickFunction& ThisTickFunction) override;
+	
+private:
+	class AJetMaster* OwningJet;
+	
+	FVector EyeLocation;
+	FRotator EyeRotation;
+	FVector EyeDirection;
 };

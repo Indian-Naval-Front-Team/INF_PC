@@ -6,12 +6,14 @@
 #include "DrawDebugHelpers.h"
 #include "Camera/CameraComponent.h"
 #include "Chaos/AABBTree.h"
+#include "Components/ArrowComponent.h"
 #include "Components/InputComponent.h"
 #include "Engine/DemoNetDriver.h"
 #include "GameFramework/Controller.h"
 #include "Components/WidgetComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "INF_PC/Components/HealthComponent.h"
+#include "INF_PC/Framework/INFPlayerState.h"
 #include "Net/UnrealNetwork.h"
 
 // Sets default values
@@ -25,6 +27,7 @@ AVehicleMaster::AVehicleMaster()
 
 	VehicleBody = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("VehicleBody"));
 	VehicleBody->SetupAttachment(RootComponent);
+	SetRootComponent(VehicleBody);
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(VehicleBody);
 	MainCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("MainCamera"));
@@ -32,6 +35,8 @@ AVehicleMaster::AVehicleMaster()
 	CrosshairWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("CrosshairWidget"));
 	CrosshairWidget->SetupAttachment(VehicleBody);
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
+	VehicleFiringRefPoint = CreateDefaultSubobject<UArrowComponent>(TEXT("Firing Ref Point"));
+	VehicleFiringRefPoint->SetupAttachment(VehicleBody);
 	
 	VehicleMovementComponent = CreateDefaultSubobject<UMovementComponentMaster>(TEXT("VehicleMovementComponent"));
 
@@ -43,6 +48,9 @@ void AVehicleMaster::BeginPlay()
 {
 	Super::BeginPlay();
 
+	PlayerStateRef = Cast<AINFPlayerState>(GetPlayerState());
+	OriginalCameraBoomTransform = CameraBoom->GetRelativeTransform();
+	
 	if (HasAuthority())
 	{
 		// TODO : Change this value to 30.0f or something higher like that while Publishing.
@@ -50,6 +58,7 @@ void AVehicleMaster::BeginPlay()
 	}
 
 	SetupVehicleWeaponTable();
+	PlayerStateRef->SetCurrentPlayerStatus(EPlayerStatus::W_MainVehicleView);
 }
 
 void AVehicleMaster::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -78,6 +87,12 @@ void AVehicleMaster::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AVehicleMaster::FireSelectedWeapon);
 	PlayerInputComponent->BindAction("Fire", IE_Released, this, &AVehicleMaster::StopFiringSelectedWeapon);
+
+	PlayerInputComponent->BindAction("ZoomIn", IE_Pressed, this, &AVehicleMaster::EnterWeaponOrCockpit);
+	PlayerInputComponent->BindAction("ZoomOut", IE_Pressed, this, &AVehicleMaster::ExitWeaponOrCockpit);
+
+	PlayerInputComponent->BindAction("FreeLook", IE_Pressed, this, &AVehicleMaster::FreeLookOn);
+	PlayerInputComponent->BindAction("FreeLook", IE_Released, this, &AVehicleMaster::FreeLookOff);
 }
 
 void AVehicleMaster::SetupVehicleWeaponTable()

@@ -5,6 +5,9 @@
 #include "CoreMinimal.h"
 #include <INF_PC/Vehicles/VehicleMaster.h>
 #include <INF_PC/Components/JetMovementComponent.h>
+
+#include "CockpitMaster.h"
+
 #include "JetMaster.generated.h"
 
 /**
@@ -51,6 +54,7 @@ public:
 	AJetMaster();
 	virtual FVector GetPawnViewLocation() const override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	ACockpitMaster* GetCockpit() const { return Cast<class ACockpitMaster>(Cockpit->GetChildActor()); }
 
 	int32 GetMaxRockets() const { return MaxRockets; }
 	int32 GetRocketsAvailable() const { return RocketsAvailable; }
@@ -75,7 +79,11 @@ protected:
 
 	// Called when the Mouse is moved left/right to Roll the Vehicle Left/Right.
 	virtual void RollVehicle(float Value) override;
-	
+
+	virtual void EnterWeaponOrCockpit() override;
+	virtual void ExitWeaponOrCockpit() override;
+	virtual void FreeLookOn() override;
+	virtual void FreeLookOff() override;
 	virtual void FireSelectedWeapon() override;
 	virtual void StopFiringSelectedWeapon() override;
 	

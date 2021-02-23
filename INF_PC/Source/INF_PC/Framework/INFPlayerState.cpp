@@ -3,3 +3,7 @@
 
 #include "INFPlayerState.h"
 
+AINFPlayerState::AINFPlayerState()
+{
+	CurrentPlayerStatus = EPlayerStatus::W_InsideMenu;
+}

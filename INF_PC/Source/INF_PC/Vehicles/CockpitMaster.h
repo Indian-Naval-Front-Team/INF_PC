@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
+#include "Camera/CameraComponent.h"
 #include "GameFramework/Actor.h"
 #include "CockpitMaster.generated.h"
 
@@ -14,6 +16,10 @@ class INF_PC_API ACockpitMaster : public AActor
 public:	
 	// Sets default values for this actor's properties
 	ACockpitMaster();
+	FVector GetCockpitCameraPos() const { return CockpitCamera->GetComponentLocation(); }
+	FRotator GetCockpitCameraRot() const { return CockpitCamera->GetComponentRotation(); }
+	class UCameraComponent* GetCockpitCamera() const;
+	void ResetCockpitCamera() const;
 
 protected:
 	// Called when the game starts or when spawned
@@ -28,4 +34,7 @@ protected:
 	class USpringArmComponent* CameraBoom;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components")
 	class UCameraComponent* CockpitCamera;
+
+private:
+	FTransform OriginalCockpitCameraTransform;
 };

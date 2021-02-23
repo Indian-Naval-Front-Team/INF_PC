@@ -7,6 +7,10 @@
 
 #include "WeaponMaster.generated.h"
 
+#define TRACE_WEAPON  ECC_GameTraceChannel2
+
+
+
 class AProjectileMaster;
 
 UENUM(BlueprintType)
@@ -48,6 +52,8 @@ public:
 	class APawn* WeaponOwner;
 };
 
+
+
 UCLASS()
 class INF_PC_API AWeaponMaster : public AActor
 {
@@ -60,6 +66,7 @@ public:
 	virtual void StartFire() {};
 	virtual void StopFire() {};
 
+	void SetMuzzleSocketName(const FName SocketName) { WeaponMuzzleSocketName = SocketName; }
 	void SetWeaponOwner(class AVehicleMaster* VehicleRef);
 	EWeaponType GetWeaponType() const { return WeaponType; }
 	AProjectileMaster* GetProjectile() { return Projectile; }
@@ -103,4 +110,6 @@ protected:
 	void SetMovementComponentOfOwner();
 	
 	virtual void Fire() {};
+
+	class AINFPlayerController* PlayerControllerRef;
 };

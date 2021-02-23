@@ -6,6 +6,8 @@
 #include "GameFramework/Pawn.h"
 #include <INF_PC/Components/MovementComponentMaster.h>
 #include <INF_PC/Components/NetworkingComponent.h>
+
+#include "Camera/CameraComponent.h"
 #include "INF_PC/Weapons/WeaponMaster.h"
 #include "VehicleMaster.generated.h"
 
@@ -37,6 +39,8 @@ protected:
 	class UHealthComponent* HealthComponent;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Vehicle Setup|Weapons")
 	TMap<TSubclassOf<AWeaponMaster>, int> Arsenal;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Components")
+	class UArrowComponent* VehicleFiringRefPoint;
 
 	// Called when 'W' or 'S' keys are pressed on the Vehicle.
 	UFUNCTION()
@@ -54,6 +58,10 @@ protected:
 	UFUNCTION()
 	virtual void RollVehicle(float Value) {};
 
+	virtual void EnterWeaponOrCockpit() {};
+	virtual void ExitWeaponOrCockpit() {};
+	virtual void FreeLookOn() {};
+	virtual void FreeLookOff() {};
 	virtual void FireSelectedWeapon() {};
 	virtual void StopFiringSelectedWeapon() {};
 
@@ -71,6 +79,11 @@ protected:
 
 	UPROPERTY()
 	EWeaponType SelectedWeaponType;
+	UPROPERTY()
+	class AINFPlayerState* PlayerStateRef;
+	UPROPERTY()
+	FTransform OriginalCameraBoomTransform;
+	bool bInsideCockpit;
 
 	TMap<EWeaponType, FWeaponSetup> GetWeaponTable() const { return WeaponTable; }
 	
@@ -81,12 +94,17 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual FVector GetPawnViewLocation() const override { return FVector::ZeroVector; };
+	class AINFPlayerState* GetPlayerStateRef() const { return PlayerStateRef; }
+	FVector GetCameraLocation() const { return MainCamera->GetComponentLocation(); }
+	FRotator GetCameraRotation() const { return MainCamera->GetComponentRotation(); }
 	float GetVehicleSpeed() const
 	{
 		return VehicleMovementComponent->GetVelocity().Size();
 	}
 	class AWeaponMaster* GetLeftGun() const { return LeftGun; }
 	class AWeaponMaster* GetRightGun() const { return RightGun; }
+	class UWidgetComponent* GetVehicleCrosshairWidget() const { return CrosshairWidget; }
+	class UArrowComponent* GetVehicleFiringRefPoint() const { return VehicleFiringRefPoint; }
 
 private:
 	TMap<EWeaponType, FWeaponSetup> WeaponTable;

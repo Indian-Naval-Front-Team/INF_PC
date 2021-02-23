@@ -5,8 +5,12 @@
 
 
 #include "Camera/CameraComponent.h"
+#include "Components/ArrowComponent.h"
 #include "Components/WidgetComponent.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "INF_PC/Framework/INFPlayerState.h"
 #include "INF_PC/Weapons/WeaponMaster.h"
+#include "INF_PC/Weapons/Guns/JetGun.h"
 #include "INF_PC/Weapons/ProjectileWeapons/JetRocket.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -71,7 +75,7 @@ void AJetMaster::BeginPlay()
 	JetMovementComponent->SetTopSpeedInKms(JetMovementComponent->GetTopSpeedInKms() * 28.0f);
 	// NetUpdateFrequency = 5.0f;
 	// MinNetUpdateFrequency = 3.0f;
-
+	
 	if (GetLocalRole() == ROLE_Authority)
 	{
 		for (const TPair<EWeaponType, FWeaponSetup>& Pair : GetWeaponTable())
@@ -118,7 +122,7 @@ FVector AJetMaster::GetPawnViewLocation() const
 {
 	if (MainCamera)
 	{
-		return MainCamera->GetComponentLocation();
+		return VehicleFiringRefPoint->GetComponentLocation();
 	}
 
 	return Super::GetPawnViewLocation();
@@ -149,15 +153,20 @@ void AJetMaster::SetupJetGuns()
 			
 		LeftGun->AttachToComponent(VehicleBody, FAttachmentTransformRules::SnapToTargetNotIncludingScale, LeftGunAttachSocketName);
 		RightGun->AttachToComponent(VehicleBody, FAttachmentTransformRules::SnapToTargetNotIncludingScale, RightGunAttachSocketName);
+		// LeftGun->SetActorTransform(VehicleBody->GetSocketTransform(LeftGunAttachSocketName));
+		// RightGun->SetActorTransform(VehicleBody->GetSocketTransform(RightGunAttachSocketName));
 
-		FQuat LeftGunRot = (UKismetMathLibrary::FindLookAtRotation(LeftGun->GetActorLocation(), CrosshairWidget->GetComponentLocation())).Quaternion();
-		FQuat RightGunRot = (UKismetMathLibrary::FindLookAtRotation(RightGun->GetActorLocation(), CrosshairWidget->GetComponentLocation())).Quaternion();
+		Cast<AJetGun>(LeftGun)->SetOwningJet(this);
+		Cast<AJetGun>(RightGun)->SetOwningJet(this);
 
-		RightGunRot = FQuat(FRotator(RightGunRot.Rotator().Pitch, RightGun->GetActorRotation().Yaw, RightGunRot.Rotator().Roll));
-		LeftGunRot = FQuat(FRotator(LeftGunRot.Rotator().Pitch, LeftGun->GetActorRotation().Yaw, LeftGunRot.Rotator().Roll));
-			
-		LeftGun->SetActorRotation(LeftGunRot);
-		RightGun->SetActorRotation(RightGunRot);
+		// FQuat LeftGunRot = (UKismetMathLibrary::FindLookAtRotation(LeftGun->GetActorLocation(), CrosshairWidget->GetComponentLocation())).Quaternion();
+		// FQuat RightGunRot = (UKismetMathLibrary::FindLookAtRotation(RightGun->GetActorLocation(), CrosshairWidget->GetComponentLocation())).Quaternion();
+		//
+		// RightGunRot = FQuat(FRotator(RightGunRot.Rotator().Pitch, RightGun->GetActorRotation().Yaw, RightGun->GetActorRotation().Roll));
+		// LeftGunRot = FQuat(FRotator(LeftGunRot.Rotator().Pitch, LeftGun->GetActorRotation().Yaw, LeftGun->GetActorRotation().Roll));
+		// 	
+		// LeftGun->SetActorRotation(LeftGunRot);
+		// RightGun->SetActorRotation(RightGunRot);
 	}
 }
 
@@ -175,6 +184,7 @@ void AJetMaster::SetupJetRockets(const int NumRockets)
 		JetRockets[SocketIndex] = JetRocket;
 		
 		JetRockets[SocketIndex]->SetOwner(this);
+		JetRockets[SocketIndex]->SetOwningJet(this);
 		JetRockets[SocketIndex]->SetWeaponOwner(this);
 
 		const FName JetSocketName("Rocket_" + FString::FromInt(SocketIndex));
@@ -215,8 +225,11 @@ void AJetMaster::YawVehicle(float Value)
 		return;
 	}
 
-	const float TargetYawRate = Value * JetMovementComponent->GetYawRate();
-	JetMovementComponent->SetYaw(FMath::FInterpTo(JetMovementComponent->GetYaw(), TargetYawRate, GetWorld()->GetDeltaSeconds(), 2.0f));
+	if (PlayerStateRef->GetCurrentPlayerStatus() != EPlayerStatus::W_FreeLookOn)
+	{
+		const float TargetYawRate = Value * JetMovementComponent->GetYawRate();
+		JetMovementComponent->SetYaw(FMath::FInterpTo(JetMovementComponent->GetYaw(), TargetYawRate, GetWorld()->GetDeltaSeconds(), 2.0f));
+	}
 }
 
 void AJetMaster::PitchVehicle(float Value)
@@ -226,10 +239,21 @@ void AJetMaster::PitchVehicle(float Value)
 		return;
 	}
 
-	bIntentionalPitch = FMath::Abs(Value) > 0.0f;
+	if (PlayerStateRef->GetCurrentPlayerStatus() != EPlayerStatus::W_FreeLookOn)
+	{
+		bIntentionalPitch = FMath::Abs(Value) > 0.0f;
 
-	const float TargetPitchRate = Value * JetMovementComponent->GetPitchRate();
-	JetMovementComponent->SetPitch(FMath::FInterpTo(JetMovementComponent->GetPitch(), TargetPitchRate, GetWorld()->GetDeltaSeconds(), 2.0f));
+		const float TargetPitchRate = Value * JetMovementComponent->GetPitchRate();
+		JetMovementComponent->SetPitch(FMath::FInterpTo(JetMovementComponent->GetPitch(), TargetPitchRate, GetWorld()->GetDeltaSeconds(), 2.0f));
+	}
+	else
+	{
+		if (!bInsideCockpit)	// If not inside Cockpit...
+		{
+			const float NewPitch = FMath::Clamp(CameraBoom->GetRelativeRotation().Pitch + Value, -15.0f, 0.0f);
+			CameraBoom->SetRelativeRotation(FRotator(NewPitch, CameraBoom->GetRelativeRotation().Yaw, CameraBoom->GetRelativeRotation().Roll));	
+		}
+	}
 }
 
 void AJetMaster::RollVehicle(float Value)
@@ -239,15 +263,94 @@ void AJetMaster::RollVehicle(float Value)
 		return;
 	}
 
-	bIntentionalRoll = FMath::Abs(Value) > 0.0f;
-
-	if (bIntentionalPitch && !bIntentionalRoll)
+	if (PlayerStateRef->GetCurrentPlayerStatus() != EPlayerStatus::W_FreeLookOn)
 	{
+		bIntentionalRoll = FMath::Abs(Value) > 0.0f;
+
+		if (bIntentionalPitch && !bIntentionalRoll)
+		{
+			return;
+		}
+
+		const float TargetRollRate = bIntentionalRoll ? (Value * JetMovementComponent->GetRollRate()) : (GetActorRotation().Roll * -0.5f);
+		JetMovementComponent->SetRoll(FMath::FInterpTo(JetMovementComponent->GetRoll(), TargetRollRate, GetWorld()->GetDeltaSeconds(), 2.0f));	
+	}
+	else
+	{
+		if (!bInsideCockpit)
+		{
+			CameraBoom->AddRelativeRotation(FRotator(0.0f, Value, 0.0f));	
+		}
+		else
+		{
+			const float NewYaw = FMath::Clamp(GetCockpit()->GetCockpitCamera()->GetRelativeRotation().Yaw + Value, -70.0f, 70.0f);
+			GetCockpit()->GetCockpitCamera()->SetRelativeRotation(FRotator(GetCockpit()->GetCockpitCamera()->GetRelativeRotation().Pitch, NewYaw, GetCockpit()->GetCockpitCamera()->GetRelativeRotation().Roll));
+			
+			//GetCockpit()->GetCockpitCamera()->AddRelativeRotation(FRotator(0.0f, Value, 0.0f));
+		}
+	}
+}
+
+void AJetMaster::EnterWeaponOrCockpit()
+{
+	if (PlayerStateRef->GetCurrentPlayerStatus() == EPlayerStatus::W_ZoomedInWeapon)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Already inside Cockpit!!"));
 		return;
 	}
 
-	const float TargetRollRate = bIntentionalRoll ? (Value * JetMovementComponent->GetRollRate()) : (GetActorRotation().Roll * -0.5f);
-	JetMovementComponent->SetRoll(FMath::FInterpTo(JetMovementComponent->GetRoll(), TargetRollRate, GetWorld()->GetDeltaSeconds(), 2.0f));
+	if (PlayerStateRef->GetCurrentPlayerStatus() == EPlayerStatus::W_MainVehicleView)
+	{
+		if (Cockpit)
+		{
+			GetWorld()->GetFirstPlayerController()->SetViewTarget(Cockpit->GetChildActor());
+			PlayerStateRef->SetCurrentPlayerStatus(EPlayerStatus::W_ZoomedInWeapon);
+			bInsideCockpit = true;
+			UE_LOG(LogTemp, Warning, TEXT("Inside Cockpit!!"));
+		}
+	}
+}
+
+void AJetMaster::ExitWeaponOrCockpit()
+{
+	if (PlayerStateRef->GetCurrentPlayerStatus() == EPlayerStatus::W_MainVehicleView)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Already in Main View!!"));
+		return;	
+	}
+	
+	if (PlayerStateRef->GetCurrentPlayerStatus() == EPlayerStatus::W_ZoomedInWeapon)
+	{
+		GetWorld()->GetFirstPlayerController()->SetViewTarget(this);
+		bInsideCockpit = false;
+		PlayerStateRef->SetCurrentPlayerStatus(EPlayerStatus::W_MainVehicleView);
+		UE_LOG(LogTemp, Warning, TEXT("Back to Main View!!"));
+	}
+}
+
+void AJetMaster::FreeLookOn()
+{
+	if (PlayerStateRef->GetCurrentPlayerStatus() != EPlayerStatus::W_FreeLookOn)
+	{
+		PlayerStateRef->SetCurrentPlayerStatus(EPlayerStatus::W_FreeLookOn);
+	}
+}
+
+void AJetMaster::FreeLookOff()
+{
+	if (PlayerStateRef->GetCurrentPlayerStatus() == EPlayerStatus::W_FreeLookOn)
+	{
+		if (bInsideCockpit)
+		{
+			GetCockpit()->ResetCockpitCamera();
+			PlayerStateRef->SetCurrentPlayerStatus(EPlayerStatus::W_ZoomedInWeapon);
+		}
+		else
+		{
+			PlayerStateRef->SetCurrentPlayerStatus(EPlayerStatus::W_MainVehicleView);
+			CameraBoom->SetRelativeTransform(OriginalCameraBoomTransform);	
+		}
+	}
 }
 
 void AJetMaster::ToggleRocketMode()
@@ -294,16 +397,17 @@ void AJetMaster::ServerFire_Implementation()
 	case EWeaponType::JetRocket:
 		if (RocketsAvailable > 0)
 		{
-			JetRockets[RocketsAvailable - 1]->SetOwningJet(this);
+			//JetRockets[RocketsAvailable - 1]->SetOwningJet(this);
 			JetRockets[RocketsAvailable - 1]->StartFire();
+			JetRockets[RocketsAvailable - 1]->SetActorScale3D(FVector::ZeroVector);
 			JetRockets[RocketsAvailable - 1]->Destroy();
 			JetRockets.RemoveAt(RocketsAvailable - 1);
 			UpdateRocketsAvailable();
-			UE_LOG(LogTemp, Warning, TEXT("RocketsAvailable = %d"), RocketsAvailable);	
+			UE_LOG(LogTemp, Warning, TEXT("RocketsAvailable = %d"), JetRockets.Num());	
 		}
 		else
 		{
-			UE_LOG(LogTemp, Warning, TEXT("No more rockets available to fire!!!"));
+			UE_LOG(LogTemp, Warning, TEXT("No more rockets available to fire %d"), JetRockets.Num());
 		}
 		break;
 	case EWeaponType::BirdTorpedo: break;

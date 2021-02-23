@@ -2,7 +2,6 @@
 
 
 #include "INF_PC/Vehicles/CockpitMaster.h"
-#include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 
 // Sets default values
@@ -23,5 +22,15 @@ ACockpitMaster::ACockpitMaster()
 void ACockpitMaster::BeginPlay()
 {
 	Super::BeginPlay();
+	OriginalCockpitCameraTransform = CockpitCamera->GetRelativeTransform();
 }
 
+UCameraComponent* ACockpitMaster::GetCockpitCamera() const
+{
+	return CockpitCamera;
+}
+
+void ACockpitMaster::ResetCockpitCamera() const
+{
+	CockpitCamera->SetRelativeTransform(OriginalCockpitCameraTransform);
+}
