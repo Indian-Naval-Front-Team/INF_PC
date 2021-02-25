@@ -18,6 +18,7 @@ class INF_PC_API AJetMaster : public AVehicleMaster
 {
 	GENERATED_BODY()
 
+private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Cockpit, meta = (AllowPrivateAccess = "true"))
 	class UChildActorComponent* Cockpit;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Mesh, meta = (AllowPrivateAccess = "true"))

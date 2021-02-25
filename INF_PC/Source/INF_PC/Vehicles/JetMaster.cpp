@@ -44,7 +44,6 @@ AJetMaster::AJetMaster()
 	RearWing_Elevator_Right->SetupAttachment(Super::VehicleBody, "RearWing_Elevator_Right");
 
 	JetMovementComponent = CreateDefaultSubobject<UJetMovementComponent>(TEXT("JetMovementComponent"));
-	NetworkingComponent = CreateDefaultSubobject<UNetworkingComponent>(TEXT("NetworkingComponent"));
 
 	SetReplicates(true);
 	//bReplicates = true;

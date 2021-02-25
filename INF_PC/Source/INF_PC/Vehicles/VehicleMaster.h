@@ -21,6 +21,8 @@ class INF_PC_API AVehicleMaster : public APawn
 public:
 	// Sets default values for this pawn's properties
 	AVehicleMaster();
+	friend class UMainHUD;
+	friend class UWeaponBar;
 
 protected:
 	// Called when the game starts or when spawned

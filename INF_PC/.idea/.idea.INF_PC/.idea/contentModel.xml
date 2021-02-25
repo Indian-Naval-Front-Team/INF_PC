@@ -49138,6 +49138,8 @@
             <e p="MovementComponentMaster.h" t="Include" />
             <e p="NetworkingComponent.cpp" t="Include" />
             <e p="NetworkingComponent.h" t="Include" />
+            <e p="ShipMovementComponent.cpp" t="Include" />
+            <e p="ShipMovementComponent.h" t="Include" />
           </e>
           <e p="Framework" t="Include">
             <e p="GameMode_DefendCarrier.cpp" t="Include" />
@@ -49171,6 +49173,8 @@
             <e p="HostServerPanel.h" t="Include" />
             <e p="LobbyWidget.cpp" t="Include" />
             <e p="LobbyWidget.h" t="Include" />
+            <e p="MainHUD.cpp" t="Include" />
+            <e p="MainHUD.h" t="Include" />
             <e p="MainMenu.cpp" t="Include" />
             <e p="MainMenu.h" t="Include" />
             <e p="MenuInterface.cpp" t="Include" />
@@ -49185,17 +49189,25 @@
             <e p="ServerRow.h" t="Include" />
             <e p="TrainingIslandWidget.cpp" t="Include" />
             <e p="TrainingIslandWidget.h" t="Include" />
+            <e p="WeaponBar.cpp" t="Include" />
+            <e p="WeaponBar.h" t="Include" />
+            <e p="WeaponIcon.cpp" t="Include" />
+            <e p="WeaponIcon.h" t="Include" />
           </e>
           <e p="Vehicles" t="Include">
             <e p="CockpitMaster.cpp" t="Include" />
             <e p="CockpitMaster.h" t="Include" />
             <e p="JetMaster.cpp" t="Include" />
             <e p="JetMaster.h" t="Include" />
+            <e p="ShipMaster.cpp" t="Include" />
+            <e p="ShipMaster.h" t="Include" />
             <e p="VehicleMaster.cpp" t="Include" />
             <e p="VehicleMaster.h" t="Include" />
           </e>
           <e p="Weapons" t="Include">
             <e p="Guns" t="Include">
+              <e p="Bofors.cpp" t="Include" />
+              <e p="Bofors.h" t="Include" />
               <e p="JetGun.cpp" t="Include" />
               <e p="JetGun.h" t="Include" />
             </e>

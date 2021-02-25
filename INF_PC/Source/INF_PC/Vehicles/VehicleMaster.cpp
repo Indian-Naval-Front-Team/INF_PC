@@ -39,6 +39,7 @@ AVehicleMaster::AVehicleMaster()
 	VehicleFiringRefPoint->SetupAttachment(VehicleBody);
 	
 	VehicleMovementComponent = CreateDefaultSubobject<UMovementComponentMaster>(TEXT("VehicleMovementComponent"));
+	NetworkingComponent = CreateDefaultSubobject<UNetworkingComponent>(TEXT("NetworkingComponent"));
 
 	CameraBoom->TargetArmLength = 300.0f;
 }
@@ -47,7 +48,8 @@ AVehicleMaster::AVehicleMaster()
 void AVehicleMaster::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
+	//UE_LOG(LogTemp, Warning, TEXT("VehicleName = %s"), *GetName());
 	PlayerStateRef = Cast<AINFPlayerState>(GetPlayerState());
 	OriginalCameraBoomTransform = CameraBoom->GetRelativeTransform();
 	
@@ -58,7 +60,11 @@ void AVehicleMaster::BeginPlay()
 	}
 
 	SetupVehicleWeaponTable();
-	PlayerStateRef->SetCurrentPlayerStatus(EPlayerStatus::W_MainVehicleView);
+
+	if (PlayerStateRef)
+	{
+		PlayerStateRef->SetCurrentPlayerStatus(EPlayerStatus::W_MainVehicleView);	
+	}
 }
 
 void AVehicleMaster::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

@@ -51,5 +51,5 @@ private:
 	void OnBtnTrainingIslandClicked();
 
 protected:
-	bool Initialize() override;
+	virtual bool Initialize() override;
 };
