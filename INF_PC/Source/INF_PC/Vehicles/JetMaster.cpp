@@ -12,7 +12,6 @@
 #include "INF_PC/Weapons/WeaponMaster.h"
 #include "INF_PC/Weapons/Guns/JetGun.h"
 #include "INF_PC/Weapons/ProjectileWeapons/JetRocket.h"
-#include "Kismet/KismetMathLibrary.h"
 
 AJetMaster::AJetMaster()
 {
@@ -77,34 +76,34 @@ void AJetMaster::BeginPlay()
 	
 	if (GetLocalRole() == ROLE_Authority)
 	{
-		for (const TPair<EWeaponType, FWeaponSetup>& Pair : GetWeaponTable())
+		for(FWeaponSetup Weapon : Arsenal)
 		{
-			switch (Pair.Key)
+			switch (Weapon.WeaponType)
 			{
 			case EWeaponType::ShipAAGun: break;
 			case EWeaponType::ShipCannon: break;
 			case EWeaponType::Missile: break;
 			case EWeaponType::ShipTorpedo: break;
 			case EWeaponType::JetGun:
-				if (Pair.Value.NumWeapon > 0)
+				if (Weapon.NumWeapon > 0)
 				{
 					SetupJetGuns();
 				}
 				break;
 			case EWeaponType::JetRocket:
-				if (Pair.Value.NumWeapon > 0)
+				if (Weapon.NumWeapon > 0)
 				{
-					SetupJetRockets(Pair.Value.NumWeapon);
+					SetupJetRockets(Weapon.NumWeapon);
 				}
 				break;
 			case EWeaponType::BirdBomb:
-				if (Pair.Value.NumWeapon > 0)
+				if (Weapon.NumWeapon > 0)
 				{
 					SetupJetBombs();
 				}
 				break;
 			case EWeaponType::BirdTorpedo:
-				if (Pair.Value.NumWeapon > 0)
+				if (Weapon.NumWeapon > 0)
 				{
 					SetupJetTorpedos();
 				}
@@ -139,9 +138,19 @@ void AJetMaster::SetupJetGuns()
 	// Spawn the Jet Guns which all the Jets will have.
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-		
-	LeftGun = GetWorld()->SpawnActor<AWeaponMaster>(GetWeaponTable().Find(EWeaponType::JetGun)->Weapon, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
-	RightGun = GetWorld()->SpawnActor<AWeaponMaster>(GetWeaponTable().Find(EWeaponType::JetGun)->Weapon, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
+
+	FWeaponSetup VehicleArsenalTemp;
+	for (FWeaponSetup & Weapon : GetVehicleArsenal())
+	{
+		if (Weapon.WeaponType == EWeaponType::JetGun)
+		{
+			VehicleArsenalTemp = Weapon;
+			break;
+		}
+	}
+	
+	LeftGun = GetWorld()->SpawnActor<AWeaponMaster>(VehicleArsenalTemp.WeaponClass, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
+	RightGun = GetWorld()->SpawnActor<AWeaponMaster>(VehicleArsenalTemp.WeaponClass, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
 
 	if (LeftGun && RightGun)
 	{
@@ -176,10 +185,20 @@ void AJetMaster::SetupJetRockets(const int NumRockets)
 
 	JetRockets.SetNum(NumRockets);
 	SetMaxRockets(NumRockets);
+
+	FWeaponSetup VehicleArsenalTemp;
+	for (FWeaponSetup & Weapon : GetVehicleArsenal())
+	{
+		if (Weapon.WeaponType == EWeaponType::JetRocket)
+		{
+			VehicleArsenalTemp = Weapon;
+			break;
+		}
+	}
 	
 	for (int SocketIndex = 0; SocketIndex < NumRockets; SocketIndex++)
 	{
-		AJetRocket* JetRocket = GetWorld()->SpawnActor<AJetRocket>(GetWeaponTable().Find(EWeaponType::JetRocket)->Weapon, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
+		AJetRocket* JetRocket = GetWorld()->SpawnActor<AJetRocket>(VehicleArsenalTemp.WeaponClass, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
 		JetRockets[SocketIndex] = JetRocket;
 		
 		JetRockets[SocketIndex]->SetOwner(this);

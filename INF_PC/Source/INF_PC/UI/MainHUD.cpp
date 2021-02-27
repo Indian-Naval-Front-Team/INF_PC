@@ -21,9 +21,10 @@ bool UMainHUD::Initialize()
 
 void UMainHUD::PopulateWeaponsTable(class AVehicleMaster* Vehicle)
 {
-	for (const TPair<EWeaponType, FWeaponSetup>& Pair : Vehicle->GetWeaponTable())
+	//for (const TPair<EWeaponType, FWeaponSetup>& Pair : Vehicle->GetVehicleArsenal())
+	for(FWeaponSetup Weapon : Vehicle->GetVehicleArsenal())
 	{
-		switch (Pair.Key)
+		switch (Weapon.WeaponType)
 		{
 			case EWeaponType::ShipAAGun: break;
 			case EWeaponType::ShipCannon: break;
@@ -64,5 +65,5 @@ void UMainHUD::SetupMainHUD(APawn* Vehicle)
 	// PlayerControllerRef->SetInputMode(InputModeData);
 
 	PlayerControllerRef->bShowMouseCursor = false;
-	WeaponBar->SetupWeaponBar(SelectedVehicle->GetWeaponTable());
+	WeaponBar->SetupWeaponBar(SelectedVehicle->GetVehicleArsenal(), SelectedVehicle->GetIsVehicleRepairable());
 }

@@ -31,4 +31,17 @@ private:
 
 public:
 	ABofors();
+
+protected:
+	virtual void BeginPlay() override;
+
+	virtual void AzimuthWeapon(float Value) override;
+	virtual void ElevateWeapon(float Value) override;
+	
+	virtual void StartFire() override;
+	virtual void StopFire() override;
+	virtual void Fire() override;
+	
+	UFUNCTION(Server, Reliable, WithValidation)
+    virtual void ServerFire();
 };

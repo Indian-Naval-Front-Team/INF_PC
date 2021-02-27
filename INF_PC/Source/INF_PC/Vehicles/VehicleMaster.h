@@ -39,10 +39,10 @@ protected:
 	class UWidgetComponent* CrosshairWidget;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Components")
 	class UHealthComponent* HealthComponent;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Vehicle Setup|Weapons")
-	TMap<TSubclassOf<AWeaponMaster>, int> Arsenal;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Components")
 	class UArrowComponent* VehicleFiringRefPoint;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vehicle Setup|Weapons")
+	TArray<FWeaponSetup> Arsenal;
 
 	// Called when 'W' or 'S' keys are pressed on the Vehicle.
 	UFUNCTION()
@@ -67,6 +67,8 @@ protected:
 	virtual void FireSelectedWeapon() {};
 	virtual void StopFiringSelectedWeapon() {};
 
+	bool bIsVehicleRepairable;
+
 	UPROPERTY(VisibleDefaultsOnly)
 	UMovementComponentMaster* VehicleMovementComponent;
 	UPROPERTY(VisibleAnywhere)
@@ -82,12 +84,14 @@ protected:
 	UPROPERTY()
 	EWeaponType SelectedWeaponType;
 	UPROPERTY()
+	AWeaponMaster* SelectedWeapon;
+	UPROPERTY()
 	class AINFPlayerState* PlayerStateRef;
 	UPROPERTY()
 	FTransform OriginalCameraBoomTransform;
 	bool bInsideCockpit;
 
-	TMap<EWeaponType, FWeaponSetup> GetWeaponTable() const { return WeaponTable; }
+	TArray<FWeaponSetup> GetVehicleArsenal() const { return Arsenal; }
 	
 public:	
 	// Called every frame
@@ -108,7 +112,5 @@ public:
 	class UWidgetComponent* GetVehicleCrosshairWidget() const { return CrosshairWidget; }
 	class UArrowComponent* GetVehicleFiringRefPoint() const { return VehicleFiringRefPoint; }
 
-private:
-	TMap<EWeaponType, FWeaponSetup> WeaponTable;
-	void SetupVehicleWeaponTable();
+	bool GetIsVehicleRepairable() const { return bIsVehicleRepairable; }
 };

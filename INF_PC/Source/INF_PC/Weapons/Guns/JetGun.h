@@ -28,7 +28,6 @@ protected:
 	
 	UFUNCTION(Server, Reliable, WithValidation)
     virtual void ServerFire();
-	virtual void TickActor(float DeltaTime, ELevelTick TickType, FActorTickFunction& ThisTickFunction) override;
 	
 private:
 	class AJetMaster* OwningJet;

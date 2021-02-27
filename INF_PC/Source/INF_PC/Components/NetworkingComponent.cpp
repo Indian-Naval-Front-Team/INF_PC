@@ -3,6 +3,8 @@
 
 #include "NetworkingComponent.h"
 #include <INF_PC/Components/JetMovementComponent.h>
+
+#include "ShipMovementComponent.h"
 #include "Net/UnrealNetwork.h"
 
 // Sets default values for this component's properties
@@ -26,6 +28,7 @@ void UNetworkingComponent::BeginPlay()
 	switch (MovementComponent->GetVehicleType())
 	{
 	case VehicleType::Ship:
+		MovementComponent = GetOwner()->FindComponentByClass<UShipMovementComponent>();
 		break;
 	case VehicleType::Jet:
 		MovementComponent = GetOwner()->FindComponentByClass<UJetMovementComponent>();

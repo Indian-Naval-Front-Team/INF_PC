@@ -22,6 +22,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetWeaponIcon(EWeaponType Weapon);
 
+	UFUNCTION(BlueprintCallable)
+	void SetRepairIcon();
+
 private:
 	class UTexture* Ico_AAGun;
 	class UTexture* Ico_Bomb;

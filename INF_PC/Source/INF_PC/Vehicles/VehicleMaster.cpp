@@ -13,6 +13,7 @@
 #include "Components/WidgetComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "INF_PC/Components/HealthComponent.h"
+#include "INF_PC/Components/RepairComponent.h"
 #include "INF_PC/Framework/INFPlayerState.h"
 #include "Net/UnrealNetwork.h"
 
@@ -59,11 +60,9 @@ void AVehicleMaster::BeginPlay()
 		//NetUpdateFrequency = 5.0f;	// 30.0f while publishing
 	}
 
-	SetupVehicleWeaponTable();
-
 	if (PlayerStateRef)
 	{
-		PlayerStateRef->SetCurrentPlayerStatus(EPlayerStatus::W_MainVehicleView);	
+		PlayerStateRef->SetCurrentPlayerStatus(EPlayerStatus::W_MainVehicleView);
 	}
 }
 
@@ -99,23 +98,4 @@ void AVehicleMaster::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 	PlayerInputComponent->BindAction("FreeLook", IE_Pressed, this, &AVehicleMaster::FreeLookOn);
 	PlayerInputComponent->BindAction("FreeLook", IE_Released, this, &AVehicleMaster::FreeLookOff);
-}
-
-void AVehicleMaster::SetupVehicleWeaponTable()
-{
-	for (const TPair<TSubclassOf<AWeaponMaster>, int>& Pair : Arsenal)
-	{
-		EWeaponType WeaponTypeTemp = Pair.Key->GetDefaultObject<AWeaponMaster>()->GetWeaponType();
-		FWeaponSetup WeaponSetupTemp;
-		WeaponSetupTemp.Weapon = Pair.Key;
-		WeaponSetupTemp.NumWeapon = Pair.Value;
-		
-		WeaponTable.Add(WeaponTypeTemp, WeaponSetupTemp);
-	}
-
-																		// DEBUG ONLY : Print out the contents of the WeaponTable
-	// for (const TPair<EWeaponType, FWeaponSetup>& Pair : WeaponTable)
-	// {
-	// 	UE_LOG(LogTemp, Warning, TEXT("WeaponType = %s, WeaponClass = %s"), *StaticEnum<EWeaponType>()->GetValueAsString(Pair.Key), *Pair.Value.Weapon->GetName());
-	// }
 }

@@ -49138,6 +49138,8 @@
             <e p="MovementComponentMaster.h" t="Include" />
             <e p="NetworkingComponent.cpp" t="Include" />
             <e p="NetworkingComponent.h" t="Include" />
+            <e p="RepairComponent.cpp" t="Include" />
+            <e p="RepairComponent.h" t="Include" />
             <e p="ShipMovementComponent.cpp" t="Include" />
             <e p="ShipMovementComponent.h" t="Include" />
           </e>

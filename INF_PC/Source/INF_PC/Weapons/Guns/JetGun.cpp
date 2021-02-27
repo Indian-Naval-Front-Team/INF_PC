@@ -17,7 +17,7 @@
 // static int32 DebugWeaponDrawing = 0;
 // FAutoConsoleVariableRef DebugWeaponTrace(TEXT("INF.DebugWeaponTrace"),
 //                                            DebugWeaponDrawing,
-//                                          TEXT("Draw Debug Lines for Weapon Fire Linetracing"),
+//                                          TEXT("Draw Debug Lines for WeaponClass Fire Linetracing"),
 //                                         ECVF_Cheat);
 
 AJetGun::AJetGun()
@@ -123,11 +123,6 @@ void AJetGun::Fire()
 		
 		LastFiredTime = GetWorld()->TimeSeconds;
 	}
-}
-
-void AJetGun::TickActor(float DeltaTime, ELevelTick TickType, FActorTickFunction& ThisTickFunction)
-{
-	//Super::TickActor(DeltaTime, TickType, ThisTickFunction);
 }
 
 void AJetGun::ServerFire_Implementation()

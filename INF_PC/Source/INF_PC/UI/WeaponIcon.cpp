@@ -50,6 +50,7 @@ void UWeaponIcon::SetWeaponIcon(EWeaponType Weapon)
 	{
 		case EWeaponType::ShipAAGun:
 			PBar_Weapon->WidgetStyle.BackgroundImage.SetResourceObject(Ico_AAGun);
+			TxtAmmoCount->SetText(AmmoText.FromString(""));
 			break;
 		case EWeaponType::ShipCannon:
 			PBar_Weapon->WidgetStyle.BackgroundImage.SetResourceObject(Ico_Cannon);
@@ -81,4 +82,11 @@ void UWeaponIcon::SetWeaponIcon(EWeaponType Weapon)
 			PBar_Weapon->WidgetStyle.BackgroundImage.SetResourceObject(Ico_AAGun);
 			break;
 	}
+}
+
+void UWeaponIcon::SetRepairIcon()
+{
+	FText TxtNumRepairs;
+	PBar_Weapon->WidgetStyle.BackgroundImage.SetResourceObject(Ico_Repair);
+	TxtAmmoCount->SetText(TxtNumRepairs.FromString("5"));
 }

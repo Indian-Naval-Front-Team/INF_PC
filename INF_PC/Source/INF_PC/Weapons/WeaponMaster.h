@@ -34,12 +34,18 @@ struct FWeaponSetup
 	GENERATED_BODY()
 
 public:
-	TSubclassOf<class AWeaponMaster> Weapon;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "WeaponClass Setup")
+	EWeaponType WeaponType;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "WeaponClass Setup")
+	TSubclassOf<class AWeaponMaster> WeaponClass;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "WeaponClass Setup")
 	int NumWeapon;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "WeaponClass Setup")
+	TArray<FName> SocketNames;
 };
 
 // Contains information of a single HitScan weapon Line Trace.
-USTRUCT()
+USTRUCT(BlueprintType)
 struct FProjectiles
 {
 	GENERATED_BODY()
@@ -79,24 +85,29 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category="Components")
 	class UStaticMeshComponent* WeaponMainBody;
 
-	UPROPERTY(EditDefaultsOnly, Category="Weapon Setup")
+	UPROPERTY(EditDefaultsOnly, Category="WeaponClass Setup")
 	EWeaponType WeaponType;
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category="Weapon Setup")
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category="WeaponClass Setup")
 	FName WeaponMuzzleSocketName;
-	UPROPERTY(EditDefaultsOnly, Category="Weapon Setup")
+	UPROPERTY(EditDefaultsOnly, Category="WeaponClass Setup")
 	TSubclassOf<AActor> ProjectileClass;
-	UPROPERTY(EditDefaultsOnly, Category="Weapon Setup")
+	UPROPERTY(EditDefaultsOnly, Category="WeaponClass Setup")
 	bool bAutoFire;
-	UPROPERTY(EditDefaultsOnly, Category="Weapon Setup", meta = (EditCondition="bAutoFire"))
+	UPROPERTY(EditDefaultsOnly, Category="WeaponClass Setup", meta = (EditCondition="bAutoFire"))
 	float RateOfFire;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Weapon Setup", meta = (EditCondition="bAutoFire"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="WeaponClass Setup", meta = (EditCondition="bAutoFire"))
 	int32 MaxShotsBeforeHeatUp;
-	UPROPERTY(EditDefaultsOnly, Category="Weapon Setup")
+	UPROPERTY(EditDefaultsOnly, Category="WeaponClass Setup")
 	bool bIsMissileRangedWeapon;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Weapon Setup", meta = (EditCondition="!bIsMissileRangedWeapon"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="WeaponClass Setup", meta = (EditCondition="!bIsMissileRangedWeapon"))
 	int32 MaxShotsBeforeReload;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Weapon Setup|Ammo", meta = (EditCondition="bIsMissileRangedWeapon"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="WeaponClass Setup|Ammo", meta = (EditCondition="bIsMissileRangedWeapon"))
 	int32 MaxAvailableProjectiles;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void AzimuthWeapon(float Value) {};
+	UFUNCTION(BlueprintCallable)
+	virtual void ElevateWeapon(float Value) {};
 	
 	FTimerHandle TimerHandle_TimeBetweenShots;
 	float LastFiredTime;

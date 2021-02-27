@@ -9,108 +9,38 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3763db42-8cdf-45b1-ae6c-15b197e57bb7" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Content/_Assets/Ships/M_VikrantBody.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/_Assets/Ships/M_VikrantCabin.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/_Assets/Ships/M_VikrantExtraObjects.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/_Assets/Ships/SM_VikrantBody.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/_Assets/Ships/SM_VikrantCabin.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/_Assets/Ships/SM_VikrantElevator.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/_Assets/Ships/SM_VikrantExtra.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/_Assets/Ships/Tex_Body_BaseColor.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/_Assets/Ships/Tex_Body_Normal.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/_Assets/Ships/Tex_Body_ORM.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/_Assets/Ships/Tex_Cabin_BaseColor.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/_Assets/Ships/Tex_Cabin_Normal.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/_Assets/Ships/Tex_Cabin_ORM.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/_Assets/Ships/Tex_EE_BaseColor.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/_Assets/Ships/Tex_EE_Normal.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/_Assets/Ships/Tex_EE_ORM.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/_Assets/Weapons/M_Bofors.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/_Assets/Weapons/Reference_Bofors.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/_Assets/Weapons/SM_Bofors_Barrel.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/_Assets/Weapons/SM_Bofors_Reticule.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/_Assets/Weapons/SM_Bofors_Support.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/_Assets/Weapons/SM_Bofors_Turret.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/_Assets/Weapons/Tex_BoforsBaseColor.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/_Assets/Weapons/Tex_BoforsNormal.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/_Assets/Weapons/Tex_BoforsORM.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__Blueprints/Vehicles/Indian/Ships/BP_Vikrant.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__Blueprints/Weapons/Guns/BP_Bofors.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__Blueprints/Widgets/WBP_MainHUD.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__Blueprints/Widgets/WBP_WeaponBar.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__Blueprints/Widgets/WBP_WeaponIcon.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__Blueprints/Workspace/BP_Test_Bofors.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Documents/WeaponIconProgressBarColour.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/INF_PC/Components/ShipMovementComponent.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/INF_PC/Components/ShipMovementComponent.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/INF_PC/UI/MainHUD.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/INF_PC/UI/MainHUD.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/INF_PC/UI/WeaponBar.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/INF_PC/UI/WeaponBar.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/INF_PC/UI/WeaponIcon.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/INF_PC/UI/WeaponIcon.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/INF_PC/Vehicles/ShipMaster.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/INF_PC/Vehicles/ShipMaster.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/INF_PC/Weapons/Guns/Bofors.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/INF_PC/Weapons/Guns/Bofors.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/INF_PC/Components/RepairComponent.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/INF_PC/Components/RepairComponent.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.INF_PC/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.INF_PC/.idea/contentModel.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.INF_PC/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.INF_PC/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Maps/Workspace/ForTestingInEditor.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/Workspace/ForTestingInEditor.umap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Maps/Workspace/WaterMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/Workspace/WaterMap.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_Assets/Jets/Indian/Seahawk/SM_SeahawkJet_Seahawk_Body.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_Assets/Jets/Indian/Seahawk/SM_SeahawkJet_Seahawk_CanopyFrame.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_Assets/Jets/Indian/Seahawk/SM_SeahawkJet_Seahawk_CanopyGlass.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_Assets/Jets/Indian/Seahawk/SM_SeahawkJet_Seahawk_Dashboard.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_Assets/Jets/Indian/Seahawk/SM_SeahawkJet_Seahawk_Dashboard_Base.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_Assets/Jets/Indian/Seahawk/SM_SeahawkJet_Seahawk_Elevator_Left.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_Assets/Jets/Indian/Seahawk/SM_SeahawkJet_Seahawk_Elevator_Right.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_Assets/Jets/Indian/Seahawk/SM_SeahawkJet_Seahawk_LG_FlapBack.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_Assets/Jets/Indian/Seahawk/SM_SeahawkJet_Seahawk_LG_FlapFront.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_Assets/Jets/Indian/Seahawk/SM_SeahawkJet_Seahawk_LG_Front.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_Assets/Jets/Indian/Seahawk/SM_SeahawkJet_Seahawk_LG_Left.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_Assets/Jets/Indian/Seahawk/SM_SeahawkJet_Seahawk_LG_Right.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_Assets/Jets/Indian/Seahawk/SM_SeahawkJet_Seahawk_LeftWing.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_Assets/Jets/Indian/Seahawk/SM_SeahawkJet_Seahawk_LeftWing_Aileron.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_Assets/Jets/Indian/Seahawk/SM_SeahawkJet_Seahawk_LeftWing_Flap.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_Assets/Jets/Indian/Seahawk/SM_SeahawkJet_Seahawk_RightWing.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_Assets/Jets/Indian/Seahawk/SM_SeahawkJet_Seahawk_RightWing_Aileron.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_Assets/Jets/Indian/Seahawk/SM_SeahawkJet_Seahawk_RightWing_Flap.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_Assets/Jets/Indian/Seahawk/SM_SeahawkJet_Seahawk_Tailhook.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_Assets/Ships/Indian/MI_VikrantBody.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_Assets/Ships/Indian/MI_VikrantCabin.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_Assets/Ships/Indian/MI_VikrantElevExtra.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_Assets/Ships/Indian/SM_VikrantBody.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_Assets/Ships/Indian/SM_VikrantCabin.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_Assets/Ships/Indian/SM_VikrantElevator.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_Assets/Ships/Indian/SM_VikrantExtra.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_Assets/Ships/Indian/Tex_VikrantBody_BaseColour.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_Assets/Ships/Indian/Tex_VikrantBody_Normal.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_Assets/Ships/Indian/Tex_VikrantBody_ORM.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_Assets/Ships/Indian/Tex_VikrantCabin_BaseColour.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_Assets/Ships/Indian/Tex_VikrantCabin_Normal.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_Assets/Ships/Indian/Tex_VikrantCabin_ORM.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_Assets/Ships/Indian/Tex_VikrantEE_BaseColour.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_Assets/Ships/Indian/Tex_VikrantEE_Normal.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_Assets/Ships/Indian/Tex_VikrantEE_ORM.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_Assets/Ships/M_ShipParent.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_Assets/UI/Ico_AAGun.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/_Assets/UI/Ico_AAGun.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_Assets/UI/Ico_Bomb.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/_Assets/UI/Ico_Bomb.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_Assets/UI/Ico_Cannon.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/_Assets/UI/Ico_Cannon.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_Assets/UI/Ico_JetCannon.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/_Assets/UI/Ico_JetCannon.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_Assets/UI/Ico_JetRocket.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/_Assets/UI/Ico_JetRocket.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_Assets/UI/Ico_Missile.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/_Assets/UI/Ico_Missile.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_Assets/UI/Ico_Repair.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/_Assets/UI/Ico_Repair.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_Assets/UI/Ico_Torpedo.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/_Assets/UI/Ico_Torpedo.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/_Assets/Ships/SM_VikrantBody.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/_Assets/Ships/SM_VikrantBody.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/__Blueprints/GM_EditorTest.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/__Blueprints/GM_EditorTest.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/__Blueprints/PlayerControllers/BP_INFPlayerController.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/__Blueprints/PlayerControllers/BP_INFPlayerController.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/__Blueprints/Vehicles/Indian/Jets/BP_JetCockpit.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/__Blueprints/Vehicles/Indian/Jets/BP_JetCockpit.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/__Blueprints/Vehicles/Indian/Jets/BP_Seahawk.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/__Blueprints/Vehicles/Indian/Jets/BP_Seahawk.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/__Blueprints/Widgets/Multiplayer/WBP_ServerRow.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/__Blueprints/Widgets/Multiplayer/WBP_ServerRow.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/__Blueprints/Widgets/Multiplayer/WBP_TrainingIsland.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/__Blueprints/Widgets/Multiplayer/WBP_TrainingIsland.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/INF_PC/UI/MultiplayerPanel.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/INF_PC/UI/MultiplayerPanel.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/__Blueprints/Vehicles/Indian/Ships/BP_Vikrant.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/__Blueprints/Vehicles/Indian/Ships/BP_Vikrant.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/__Blueprints/Weapons/Guns/BP_Bofors.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/__Blueprints/Weapons/Guns/BP_Bofors.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/__Blueprints/Widgets/WBP_WeaponBar.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/__Blueprints/Widgets/WBP_WeaponBar.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/INF_PC/Components/NetworkingComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/INF_PC/Components/NetworkingComponent.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/INF_PC/Components/ShipMovementComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/INF_PC/Components/ShipMovementComponent.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/INF_PC/Components/ShipMovementComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/INF_PC/Components/ShipMovementComponent.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/INF_PC/UI/MainHUD.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/INF_PC/UI/MainHUD.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/INF_PC/UI/WeaponBar.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/INF_PC/UI/WeaponBar.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/INF_PC/UI/WeaponBar.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/INF_PC/UI/WeaponBar.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/INF_PC/UI/WeaponIcon.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/INF_PC/UI/WeaponIcon.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/INF_PC/UI/WeaponIcon.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/INF_PC/UI/WeaponIcon.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/INF_PC/Vehicles/JetMaster.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/INF_PC/Vehicles/JetMaster.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/INF_PC/Vehicles/JetMaster.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/INF_PC/Vehicles/JetMaster.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/INF_PC/Vehicles/ShipMaster.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/INF_PC/Vehicles/ShipMaster.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/INF_PC/Vehicles/ShipMaster.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/INF_PC/Vehicles/ShipMaster.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/INF_PC/Vehicles/VehicleMaster.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/INF_PC/Vehicles/VehicleMaster.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/INF_PC/Vehicles/VehicleMaster.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/INF_PC/Vehicles/VehicleMaster.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/INF_PC/Weapons/Guns/Bofors.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/INF_PC/Weapons/Guns/Bofors.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/INF_PC/Weapons/Guns/Bofors.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/INF_PC/Weapons/Guns/Bofors.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/INF_PC/Weapons/Guns/JetGun.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/INF_PC/Weapons/Guns/JetGun.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/INF_PC/Weapons/Guns/JetGun.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/INF_PC/Weapons/Guns/JetGun.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/INF_PC/Weapons/WeaponMaster.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/INF_PC/Weapons/WeaponMaster.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -121,24 +51,28 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/Engine/Private/InGameAdvertising.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Source/Editor/EditorSettingsViewer/Private/EditorSettingsViewerModule.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Source/Developer/HierarchicalLODUtilities/Public/HierarchicalLODProxyProcessor.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Source/Editor/EditorStyle/Private/SlateEditorStyle.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Plugins/Online/Android/OnlineSubsystemGooglePlay/Source/Private/OnlineStoreGooglePlay.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Source/Editor/KismetCompiler/Private/UserDefinedStructureCompilerUtils.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/Renderer/Private/RayTracing/RayTracingGlobalIllumination.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/Renderer/Private/RayTracing/RayTracingMaterialHitShaders.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/Core/Public/Misc/CompressedGrowableBuffer.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/CoreUObject/Public/UObject/Object.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Source/Editor/UnrealEd/Classes/Exporters/TextureExporterPCX.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/Engine/Classes/Components/PrimitiveComponent.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/UMG/Public/Blueprint/UserWidget.h" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/Engine/Private/InGameAdvertising.cpp" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Source/Editor/EditorSettingsViewer/Private/EditorSettingsViewerModule.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Source/Editor/BlueprintGraph/Classes/K2Node_MathExpression.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Source/Editor/Matinee/Private/Matinee.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Source/Editor/UnrealEd/Private/Commandlets/DiffAssetsCommandlet.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/Engine/Private/Pawn.cpp" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Plugins/Online/Android/OnlineSubsystemGooglePlay/Source/Private/OnlineStoreGooglePlay.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Source/Editor/KismetCompiler/Private/UserDefinedStructureCompilerUtils.cpp" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/Renderer/Private/RayTracing/RayTracingGlobalIllumination.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/Engine/Classes/GameFramework/CharacterMovementComponent.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/ApplicationCore/Public/Windows/WindowsTextInputMethodSystem.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/UnrealAudio/Public/UnrealAudioModule.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Source/Editor/UnrealEd/Private/Toolkits/SGlobalTabSwitchingDialog.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/Engine/Private/LocalPlayer.cpp" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/Renderer/Private/RayTracing/RayTracingMaterialHitShaders.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/Engine/Classes/GameFramework/MovementComponent.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/Engine/Classes/Components/ChildActorComponent.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/Windows/UnrealAudioXAudio2/Private/UnrealAudioDeviceXAudio2.cpp" root0="FORCE_HIGHLIGHTING" />
@@ -151,38 +85,40 @@
       <option value="$PROJECT_DIR$/Source/INF_PC/Components/HealthComponent.cpp" />
       <option value="$PROJECT_DIR$/Source/INF_PC/Components/MovementComponentMaster.h" />
       <option value="$PROJECT_DIR$/Source/INF_PC/Components/NetworkingComponent.h" />
-      <option value="$PROJECT_DIR$/Source/INF_PC/Components/NetworkingComponent.cpp" />
       <option value="$PROJECT_DIR$/Source/INF_PC/Projectiles/ProjectileMaster.h" />
       <option value="$PROJECT_DIR$/Source/INF_PC/Components/JetMovementComponent.cpp" />
       <option value="$PROJECT_DIR$/Source/INF_PC/Projectiles/ProjectileMaster.cpp" />
       <option value="$PROJECT_DIR$/Source/INF_PC/Weapons/ProjectileWeapons/JetRocket.h" />
       <option value="$PROJECT_DIR$/Source/INF_PC/Framework/GameMode_DefendCarrier.cpp" />
-      <option value="$PROJECT_DIR$/Source/INF_PC/Weapons/WeaponMaster.h" />
       <option value="$PROJECT_DIR$/Source/INF_PC/Weapons/WeaponMaster.cpp" />
-      <option value="$PROJECT_DIR$/Source/INF_PC/Weapons/Guns/JetGun.h" />
       <option value="$PROJECT_DIR$/Source/INF_PC/Framework/INFPlayerState.cpp" />
-      <option value="$PROJECT_DIR$/Source/INF_PC/Weapons/Guns/JetGun.cpp" />
       <option value="$PROJECT_DIR$/Source/INF_PC/Framework/INFPlayerState.h" />
       <option value="$PROJECT_DIR$/Source/INF_PC/Vehicles/CockpitMaster.h" />
       <option value="$PROJECT_DIR$/Source/INF_PC/Vehicles/CockpitMaster.cpp" />
       <option value="$PROJECT_DIR$/Source/INF_PC/Weapons/ProjectileWeapons/JetRocket.cpp" />
       <option value="$PROJECT_DIR$/Source/INF_PC/UI/MultiplayerPanel.h" />
-      <option value="$PROJECT_DIR$/Source/INF_PC/Vehicles/VehicleMaster.h" />
       <option value="$PROJECT_DIR$/Source/INF_PC/UI/MainHUD.h" />
-      <option value="$PROJECT_DIR$/Source/INF_PC/UI/WeaponBar.cpp" />
-      <option value="$PROJECT_DIR$/Source/INF_PC/UI/MainHUD.cpp" />
-      <option value="$PROJECT_DIR$/Source/INF_PC/UI/WeaponBar.h" />
-      <option value="$PROJECT_DIR$/Source/INF_PC/UI/WeaponIcon.h" />
-      <option value="$PROJECT_DIR$/Source/INF_PC/UI/WeaponIcon.cpp" />
       <option value="$PROJECT_DIR$/Source/INF_PC/Vehicles/JetMaster.h" />
-      <option value="$PROJECT_DIR$/Source/INF_PC/Components/ShipMovementComponent.cpp" />
-      <option value="$PROJECT_DIR$/Source/INF_PC/Components/ShipMovementComponent.h" />
-      <option value="$PROJECT_DIR$/Source/INF_PC/Vehicles/ShipMaster.h" />
+      <option value="$PROJECT_DIR$/Source/INF_PC/UI/WeaponBar.cpp" />
       <option value="$PROJECT_DIR$/Source/INF_PC/Vehicles/JetMaster.cpp" />
-      <option value="$PROJECT_DIR$/Source/INF_PC/Vehicles/ShipMaster.cpp" />
-      <option value="$PROJECT_DIR$/Source/INF_PC/Vehicles/VehicleMaster.cpp" />
-      <option value="$PROJECT_DIR$/Source/INF_PC/Weapons/Guns/Bofors.h" />
+      <option value="$PROJECT_DIR$/Source/INF_PC/UI/WeaponIcon.h" />
+      <option value="$PROJECT_DIR$/Source/INF_PC/UI/WeaponBar.h" />
+      <option value="$PROJECT_DIR$/Source/INF_PC/UI/MainHUD.cpp" />
+      <option value="$PROJECT_DIR$/Source/INF_PC/Components/RepairComponent.h" />
+      <option value="$PROJECT_DIR$/Source/INF_PC/Components/RepairComponent.cpp" />
+      <option value="$PROJECT_DIR$/Source/INF_PC/UI/WeaponIcon.cpp" />
+      <option value="$PROJECT_DIR$/Source/INF_PC/Components/NetworkingComponent.cpp" />
+      <option value="$PROJECT_DIR$/Source/INF_PC/Components/ShipMovementComponent.h" />
+      <option value="$PROJECT_DIR$/Source/INF_PC/Components/ShipMovementComponent.cpp" />
+      <option value="$PROJECT_DIR$/Source/INF_PC/Vehicles/ShipMaster.h" />
+      <option value="$PROJECT_DIR$/Source/INF_PC/Vehicles/VehicleMaster.h" />
+      <option value="$PROJECT_DIR$/Source/INF_PC/Weapons/Guns/JetGun.cpp" />
+      <option value="$PROJECT_DIR$/Source/INF_PC/Weapons/Guns/JetGun.h" />
       <option value="$PROJECT_DIR$/Source/INF_PC/Weapons/Guns/Bofors.cpp" />
+      <option value="$PROJECT_DIR$/Source/INF_PC/Vehicles/VehicleMaster.cpp" />
+      <option value="$PROJECT_DIR$/Source/INF_PC/Vehicles/ShipMaster.cpp" />
+      <option value="$PROJECT_DIR$/Source/INF_PC/Weapons/Guns/Bofors.h" />
+      <option value="$PROJECT_DIR$/Source/INF_PC/Weapons/WeaponMaster.h" />
     </changedPaths>
   </component>
   <component name="ProjectId" id="1oQWbhGWlw9ZVA8DqEzivOAnY5b" />
@@ -432,6 +368,10 @@
       <workItem from="1614143078113" duration="19604000" />
       <workItem from="1614231020712" duration="15231000" />
       <workItem from="1614258105608" duration="2693000" />
+      <workItem from="1614316254363" duration="165000" />
+      <workItem from="1614317557536" duration="8934000" />
+      <workItem from="1614338966857" duration="8298000" />
+      <workItem from="1614401090466" duration="16505000" />
     </task>
     <servers />
   </component>
@@ -449,12 +389,5 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-  </component>
-  <component name="XDebuggerManager">
-    <watches-manager>
-      <configuration name="CppProject">
-        <watch expression="Test" />
-      </configuration>
-    </watches-manager>
   </component>
 </project>
