@@ -9,6 +9,7 @@
 #include "Components/WidgetComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "INF_PC/Framework/INFPlayerState.h"
+#include "INF_PC/UI/WeaponIcon.h"
 #include "INF_PC/Weapons/WeaponMaster.h"
 #include "INF_PC/Weapons/Guns/JetGun.h"
 #include "INF_PC/Weapons/ProjectileWeapons/JetRocket.h"
@@ -58,6 +59,15 @@ void AJetMaster::UpdateRocketsAvailable()
 	if (RocketsAvailable > 0)
 	{
 		RocketsAvailable--;
+		
+		for (auto WeaponInfo : VehicleWeaponHUDRef)
+		{
+			if (WeaponInfo.WeaponType == EWeaponType::JetRocket)
+			{
+				WeaponInfo.WeaponIcon->SetAmmoText(FText::FromString(FString::FromInt(RocketsAvailable)));
+				break;
+			}
+		}
 	}
 	else
 	{

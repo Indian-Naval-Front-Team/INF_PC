@@ -158,13 +158,27 @@ void AShipMaster::YawVehicle(float Value)
 
 void AShipMaster::PitchVehicle(float Value)
 {
-	const float NewPitch = FMath::Clamp(MainCamera->GetRelativeRotation().Pitch + Value, 0.0f, 30.0f);
-	MainCamera->SetRelativeRotation(FRotator(NewPitch, MainCamera->GetRelativeRotation().Yaw, MainCamera->GetRelativeRotation().Roll));
+	if (PlayerStateRef->GetCurrentPlayerStatus() == EPlayerStatus::W_MainVehicleView)
+	{
+		const float NewPitch = FMath::Clamp(MainCamera->GetRelativeRotation().Pitch + Value, 0.0f, 30.0f);
+		MainCamera->SetRelativeRotation(FRotator(NewPitch, MainCamera->GetRelativeRotation().Yaw, MainCamera->GetRelativeRotation().Roll));
+	}
+	else if(PlayerStateRef->GetCurrentPlayerStatus() == EPlayerStatus::W_ZoomedInWeapon)
+	{
+		SelectedWeapon->ElevateWeapon(Value);
+	}
 }
 
 void AShipMaster::RollVehicle(float Value)
 {
-	CameraBoom->AddRelativeRotation(FRotator(0.0f, Value, 0.0f));
+	if (PlayerStateRef->GetCurrentPlayerStatus() == EPlayerStatus::W_MainVehicleView)
+	{
+		CameraBoom->AddRelativeRotation(FRotator(0.0f, Value, 0.0f));
+	}
+	else if(PlayerStateRef->GetCurrentPlayerStatus() == EPlayerStatus::W_ZoomedInWeapon)
+	{
+		SelectedWeapon->AzimuthWeapon(Value);
+	}
 }
 
 // WEAPON FUNCTIONS
@@ -203,16 +217,22 @@ void AShipMaster::ExitWeaponOrCockpit()
 
 void AShipMaster::FireSelectedWeapon()
 {
+	ServerFire();
 }
 
 void AShipMaster::StopFiringSelectedWeapon()
 {
+	ServerStopFire();
 }
 
 // SERVER FUNCTIONS
 
 void AShipMaster::ServerFire_Implementation()
 {
+	if (PlayerStateRef->GetCurrentPlayerStatus() == EPlayerStatus::W_ZoomedInWeapon)
+	{
+		SelectedWeapon->StartFire();
+	}
 }
 
 bool AShipMaster::ServerFire_Validate()
@@ -222,6 +242,10 @@ bool AShipMaster::ServerFire_Validate()
 
 void AShipMaster::ServerStopFire_Implementation()
 {
+	if (PlayerStateRef->GetCurrentPlayerStatus() == EPlayerStatus::W_ZoomedInWeapon)
+	{
+		SelectedWeapon->StopFire();
+	}
 }
 
 bool AShipMaster::ServerStopFire_Validate()

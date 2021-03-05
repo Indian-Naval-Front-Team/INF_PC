@@ -19,13 +19,27 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SetupMainHUD(APawn* Vehicle);
+
+	UFUNCTION(BlueprintCallable)
+	class UWeaponBar* GetWeaponBar() const { return WeaponBar; }
+
+	UFUNCTION(BlueprintCallable)
+	class UCompass* GetHorizontalCompass() const { return Compass_Horizontal; }
+
+	UFUNCTION(BlueprintCallable)
+	class AVehicleMaster* GetSelectedVehicle() const { return SelectedVehicle; }
 	
 private:
 	UPROPERTY(meta = (BindWidget))
 	class UWeaponBar* WeaponBar;
+	UPROPERTY(meta = (BindWidget))
+	class UCompass* Compass_Horizontal;
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget, AllowPrivateAccess = "true"))
+	class URadar* Radar;
 
 	TArray<class AWeaponMaster*> Weapons;
 	class AINFPlayerController* PlayerControllerRef;
+	class AVehicleMaster* SelectedVehicle;
 	
 protected:
 	virtual bool Initialize() override;

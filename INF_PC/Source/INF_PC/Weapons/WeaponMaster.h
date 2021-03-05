@@ -10,7 +10,6 @@
 #define TRACE_WEAPON  ECC_GameTraceChannel2
 
 
-
 class AProjectileMaster;
 
 UENUM(BlueprintType)
@@ -26,6 +25,7 @@ enum class EWeaponType: uint8
     BirdTorpedo,
     AAGunSingleBarrel,
     AAGunFourBarrel,
+	Generic
 };
 
 USTRUCT(BlueprintType)
@@ -78,6 +78,11 @@ public:
 	AProjectileMaster* GetProjectile() { return Projectile; }
 	TSubclassOf<AActor> GetProjectileClass() const { return ProjectileClass; }
 
+	UFUNCTION(BlueprintCallable)
+    virtual void AzimuthWeapon(float Value) {};
+	UFUNCTION(BlueprintCallable)
+    virtual void ElevateWeapon(float Value) {};
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -103,11 +108,6 @@ protected:
 	int32 MaxShotsBeforeReload;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="WeaponClass Setup|Ammo", meta = (EditCondition="bIsMissileRangedWeapon"))
 	int32 MaxAvailableProjectiles;
-
-	UFUNCTION(BlueprintCallable)
-	virtual void AzimuthWeapon(float Value) {};
-	UFUNCTION(BlueprintCallable)
-	virtual void ElevateWeapon(float Value) {};
 	
 	FTimerHandle TimerHandle_TimeBetweenShots;
 	float LastFiredTime;

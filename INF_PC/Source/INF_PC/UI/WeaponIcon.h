@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/TextBlock.h"
 #include "INF_PC/Weapons/WeaponMaster.h"
 
 #include "WeaponIcon.generated.h"
@@ -25,6 +26,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetRepairIcon();
 
+	UFUNCTION(BlueprintCallable)
+	void SetAmmoText(FText AmmoText) { TxtAmmoCount->SetText(AmmoText); }
+
+	UFUNCTION(BlueprintCallable)
+	class UProgressBar* GetWeaponProgressBar() { return PBar_Weapon; }
+
 private:
 	class UTexture* Ico_AAGun;
 	class UTexture* Ico_Bomb;
@@ -41,5 +48,4 @@ private:
 	// class USizeBox* SizeBox_IconContainer;
 	UPROPERTY(meta = (BindWidget))
 	class UProgressBar* PBar_Weapon;
-
 };

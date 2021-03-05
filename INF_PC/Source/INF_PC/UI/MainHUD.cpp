@@ -43,7 +43,7 @@ void UMainHUD::PopulateWeaponsTable(class AVehicleMaster* Vehicle)
 
 void UMainHUD::SetupMainHUD(APawn* Vehicle)
 {
-	AVehicleMaster* SelectedVehicle = Cast<AVehicleMaster>(Vehicle);
+	SelectedVehicle = Cast<AVehicleMaster>(Vehicle);
 
 	if (SelectedVehicle == nullptr)
 	{
@@ -65,5 +65,8 @@ void UMainHUD::SetupMainHUD(APawn* Vehicle)
 	// PlayerControllerRef->SetInputMode(InputModeData);
 
 	PlayerControllerRef->bShowMouseCursor = false;
-	WeaponBar->SetupWeaponBar(SelectedVehicle->GetVehicleArsenal(), SelectedVehicle->GetIsVehicleRepairable());
+	PlayerControllerRef->SetMainHUD(this);
+	
+	WeaponBar->SetupWeaponBar(SelectedVehicle->GetVehicleArsenal(), SelectedVehicle->GetIsVehicleRepairable(), SelectedVehicle);
 }
+

@@ -20,7 +20,7 @@ public:
 	// UFUNCTION(BlueprintImplementableEvent)
 	// void SetupWeaponBar(const TMap<EWeaponType, FWeaponSetup> & WeaponTableRef);
 	UFUNCTION(BlueprintImplementableEvent)
-    void SetupWeaponBar(const TArray<FWeaponSetup> & Arsenal, bool bIsRepairable);
+    void SetupWeaponBar(const TArray<FWeaponSetup> & Arsenal, bool bIsRepairable, class AVehicleMaster* SelectedVehicleRef);
 	UFUNCTION(BlueprintCallable)
 	void SetWeaponTable(const TArray<FWeaponSetup> & ArsenalRef) { VehicleArsenal = ArsenalRef; }
 	UFUNCTION(BlueprintCallable)

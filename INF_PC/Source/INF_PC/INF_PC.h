@@ -4,3 +4,5 @@
 
 #include "CoreMinimal.h"
 
+
+#define TRACE_RADAR	 ECC_GameTraceChannel3

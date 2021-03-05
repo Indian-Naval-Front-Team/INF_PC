@@ -6,12 +6,21 @@
 #include "GameFramework/Pawn.h"
 #include <INF_PC/Components/MovementComponentMaster.h>
 #include <INF_PC/Components/NetworkingComponent.h>
-
+#include "INF_PC/cpplinq.hpp"
 #include "Camera/CameraComponent.h"
 #include "INF_PC/Weapons/WeaponMaster.h"
 #include "VehicleMaster.generated.h"
 
-
+USTRUCT(BlueprintType)
+struct FVehicleWeaponHUD
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Vehicle Weapon HUD")
+	EWeaponType WeaponType;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Vehicle Weapon HUD")
+	class UWeaponIcon* WeaponIcon;
+};
 
 UCLASS()
 class INF_PC_API AVehicleMaster : public APawn
@@ -69,6 +78,9 @@ protected:
 
 	bool bIsVehicleRepairable;
 
+	UPROPERTY(BlueprintReadWrite)
+	TArray<FVehicleWeaponHUD> VehicleWeaponHUDRef;
+	
 	UPROPERTY(VisibleDefaultsOnly)
 	UMovementComponentMaster* VehicleMovementComponent;
 	UPROPERTY(VisibleAnywhere)

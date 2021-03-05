@@ -3,7 +3,6 @@
 
 #include "INF_PC/Components/HealthComponent.h"
 
-
 UHealthComponent::UHealthComponent()
 {
 	DefaultHealth = 100.0f;
@@ -17,6 +16,9 @@ void UHealthComponent::BeginPlay()
 	if (ComponentOwner)
 	{
 		ComponentOwner->OnTakeAnyDamage.AddDynamic(this, &UHealthComponent::HandleTakeAnyDamage);
+		const FString EntityString = StaticEnum<EEntityType>()->GetValueAsString(EntityType);
+		const TArray<FName> EntityTypeTag { FName(EntityString) };
+		ComponentOwner->Tags = EntityTypeTag;
 	}
 
 	Health = DefaultHealth;

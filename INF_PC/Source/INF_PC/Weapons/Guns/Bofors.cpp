@@ -59,21 +59,31 @@ void ABofors::Fire()
 {
 	if (GetOwner())
 	{
-		FTransform ProjectileTransform;
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 		
-		// Jet Gun Firing 
-		Projectile = GetWorld()->SpawnActorDeferred<AProjectileMaster>(ProjectileClass, WeaponMainBody->GetSocketTransform(WeaponMuzzleSocketName), this);
+		// Bofors Firing
+		Projectile = GetWorld()->SpawnActorDeferred<AProjectileMaster>(ProjectileClass, Barrel_Left->GetSocketTransform(WeaponMuzzleSocketName), this);
 		//UE_LOG(LogTemp, Warning, TEXT("Instigator = %s"), *Projectile->GetInstigator()->GetName());
 		
 		if (Projectile)
 		{
 			Projectile->SetInstigator(Cast<APawn>(GetOwner()));
 			Projectile->SetOwner(this);
-			Projectile->SetProjectileSpeed(MovementComponentOfOwner->GetVelocity().Size() * 100.0f + 40000.0f);
+			Projectile->SetProjectileSpeed(60000.0f);
 			//UE_LOG(LogTemp, Warning, TEXT("Projectile speed = %f"), Projectile->GetVelocity().Size());
-			UGameplayStatics::FinishSpawningActor(Projectile, WeaponMainBody->GetSocketTransform(WeaponMuzzleSocketName));
+			UGameplayStatics::FinishSpawningActor(Projectile, Barrel_Left->GetSocketTransform(WeaponMuzzleSocketName));
+		}
+		
+		Projectile = GetWorld()->SpawnActorDeferred<AProjectileMaster>(ProjectileClass, Barrel_Right->GetSocketTransform(WeaponMuzzleSocketName), this);
+		
+		if (Projectile)
+		{
+			Projectile->SetInstigator(Cast<APawn>(GetOwner()));
+			Projectile->SetOwner(this);
+			Projectile->SetProjectileSpeed(60000.0f);
+			//UE_LOG(LogTemp, Warning, TEXT("Projectile speed = %f"), Projectile->GetVelocity().Size());
+			UGameplayStatics::FinishSpawningActor(Projectile, Barrel_Right->GetSocketTransform(WeaponMuzzleSocketName));
 		}
 		
 		LastFiredTime = GetWorld()->TimeSeconds;
