@@ -12,9 +12,13 @@
 #include "GameFramework/Controller.h"
 #include "Components/WidgetComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "INF_PC/Components/EntityMarkerComponent.h"
 #include "INF_PC/Components/HealthComponent.h"
+#include "INF_PC/Components/QuestComponent.h"
 #include "INF_PC/Components/RepairComponent.h"
+#include "INF_PC/Framework/INFPlayerController.h"
 #include "INF_PC/Framework/INFPlayerState.h"
+#include "Kismet/GameplayStatics.h"
 #include "Net/UnrealNetwork.h"
 
 // Sets default values
@@ -38,9 +42,12 @@ AVehicleMaster::AVehicleMaster()
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
 	VehicleFiringRefPoint = CreateDefaultSubobject<UArrowComponent>(TEXT("Firing Ref Point"));
 	VehicleFiringRefPoint->SetupAttachment(VehicleBody);
+	EntityMarker = CreateDefaultSubobject<UEntityMarkerComponent>(TEXT("Entity Marker"));
+	EntityMarker->SetupAttachment(VehicleBody);
 	
 	VehicleMovementComponent = CreateDefaultSubobject<UMovementComponentMaster>(TEXT("VehicleMovementComponent"));
 	NetworkingComponent = CreateDefaultSubobject<UNetworkingComponent>(TEXT("NetworkingComponent"));
+	QuestComponent = CreateDefaultSubobject<UQuestComponent>(TEXT("Quest Component"));
 
 	CameraBoom->TargetArmLength = 300.0f;
 }
@@ -52,6 +59,7 @@ void AVehicleMaster::BeginPlay()
 	
 	//UE_LOG(LogTemp, Warning, TEXT("VehicleName = %s"), *GetName());
 	PlayerStateRef = Cast<AINFPlayerState>(GetPlayerState());
+	PlayerControllerRef = Cast<AINFPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 	OriginalCameraBoomTransform = CameraBoom->GetRelativeTransform();
 	
 	if (HasAuthority())

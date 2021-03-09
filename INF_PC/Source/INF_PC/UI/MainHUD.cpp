@@ -5,6 +5,7 @@
 
 
 #include "WeaponBar.h"
+#include "INF_PC/Components/QuestComponent.h"
 #include "INF_PC/Framework/INFPlayerController.h"
 #include "INF_PC/Vehicles/VehicleMaster.h"
 
@@ -68,5 +69,6 @@ void UMainHUD::SetupMainHUD(APawn* Vehicle)
 	PlayerControllerRef->SetMainHUD(this);
 	
 	WeaponBar->SetupWeaponBar(SelectedVehicle->GetVehicleArsenal(), SelectedVehicle->GetIsVehicleRepairable(), SelectedVehicle);
+	SelectedVehicle->GetQuestComponent()->InitializeQuestComponent();
 }
 

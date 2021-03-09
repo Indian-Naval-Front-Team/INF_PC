@@ -11,6 +11,14 @@
 #include "INF_PC/Weapons/WeaponMaster.h"
 #include "VehicleMaster.generated.h"
 
+UENUM(BlueprintType)
+enum class EVehicleType: uint8
+{
+	Neutral,
+    Friendly,
+    Enemy,
+};
+
 USTRUCT(BlueprintType)
 struct FVehicleWeaponHUD
 {
@@ -49,9 +57,15 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Components")
 	class UHealthComponent* HealthComponent;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Components")
+	class UQuestComponent* QuestComponent;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Components")
+	class UEntityMarkerComponent* EntityMarker;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Components")
 	class UArrowComponent* VehicleFiringRefPoint;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vehicle Setup|Weapons")
 	TArray<FWeaponSetup> Arsenal;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vehicle Setup|Weapons")
+	EVehicleType VehicleType;
 
 	// Called when 'W' or 'S' keys are pressed on the Vehicle.
 	UFUNCTION()
@@ -99,6 +113,8 @@ protected:
 	AWeaponMaster* SelectedWeapon;
 	UPROPERTY()
 	class AINFPlayerState* PlayerStateRef;
+	UPROPERTY(BlueprintReadOnly, Category="Player Controller")
+	AINFPlayerController* PlayerControllerRef;
 	UPROPERTY()
 	FTransform OriginalCameraBoomTransform;
 	bool bInsideCockpit;
@@ -113,6 +129,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual FVector GetPawnViewLocation() const override { return FVector::ZeroVector; };
 	class AINFPlayerState* GetPlayerStateRef() const { return PlayerStateRef; }
+	AINFPlayerController* GetPlayerControllerRef() const { return PlayerControllerRef; }
 	FVector GetCameraLocation() const { return MainCamera->GetComponentLocation(); }
 	FRotator GetCameraRotation() const { return MainCamera->GetComponentRotation(); }
 	float GetVehicleSpeed() const
@@ -123,6 +140,8 @@ public:
 	class AWeaponMaster* GetRightGun() const { return RightGun; }
 	class UWidgetComponent* GetVehicleCrosshairWidget() const { return CrosshairWidget; }
 	class UArrowComponent* GetVehicleFiringRefPoint() const { return VehicleFiringRefPoint; }
+	class UQuestComponent* GetQuestComponent() { return QuestComponent; }
+	UEntityMarkerComponent* GetEntityMarkerComponent() const { return EntityMarker; }
 
 	bool GetIsVehicleRepairable() const { return bIsVehicleRepairable; }
 };

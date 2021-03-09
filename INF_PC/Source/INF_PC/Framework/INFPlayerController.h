@@ -22,4 +22,7 @@ public:
 	
 private:
 	class UMainHUD* MainHUDRef;
+
+protected:
+	virtual void BeginPlay() override;;
 };

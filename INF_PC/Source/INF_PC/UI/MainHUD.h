@@ -29,6 +29,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	class AVehicleMaster* GetSelectedVehicle() const { return SelectedVehicle; }
 	
+	UFUNCTION(BlueprintCallable)
+    class UObjectiveWidget* GetObjectiveWidget() const { return ObjectiveWidget; }
+	
 private:
 	UPROPERTY(meta = (BindWidget))
 	class UWeaponBar* WeaponBar;
@@ -36,6 +39,8 @@ private:
 	class UCompass* Compass_Horizontal;
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget, AllowPrivateAccess = "true"))
 	class URadar* Radar;
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget, AllowPrivateAccess = "true"))
+	class UObjectiveWidget* ObjectiveWidget;
 
 	TArray<class AWeaponMaster*> Weapons;
 	class AINFPlayerController* PlayerControllerRef;

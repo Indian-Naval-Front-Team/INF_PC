@@ -3,6 +3,15 @@
 
 #include "INF_PC/Components/HealthComponent.h"
 
+
+
+#include "EntityMarkerComponent.h"
+#include "QuestComponent.h"
+#include "INF_PC/Gameplay/QuestMaster.h"
+#include "INF_PC/UI/EntityCardWidget.h"
+#include "INF_PC/Vehicles/VehicleMaster.h"
+
+
 UHealthComponent::UHealthComponent()
 {
 	DefaultHealth = 100.0f;
@@ -34,11 +43,25 @@ void UHealthComponent::HandleTakeAnyDamage(AActor* DamagedActor, float Damage, c
 
 	// Update Health Clamped.
 	Health = FMath::Clamp(Health - Damage, 0.0f, DefaultHealth);
+	UE_LOG(LogTemp, Warning, TEXT("Health : %f"), (1.0f - Health / 100.0f));
 
-	UE_LOG(LogTemp, Warning, TEXT("Health : %f"), Health);
+	if (EntityMarkerComponentRef)
+	{
+		EntityMarkerComponentRef->GetEntityCardWidget()->UpdateEntityCardHealth(1.0f - Health / 100.0f);
+	}
+
+	//UE_LOG(LogTemp, Warning, TEXT("Health : %f"), Health);
+	//UE_LOG(LogTemp, Warning, TEXT("DamageCauser = %s"), *DamageCauser->GetOwner()->GetOwner()->GetName());
 
 	if (Health <= 0.0f)
 	{
+		AVehicleMaster* Vehicle = Cast<AVehicleMaster>(DamageCauser->GetOwner()->GetOwner());
+		
+		if (Vehicle)
+		{
+			Vehicle->GetQuestComponent()->GetActiveQuest()->CallEnemyKilledObjectiveAchieved(Cast<AVehicleMaster>(GetOwner()));	
+		}
+		 
 		GetOwner()->Destroy();
 	}	
 }
